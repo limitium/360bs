@@ -20,7 +20,7 @@
 }
 
 body {
-    padding-top: 70px;
+    padding-top: 50px;
     background: #fafafa;
     background: url(../img/body-bg.png) repeat;
     font-family: segoeui;
@@ -172,6 +172,20 @@ body {
     font-weight: lighter;
 }
 
+.label {
+    cursor: pointer;
+}
+
+.label.label-off {
+    background-color: transparent;
+    color: #0088CC;
+}
+
+.label.label-off:hover {
+    background-color: #ffffff;
+    color: #005580;
+}
+
 /* .: GALERI :. */
 
 .galery {
@@ -188,16 +202,19 @@ body {
 
 .galery:hover img {
     border: 1px solid red;
-    margin-left: -11px;
     margin-top: -1px;
     margin-bottom: -1px;
+    margin-left: -1px;
 }
 
 .galery img {
     cursor: pointer;
-    width: 190px;
-    max-width: 190px;
-    margin-left: -10px;
+    max-width: 100%;
+    width: 100%;
+}
+
+.count {
+    overflow: hidden;
 }
 
 .count ul {

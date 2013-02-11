@@ -1,3 +1,7 @@
+_welcome:
+    pattern:  /
+    defaults: { _controller: BsVideoBundle:Video:index }
+
 bs_video:
     resource: "@BsVideoBundle/Controller/"
     type:     annotation

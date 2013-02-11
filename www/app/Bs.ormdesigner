@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8" standalone="no" ?>
+<orm-designer version="1.4.7.511">
+
+  <project code-name="Bs" framework="Without Framework" name="bs" orm="Doctrine2" visSizeX="28" visSizeX2="1684" visSizeY="171" visSizeY2="918">
+    <module-position name="VideoBundle" visPositionX="-16" visPositionY="-153"/>
+  </project>
+
+  <module import-format="Doctrine2Yml" import-path="..\src\Bs\VideoBundle\Resources\config\doctrine\" name="VideoBundle" visBkColor="16317694" visSizeX="0" visSizeX2="404" visSizeY="6" visSizeY2="441">
+    <table name="Tag" visPositionX="283" visPositionY="201" visSizeX="0" visSizeX2="83" visSizeY="0" visSizeY2="59">
+      <column auto-increment="true" name="id" primary="true" required="true" type="integer"/>
+      <column name="name" required="true" type="string"/>
+      <column name="tag_group_id"/>
+    </table>
+    <table name="Video" visPositionX="28" visPositionY="34" visSizeX="0" visSizeX2="83" visSizeY="0" visSizeY2="59">
+      <column auto-increment="true" name="id" primary="true" required="true" type="integer"/>
+      <column name="vid" required="true" type="string"/>
+      <column name="name" required="true" type="string"/>
+    </table>
+    <table name="TagGroup" visPositionX="310" visPositionY="361" visSizeX="0" visSizeX2="58" visSizeY="0" visSizeY2="45">
+      <column auto-increment="true" name="id" primary="true" required="true"/>
+      <column name="name" required="true"/>
+    </table>
+    <table name="VideoTag" visPositionX="155" visPositionY="110" visSizeX="0" visSizeX2="100" visSizeY="0" visSizeY2="60">
+      <column name="tag_id" required="true" type="integer"/>
+      <column name="video_id" required="true" type="integer"/>
+    </table>
+    <foreign-key caption="tag group" from="Tag" inverse-alias="Group" name="FK_tag_tag_group_id" owning-alias="Tags" to="TagGroup">
+      <foreign-key-column from="tag_group_id" to="id"/>
+    </foreign-key>
+    <foreign-key caption="tag video_tag" from="VideoTag" inverse-alias="Tag" name="FK_video_tag_tag_id" owning-alias="Videos" to="Tag">
+      <foreign-key-column from="tag_id" to="id"/>
+    </foreign-key>
+    <foreign-key caption="video video_tag" from="VideoTag" inverse-alias="Video" name="FK_video_tag_video_id" owning-alias="Tags" to="Video">
+      <foreign-key-column from="video_id" to="id"/>
+    </foreign-key>
+    <many-to-many-relation mn-table="VideoTag">
+      <many-to-many-foreign-key foreign-key="FK_video_tag_tag_id" relation-alias="Tags"/>
+      <many-to-many-foreign-key foreign-key="FK_video_tag_video_id" relation-alias="Videos"/>
+    </many-to-many-relation>
+  </module>
+
+</orm-designer>

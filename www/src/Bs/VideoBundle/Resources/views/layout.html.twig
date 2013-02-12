@@ -9,175 +9,122 @@
 {% endblock %}
 {% block body %}
 
-    <div class="navbar navbar-fixed-top">
-        <div class="navbar-inner">
-            <div class="container-fluid">
-                <a class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
-                    <span class="icon-bar"></span>
-                    <span class="icon-bar"></span>
-                    <span class="icon-bar"></span>
-                </a>
-                <a class="brand" href="index.html">
-                    Nollie 900
-                </a>
 
-                <div class="nav-collapse">
-                    <ul class="nav">
-                        <li class="divider-vertical"></li>
 
-                    </ul>
-                    <ul class="nav pull-right">
-                        <li class="divider-vertical"></li>
-                        <li><a href="signin.html"><i class="icon-lock"></i> Sign in</a></li>
-                        <li class="divider-vertical"></li>
-                        <li><a href="signup.html"><i class="icon-edit"></i> Sign up</a></li>
-                        <li class="divider-vertical"></li>
-                        <li class="dropdown">
-                            <a href="#" class="dropdown-toggle" data-toggle="dropdown">Dropdown <b
-                                        class="caret"></b></a>
-                            <ul class="dropdown-menu">
-                                <li><a href="#">Action</a></li>
-                                <li><a href="#">Another action</a></li>
-                                <li><a href="#">Something else here</a></li>
-                                <li class="divider"></li>
-                                <li><a href="#">Separated link</a></li>
-                            </ul>
-                        </li>
-                        <li class="divider-vertical"></li>
-                    </ul>
-                </div>
-                <!--/.nav-collapse -->
+    <header class="container">
+        <div class="row">
+
+            <div class="span1">
+                <img src="{{ asset('img/logo2.png') }}"/>
             </div>
+            <h1 class="span5 brand">Stop fall</h1>
         </div>
-    </div>
+    </header>
 
     <div class="container">
+        <div class="row">
+            <div class="span12">
+                <div id="main-menu" class="navbar ">
+                    <div class="navbar-inner">
+                        <div class="container">
+                            <a class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
+                                <span class="icon-bar"></span>
+                                <span class="icon-bar"></span>
+                                <span class="icon-bar"></span>
+                            </a>
+
+                            <div class="nav-collapse">
+                                <ul class="nav">
+                                    <li class="active">
+                                        <a href="index.html">
+                                            <i class="icon-home"></i>
+                                        </a>
+                                    </li>
+                                    <li class="divider-vertical"></li>
+                                    <li><a href="signin.html"><i class="icon-lock"></i> Sign in</a></li>
+                                    <li class="divider-vertical"></li>
+                                    <li><a href="signup.html"><i class="icon-edit"></i> Sign up</a></li>
+                                    <li class="divider-vertical"></li>
+                                </ul>
+                            </div>
+                            <!--/.nav-collapse -->
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
         <div class="row">
             <object>
                 {#<param name="movie" value="http://www.youtube.com/v/kh29_SERH0Y?version=3&autoplay=1&autohide=1&cc_load_policy=1&iv_load_policy=3&enablejsapi=1&fs=1&modestbranding=1&rel=0&theme=light&ap=%2526fmt%3D22"></param>#}
                 <embed src="http://www.youtube.com/v/kh29_SERH0Y?version=3&autoplay=1&autohide=1&cc_load_policy=1&iv_load_policy=3&enablejsapi=1&fs=1&modestbranding=1&rel=0&theme=light&vq=hd720"
                        type="application/x-shockwave-flash"
-                       class="span10 offset1" height="400">
+                       class="span12" height="500">
                 </embed>
             </object>
         </div>
         <div class="row">
-            Stance:
-            <br>
-            <span class="label label-info">Regular</span>
-            <span class="label label-info">Guffy</span>
-            <span class="label label-off">FS</span>
-            <span class="label label-off">BS</span>
-        </div>
-        <div class="row">
-            Rotation
-            <ul class="nav nav-pills">
-                <li class="active">
-                    <a href="#">Straight</a>
-                </li>
-                <li class="active"><a href="#">180s</a></li>
-                <li class="active"><a href="#">360s</a></li>
-                <li><a href="#">540s</a></li>
-                <li class="active"><a href="#">720s</a></li>
-            </ul>
-        </div>
-        <div class="row">
-            Count
-            <ul class="nav nav-pills">
-                <li class="active">
-                    <a href="#">double</a>
-                </li>
-                <li class="active"><a href="#">Triple</a></li>
-            </ul>
-        </div>
-        <div class="row">
-            Grab
-            <ul class="nav nav-pills">
-                <li class="active">
-                    <a href="#">Noise</a>
-                </li>
-                <li><a href="#">Tail</a></li>
-            </ul>
-        </div>
-        <div class="row">
-            Slide
-            <ul class="nav nav-pills">
-                <li>
-                    <a href="#">50-50</a>
-                </li>
-                <li><a href="#">Boardslide</a></li>
-            </ul>
-        </div>
 
-        <div class="row">
+            {% block tags %}
+            {% endblock %}
 
-            {% include 'BsVideoBundle:Video:vid.html.twig' %}
-            {% include 'BsVideoBundle:Video:vid.html.twig' %}
-            {% include 'BsVideoBundle:Video:vid.html.twig' %}
-            {% include 'BsVideoBundle:Video:vid.html.twig' %}
-            {% include 'BsVideoBundle:Video:vid.html.twig' %}
-            {% include 'BsVideoBundle:Video:vid.html.twig' %}
-            {% include 'BsVideoBundle:Video:vid.html.twig' %}
-            {% include 'BsVideoBundle:Video:vid.html.twig' %}
-            {% include 'BsVideoBundle:Video:vid.html.twig' %}
-            {% include 'BsVideoBundle:Video:vid.html.twig' %}
-            {% include 'BsVideoBundle:Video:vid.html.twig' %}
-            {% include 'BsVideoBundle:Video:vid.html.twig' %}
-            {% include 'BsVideoBundle:Video:vid.html.twig' %}
-            {% include 'BsVideoBundle:Video:vid.html.twig' %}
-            {% include 'BsVideoBundle:Video:vid.html.twig' %}
-            {% include 'BsVideoBundle:Video:vid.html.twig' %}
-            {% include 'BsVideoBundle:Video:vid.html.twig' %}
-            {% include 'BsVideoBundle:Video:vid.html.twig' %}
-            {% include 'BsVideoBundle:Video:vid.html.twig' %}
-            {% include 'BsVideoBundle:Video:vid.html.twig' %}
-            {% include 'BsVideoBundle:Video:vid.html.twig' %}
-            {% include 'BsVideoBundle:Video:vid.html.twig' %}
-            {% include 'BsVideoBundle:Video:vid.html.twig' %}
-            {% include 'BsVideoBundle:Video:vid.html.twig' %}
-            {% include 'BsVideoBundle:Video:vid.html.twig' %}
-            {% include 'BsVideoBundle:Video:vid.html.twig' %}
-
-
-
-
-            <div class="span2">
-                <div class="nav-headers">
-                    <h3>Find</h3>
-                </div>
-                <ul class="nav nav-tabs nav-stacked">
-                    <li class="active"><a href="#"><i class="icon-picture"></i> Newest</a></li>
-                    <li><a href="#"><i class="icon-ok"></i> Popular</a></li>
-                    <li><a href="#"><i class="icon-certificate"></i> Top Sites</a></li>
-                    <li><a href="#"><i class="icon-bookmark"></i> Most Viewed</a></li>
-                    <li><a href="#"><i class="icon-th-list"></i> Categories</a></li>
-                    <li><a href="#"><i class="icon-download"></i> Most Download</a></li>
-                    <li><a href="#"><i class="icon-heart"></i> Recomended</a></li>
-                </ul>
-            </div>
         </div>
     </div>
+    <div class="container videos">
+        <div class="row">
 
-    <div class="container">
-        <div class="pagination">
-            <ul>
-                <li class="disabled"><a href="#" title="Go to the first page">&laquo; First</a></li>
-                <li><a href="#" title="Go to the previous page">&larr;</a></li>
-                <li class="active"><a href="#">1</a></li>
-                <li><a href="#">2</a></li>
-                <li><a href="#">..</a></li>
-                <li><a href="#">8</a></li>
-                <li><a href="#">9</a></li>
-                <li><a href="#" title="Go to the next page">&rarr;</a></li>
-                <li><a href="#" title="Go to the last page">Last &raquo;</a></li>
-            </ul>
+
+            {% include 'BsVideoBundle:Video:vid.html.twig' %}
+            {% include 'BsVideoBundle:Video:vid.html.twig' %}
+            {% include 'BsVideoBundle:Video:vid.html.twig' %}
+            {% include 'BsVideoBundle:Video:vid.html.twig' %}
+            {% include 'BsVideoBundle:Video:vid.html.twig' %}
+            {% include 'BsVideoBundle:Video:vid.html.twig' %}
+
+            {% include 'BsVideoBundle:Video:vid.html.twig' %}
+            {% include 'BsVideoBundle:Video:vid.html.twig' %}
+            {% include 'BsVideoBundle:Video:vid.html.twig' %}
+            {% include 'BsVideoBundle:Video:vid.html.twig' %}
+            {% include 'BsVideoBundle:Video:vid.html.twig' %}
+            {% include 'BsVideoBundle:Video:vid.html.twig' %}
+
+
         </div>
+
+
+        {#<div class="span2">#}
+        {#<div class="nav-headers">#}
+        {#<h3>Find</h3>#}
+        {#</div>#}
+        {#<ul class="nav nav-tabs nav-stacked">#}
+        {#<li class="active"><a href="#"><i class="icon-picture"></i> Newest</a></li>#}
+        {#<li><a href="#"><i class="icon-ok"></i> Popular</a></li>#}
+        {#<li><a href="#"><i class="icon-certificate"></i> Top Sites</a></li>#}
+        {#<li><a href="#"><i class="icon-bookmark"></i> Most Viewed</a></li>#}
+        {#<li><a href="#"><i class="icon-th-list"></i> Categories</a></li>#}
+        {#<li><a href="#"><i class="icon-download"></i> Most Download</a></li>#}
+        {#<li><a href="#"><i class="icon-heart"></i> Recomended</a></li>#}
+        {#</ul>#}
+        {#</div>#}
+    </div>
+    <div class="pagination">
+        <ul>
+            <li class="disabled"><a href="#" title="Go to the first page">&laquo; First</a></li>
+            <li><a href="#" title="Go to the previous page">&larr;</a></li>
+            <li class="active"><a href="#">1</a></li>
+            <li><a href="#">2</a></li>
+            <li><a href="#">..</a></li>
+            <li><a href="#">8</a></li>
+            <li><a href="#">9</a></li>
+            <li><a href="#" title="Go to the next page">&rarr;</a></li>
+            <li><a href="#" title="Go to the last page">Last &raquo;</a></li>
+        </ul>
+    </div>
     </div>
 
-    <div class="container footer">
+    <footer class="container">
         <hr class="alt"/>
         <div class="row">
-            <div class="span6">&copy; 2012 Fransisca Gallery. All right reserved.</div>
+            <div class="span6">&copy; 2013 Stop fall. All right reserved.</div>
             <div class="span6">
                 <ul>
                     <li><a href="#">Terms Of Service</a></li>
@@ -185,7 +132,7 @@
                 </ul>
             </div>
         </div>
-    </div>
+    </footer>
 
 
 {% endblock %}

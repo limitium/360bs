@@ -12,6 +12,15 @@ Bs\VideoBundle\Entity\Video:
     name:
       type: string
       nullable: false
+    duration:
+      type: decimal
+      nullable: false
+    start:
+      type: decimal
+      nullable: true
+    end:
+      type: decimal
+      nullable: true
   manyToMany:
     Tags:
       targetEntity: Tag

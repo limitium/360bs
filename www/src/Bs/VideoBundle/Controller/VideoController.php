@@ -27,10 +27,9 @@ class VideoController extends Controller
     {
         $em = $this->getDoctrine()->getManager();
 
-        $entities = $em->getRepository('BsVideoBundle:Video')->findAll();
 
         return array(
-            'entities' => $entities,
+            'taggroups' => $em->getRepository('BsVideoBundle:TagGroup')->findAll(),
         );
     }
 

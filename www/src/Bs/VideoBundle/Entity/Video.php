@@ -125,4 +125,88 @@ class Video
     {
         return $this->Tags;
     }
+    /**
+     * @var float
+     */
+    private $duration;
+
+    /**
+     * @var float
+     */
+    private $start;
+
+    /**
+     * @var float
+     */
+    private $end;
+
+
+    /**
+     * Set duration
+     *
+     * @param float $duration
+     * @return Video
+     */
+    public function setDuration($duration)
+    {
+        $this->duration = $duration;
+    
+        return $this;
+    }
+
+    /**
+     * Get duration
+     *
+     * @return float 
+     */
+    public function getDuration()
+    {
+        return $this->duration;
+    }
+
+    /**
+     * Set start
+     *
+     * @param float $start
+     * @return Video
+     */
+    public function setStart($start)
+    {
+        $this->start = $start;
+    
+        return $this;
+    }
+
+    /**
+     * Get start
+     *
+     * @return float 
+     */
+    public function getStart()
+    {
+        return $this->start;
+    }
+
+    /**
+     * Set end
+     *
+     * @param float $end
+     * @return Video
+     */
+    public function setEnd($end)
+    {
+        $this->end = $end;
+    
+        return $this;
+    }
+
+    /**
+     * Get end
+     *
+     * @return float 
+     */
+    public function getEnd()
+    {
+        return $this->end;
+    }
 }

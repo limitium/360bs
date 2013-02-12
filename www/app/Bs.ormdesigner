@@ -9,16 +9,19 @@
     <table name="Tag" visPositionX="283" visPositionY="201" visSizeX="0" visSizeX2="83" visSizeY="0" visSizeY2="59">
       <column auto-increment="true" name="id" primary="true" required="true" type="integer"/>
       <column name="name" required="true" type="string"/>
-      <column name="tag_group_id"/>
+      <column name="tag_group_id" type="integer"/>
     </table>
     <table name="Video" visPositionX="28" visPositionY="34" visSizeX="0" visSizeX2="83" visSizeY="0" visSizeY2="59">
       <column auto-increment="true" name="id" primary="true" required="true" type="integer"/>
       <column name="vid" required="true" type="string"/>
       <column name="name" required="true" type="string"/>
+      <column name="duration" required="true" type="decimal"/>
+      <column name="start" type="decimal"/>
+      <column name="end" type="decimal"/>
     </table>
     <table name="TagGroup" visPositionX="310" visPositionY="361" visSizeX="0" visSizeX2="58" visSizeY="0" visSizeY2="45">
-      <column auto-increment="true" name="id" primary="true" required="true"/>
-      <column name="name" required="true"/>
+      <column auto-increment="true" name="id" primary="true" required="true" type="integer"/>
+      <column name="name" required="true" type="string"/>
     </table>
     <table name="VideoTag" visPositionX="155" visPositionY="110" visSizeX="0" visSizeX2="100" visSizeY="0" visSizeY2="60">
       <column name="tag_id" required="true" type="integer"/>

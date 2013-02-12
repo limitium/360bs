@@ -1,1 +1,12 @@
 {% extends 'BsVideoBundle::layout.html.twig' %}
+{% block tags %}
+    {% for group in taggroups %}
+        <div class="span4 tag">
+            <strong> {{ group.name }}:</strong>
+            <br>
+            {% for tag in group.tags %}
+                <span class="label label-off">{{ tag.name }}</span>
+            {% endfor %}
+        </div>
+    {% endfor %}
+{% endblock %}

@@ -9,8 +9,6 @@
 {% endblock %}
 {% block body %}
 
-
-
     <header class="container">
         <div class="row">
 
@@ -18,6 +16,12 @@
                 <img src="{{ asset('img/logo2.png') }}"/>
             </div>
             <h1 class="span5 brand">Stop fall</h1>
+
+            <div class="pull-right">
+                <a href="{{ path('video_new') }}" class="btn btn-danger btn-large"><strong><i
+                                class="icon-upload icon-white"></i> Add
+                        trick</strong></a>
+            </div>
         </div>
     </header>
 
@@ -37,13 +41,14 @@
                                 <ul class="nav">
                                     <li class="active">
                                         <a href="index.html">
-                                            <i class="icon-home"></i>
+                                            <i class="icon-film"></i> Watch tricks
                                         </a>
                                     </li>
+                                </ul>
+                                <ul class="nav pull-right ">
                                     <li class="divider-vertical"></li>
-                                    <li><a href="signin.html"><i class="icon-lock"></i> Sign in</a></li>
-                                    <li class="divider-vertical"></li>
-                                    <li><a href="signup.html"><i class="icon-edit"></i> Sign up</a></li>
+                                    <li rel="tooltip" title="Registration / Login"><a href="signin.html"><i
+                                                    class="icon-user"></i> Authorize</a></li>
                                     <li class="divider-vertical"></li>
                                 </ul>
                             </div>
@@ -53,73 +58,9 @@
                 </div>
             </div>
         </div>
-        <div class="row">
-            <object>
-                {#<param name="movie" value="http://www.youtube.com/v/kh29_SERH0Y?version=3&autoplay=1&autohide=1&cc_load_policy=1&iv_load_policy=3&enablejsapi=1&fs=1&modestbranding=1&rel=0&theme=light&ap=%2526fmt%3D22"></param>#}
-                <embed src="http://www.youtube.com/v/kh29_SERH0Y?version=3&autoplay=1&autohide=1&cc_load_policy=1&iv_load_policy=3&enablejsapi=1&fs=1&modestbranding=1&rel=0&theme=light&vq=hd720"
-                       type="application/x-shockwave-flash"
-                       class="span12" height="500">
-                </embed>
-            </object>
-        </div>
-        <div class="row">
-
-            {% block tags %}
-            {% endblock %}
-
-        </div>
     </div>
-    <div class="container videos">
-        <div class="row">
 
-
-            {% include 'BsVideoBundle:Video:vid.html.twig' %}
-            {% include 'BsVideoBundle:Video:vid.html.twig' %}
-            {% include 'BsVideoBundle:Video:vid.html.twig' %}
-            {% include 'BsVideoBundle:Video:vid.html.twig' %}
-            {% include 'BsVideoBundle:Video:vid.html.twig' %}
-            {% include 'BsVideoBundle:Video:vid.html.twig' %}
-
-            {% include 'BsVideoBundle:Video:vid.html.twig' %}
-            {% include 'BsVideoBundle:Video:vid.html.twig' %}
-            {% include 'BsVideoBundle:Video:vid.html.twig' %}
-            {% include 'BsVideoBundle:Video:vid.html.twig' %}
-            {% include 'BsVideoBundle:Video:vid.html.twig' %}
-            {% include 'BsVideoBundle:Video:vid.html.twig' %}
-
-
-        </div>
-
-
-        {#<div class="span2">#}
-        {#<div class="nav-headers">#}
-        {#<h3>Find</h3>#}
-        {#</div>#}
-        {#<ul class="nav nav-tabs nav-stacked">#}
-        {#<li class="active"><a href="#"><i class="icon-picture"></i> Newest</a></li>#}
-        {#<li><a href="#"><i class="icon-ok"></i> Popular</a></li>#}
-        {#<li><a href="#"><i class="icon-certificate"></i> Top Sites</a></li>#}
-        {#<li><a href="#"><i class="icon-bookmark"></i> Most Viewed</a></li>#}
-        {#<li><a href="#"><i class="icon-th-list"></i> Categories</a></li>#}
-        {#<li><a href="#"><i class="icon-download"></i> Most Download</a></li>#}
-        {#<li><a href="#"><i class="icon-heart"></i> Recomended</a></li>#}
-        {#</ul>#}
-        {#</div>#}
-    </div>
-    <div class="pagination">
-        <ul>
-            <li class="disabled"><a href="#" title="Go to the first page">&laquo; First</a></li>
-            <li><a href="#" title="Go to the previous page">&larr;</a></li>
-            <li class="active"><a href="#">1</a></li>
-            <li><a href="#">2</a></li>
-            <li><a href="#">..</a></li>
-            <li><a href="#">8</a></li>
-            <li><a href="#">9</a></li>
-            <li><a href="#" title="Go to the next page">&rarr;</a></li>
-            <li><a href="#" title="Go to the last page">Last &raquo;</a></li>
-        </ul>
-    </div>
-    </div>
+    {% block content %}{% endblock %}
 
     <footer class="container">
         <hr class="alt"/>
@@ -136,4 +77,3 @@
 
 
 {% endblock %}
-{% block container_class %}{% endblock %}

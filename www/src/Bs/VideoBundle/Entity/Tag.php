@@ -125,4 +125,10 @@ class Tag
     {
         return $this->Videos;
     }
+
+    function __toString()
+    {
+        return $this->name;
+    }
+
 }

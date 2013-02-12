@@ -29,7 +29,7 @@
 body {
     background: #f2f2f2;
     background: url(../img/body-bg.png) repeat;
-    font-family: segoeui;
+    /*font-family: segoeui;*/
 }
 
 a {
@@ -49,6 +49,10 @@ header .brand {
     font-size: 4rem;
     text-shadow: 0 1px 3px rgba(0, 0, 0, 0.25);
     margin: 15px 0 20px 40px;
+}
+
+header a {
+    margin-top: 15px;
 }
 
 .brand img {
@@ -89,8 +93,6 @@ header .brand {
     font-weight: lighter;
 }
 
-
-
 .tag {
     text-align: center;
 }
@@ -115,12 +117,13 @@ header .brand {
 }
 
 /* .: GALERI :. */
-.container.videos{
+.container.videos {
     background: none repeat scroll 0 0 #FFFFFF;
     border: 1px solid #EBEBEB;
     padding: 10px 10px 0 10px;
     margin-top: 20px;
 }
+
 .galery {
     margin-bottom: 10px;
     background: #fff;

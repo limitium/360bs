@@ -2,42 +2,27 @@
 {% block javascripts %}
     {{ parent() }}
     <script src='http://ajax.googleapis.com/ajax/libs/swfobject/2.2/swfobject.js'></script>
-    <script>
-        function onYouTubePlayerReady(playerId) {
-            player = document.getElementById("zebra");
-            console.log(player);
-//            player.playVideo();
-        }
-        $(function () {
-            swfobject.embedSWF(
-                    "http://www.youtube.com/v/qCTLCNmnlKU?hl=en_US&fs=1&enablejsapi=1&playerapiid=ytplayer",
-                    "foo",
-                    "480", "295",
-                    "8",
-                    null, null,
-                    { allowScriptAccess: 'always' },
-                    { id: 'zebra' }
-            );
-        });
-    </script>
+    <script src='{{ asset('js/upload.js') }}'></script>
 {% endblock %}
 
 {% block content %}
     <div class="container">
         <div class="row">
-
-
-            <div id="foo"></div>
-            {#<object>#}
-            {#<param name="allowFullScreen" value="true">#}
-            {#<param name="allowscriptaccess" value="always">#}
-            {#<embed src="http://www.youtube.com/v/Zhawgd0REhA?version=3&autoplay=1&autohide=1&cc_load_policy=1&iv_load_policy=3&enablejsapi=1&fs=1&modestbranding=1&rel=0&theme=light&vq=hd720&playerapiid=player&showinfo=0"#}
-            {#type="application/x-shockwave-flash"#}
-            {#allowscriptaccess="always"#}
-            {#allowfullscreen="true"#}
-            {#class="offset3 span6" height="200">#}
-            {#</embed>#}
-            {#</object>#}
+            <div class="span6">
+                <fieldset>
+                    <div class="input-prepend">
+                        <span class="add-on"><i class="icon-globe"></i></span>
+                        <input class="span6" id="youtube-link" type="text" placeholder="Youtube video url">
+                    </div>
+                </fieldset>
+            </div>
+            <div class="span6">
+                <div class="alert alert-error hide">
+                    <strong>Oh snap</strong>
+                    Seems wrong youtube URL.
+                </div>
+                <div id="player"></div>
+            </div>
         </div>
         <div class="row">
             <div class="span12">

@@ -3,17 +3,18 @@ u = {
     loadTimeOut: 500,
     loadedVideoId: false,
     player: null,
-    getVideoId: function () {
+    getVideoId: function (url) {
         var regExp = /^.*(youtu.be\/|v\/|e\/|u\/\w+\/|embed\/|v=)([^#\&\?]*).*/;
-        var match = $("#youtube-link").val().match(regExp);
+        var match = url.match(regExp);
         if (match && match[2].length == 11) {
             return match[2];
         }
         return false;
     },
     loadVideo: function () {
-        if ((new Date()).getTime() - u.lastUrlChange >= u.loadTimeOut) {
-            var vid = u.getVideoId(), wrong = $("#wrong-url");
+        const url = $("#yt-url").val();
+        if ((new Date()).getTime() - u.lastUrlChange >= u.loadTimeOut && url) {
+            var vid = u.getVideoId(url), wrong = $("#wrong-url");
             if (vid) {
                 if (u.loadedVideoId != vid) {
                     u.loadedVideoId = vid;
@@ -27,6 +28,7 @@ u = {
                         { allowScriptAccess: 'always' },
                         { id: 'player-swf' }
                     );
+                    u.loadMeta();
                 }
             } else {
                 u.loadedVideoId = false;
@@ -36,12 +38,44 @@ u = {
             }
         }
     },
+    onLoad: function () {
+        setInterval(function () {
+            if (u.player) {
+                $('#yt-player-position').html(Math.round(u.player.getCurrentTime()));
+            }
+        }, 500);
+    },
     onUrlChange: function () {
         u.lastUrlChange = (new Date()).getTime();
         setTimeout(u.loadVideo, u.loadTimeOut)
     },
     onPlayerLoad: function (player) {
         u.player = player;
+        const duration = player.getDuration();
+        $("#yt-duration").html(duration);
+        $('#yt-scroll').slider({
+            range: true,
+            min: 0,
+            max: duration,
+            values: [0, duration],
+            slide: function (e, ui) {
+                $('#yt-trick-start').val(ui.values[0]).spinner("option", {max: ui.values[1]});
+                $('#yt-trick-end').val(ui.values[1]).spinner("option", {min: ui.values[0]});
+            }
+        });
+        $('#yt-player-position').html(0);
+
+        $('#yt-trick-start').val(0);
+        $('#yt-trick-end').val(duration).spinner("option", {max: duration});
+    },
+    loadMeta: function () {
+        $.getJSON("http://gdata.youtube.com/feeds/api/videos/" + u.loadedVideoId + "?v=2&alt=json&prettyprint=true", function (resp) {
+            console.log(resp.entry);
+            $("#yt-title").html(resp.entry.title.$t);
+            $("#yt-uploader").html(resp.entry.author[0].name.$t);
+            $("#yt-uploaded").html(resp.entry.published.$t);
+            $("#yt-views").html(resp.entry.yt$statistics.viewCount);
+        });
     }
 };
 
@@ -50,11 +84,52 @@ function onYouTubePlayerReady(playerId) {
 }
 
 $(function () {
-    $("#youtube-link").on("blur change keyup", u.onUrlChange);
-    $("#player-swf").load(function () {
-        console.log(this)
+    u.onLoad();
+    $("#yt-url").on("blur change keyup", u.onUrlChange);
+    $("[rel=tooltip]").tooltip();
+
+    var onEndSpinChange = function (e, ui) {
+            const start = $('#yt-trick-start').val();
+            var end = ui.value;
+            const spin = $(this);
+            if (!end) {
+                end = spin.val();
+            }
+            if (start > end) {
+                spin.val(start);
+                end = start;
+            }
+            const max = spin.spinner("option", "max");
+            if (end > max) {
+                spin.val(max);
+                end = max
+            }
+
+            $('#yt-scroll').slider("option", {values: [ start, end] });
+        },
+        onStartSpinChange = function (e, ui) {
+            const end = $('#yt-trick-end').val();
+            var start = ui.value;
+            if (!start) {
+                start = $(this).val();
+            }
+            if (start > end) {
+                $(this).val(end);
+                start = end;
+            }
+            if (start < 0) {
+                $(this).val(0);
+                start = 0
+            }
+            console.log(start, end)
+            $('#yt-scroll').slider("option", {values: [  start, end] });
+        };
+    $('#yt-trick-start').spinner({ min: 0,
+        change: onStartSpinChange,
+        spin: onStartSpinChange
     });
-    $("#player-container").on("load", "#player-swf", function () {
-        console.log(this)
-    })
+    $('#yt-trick-end').spinner({ min: 0,
+        change: onEndSpinChange,
+        spin: onEndSpinChange
+    });
 });

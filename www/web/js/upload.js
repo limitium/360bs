@@ -2,6 +2,7 @@ u = {
     lastUrlChange: 0,
     loadTimeOut: 500,
     loadedVideoId: false,
+    previewing: false,
     player: null,
     getVideoId: function (url) {
         var regExp = /^.*(youtu.be\/|v\/|e\/|u\/\w+\/|embed\/|v=)([^#\&\?]*).*/;
@@ -35,13 +36,19 @@ u = {
                 u.player = null;
                 wrong.removeClass("hide");
                 $("#player-container").html('<div id="player"></div>');
+                $("#yt-trick-control,#yt-meta").addClass("hide");
             }
         }
     },
     onLoad: function () {
         setInterval(function () {
             if (u.player) {
-                $('#yt-player-position').html(Math.round(u.player.getCurrentTime()));
+                const currentTime = u.player.getCurrentTime();
+                $('#yt-player-position').html(Math.round(currentTime));
+                if (u.previewing && currentTime >= $('#yt-trick-end').val()) {
+                    u.previewing = false;
+                    u.player.pauseVideo();
+                }
             }
         }, 500);
     },
@@ -52,6 +59,7 @@ u = {
     onPlayerLoad: function (player) {
         u.player = player;
         const duration = player.getDuration();
+        player.loadVideoById(u.loadedVideoId);
         $("#yt-duration").html(duration);
         $('#yt-scroll').slider({
             range: true,
@@ -67,15 +75,25 @@ u = {
 
         $('#yt-trick-start').val(0);
         $('#yt-trick-end').val(duration).spinner("option", {max: duration});
+
+        $("#yt-trick-control").removeClass("hide");
     },
     loadMeta: function () {
         $.getJSON("http://gdata.youtube.com/feeds/api/videos/" + u.loadedVideoId + "?v=2&alt=json&prettyprint=true", function (resp) {
-            console.log(resp.entry);
             $("#yt-title").html(resp.entry.title.$t);
             $("#yt-uploader").html(resp.entry.author[0].name.$t);
             $("#yt-uploaded").html(resp.entry.published.$t);
             $("#yt-views").html(resp.entry.yt$statistics.viewCount);
+
+            $('#yt-meta').removeClass("hide");
         });
+    },
+    onPreview: function () {
+        u.player.seekTo($('#yt-trick-start').val(), true);
+        u.player.playVideo();
+        u.previewing = true;
+    },
+    onSubmit: function () {
     }
 };
 
@@ -85,7 +103,7 @@ function onYouTubePlayerReady(playerId) {
 
 $(function () {
     u.onLoad();
-    $("#yt-url").on("blur change keyup", u.onUrlChange);
+    $("#yt-url").on("blur change keyup", u.onUrlChange).trigger("change");
     $("[rel=tooltip]").tooltip();
 
     var onEndSpinChange = function (e, ui) {
@@ -124,6 +142,7 @@ $(function () {
             console.log(start, end)
             $('#yt-scroll').slider("option", {values: [  start, end] });
         };
+
     $('#yt-trick-start').spinner({ min: 0,
         change: onStartSpinChange,
         spin: onStartSpinChange
@@ -132,4 +151,7 @@ $(function () {
         change: onEndSpinChange,
         spin: onEndSpinChange
     });
+
+    $("#yt-trick-preview").click(u.onPreview);
+    $("#yt-trick-submit").click(u.onSubmit);
 });

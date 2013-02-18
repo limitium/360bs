@@ -6,3 +6,16 @@
 #yt-scroll {
     margin-bottom: 10px;
 }
+
+#yt-player-position-container {
+    margin: 0 auto;
+    display: table;
+}
+
+.ui-spinner {
+    vertical-align: super;
+}
+
+#yt-trick-end-container .ui-spinner {
+    float: right;
+}

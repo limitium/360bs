@@ -78,6 +78,18 @@
                 </ul>
             </div>
         </div>
+        <div class="row">
+            {% for group in taggroups %}
+                <div class="span4 tag">
+                    <strong> {{ group.name }}:</strong>
+                    <br>
+                    {% for tag in group.tags %}
+                        <span class="label label-off">{{ tag.name }}</span>
+                    {% endfor %}
+                </div>
+            {% endfor %}
+
+        </div>
         {#<div class="row">#}
         {#<div class="span12">#}
         {#<button id="load" class="btn">load</button>#}

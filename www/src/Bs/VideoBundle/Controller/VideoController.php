@@ -67,10 +67,11 @@ class VideoController extends Controller
     {
         $entity = new Video();
         $form   = $this->createForm(new VideoType(), $entity);
-
+        $em = $this->getDoctrine()->getManager();
         return array(
             'entity' => $entity,
             'form'   => $form->createView(),
+            'taggroups' => $em->getRepository('BsVideoBundle:TagGroup')->findAll(),
         );
     }
 

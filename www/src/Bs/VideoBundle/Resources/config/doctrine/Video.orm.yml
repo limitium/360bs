@@ -15,13 +15,7 @@ Bs\VideoBundle\Entity\Video:
     duration:
       type: decimal
       nullable: false
-    start:
-      type: decimal
-      nullable: true
-    end:
-      type: decimal
-      nullable: true
-  manyToMany:
-    Tags:
-      targetEntity: Tag
-      mappedBy: Videos
+  oneToMany:
+    Tricks:
+      targetEntity: Bs\VideoBundle\Entity\Trick
+      mappedBy: Video

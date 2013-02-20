@@ -209,4 +209,42 @@ class Video
     {
         return $this->end;
     }
+    /**
+     * @var \Doctrine\Common\Collections\Collection
+     */
+    private $Tricks;
+
+
+    /**
+     * Add Tricks
+     *
+     * @param \Bs\VideoBundle\Entity\Trick $tricks
+     * @return Video
+     */
+    public function addTrick(\Bs\VideoBundle\Entity\Trick $tricks)
+    {
+        $this->Tricks[] = $tricks;
+    
+        return $this;
+    }
+
+    /**
+     * Remove Tricks
+     *
+     * @param \Bs\VideoBundle\Entity\Trick $tricks
+     */
+    public function removeTrick(\Bs\VideoBundle\Entity\Trick $tricks)
+    {
+        $this->Tricks->removeElement($tricks);
+    }
+
+    /**
+     * Get Tricks
+     *
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function getTricks()
+    {
+        return $this->Tricks;
+    }
 }

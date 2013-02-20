@@ -5,40 +5,51 @@
     <module-position name="VideoBundle" visPositionX="-16" visPositionY="-153"/>
   </project>
 
-  <module import-format="Doctrine2Yml" import-path="..\src\Bs\VideoBundle\Resources\config\doctrine\" name="VideoBundle" visBkColor="16317694" visSizeX="0" visSizeX2="404" visSizeY="6" visSizeY2="441">
-    <table name="Tag" visPositionX="283" visPositionY="201" visSizeX="0" visSizeX2="83" visSizeY="0" visSizeY2="59">
+  <module import-format="Doctrine2Yml" import-path="..\src\Bs\VideoBundle\Resources\config\doctrine\" name="VideoBundle" visBkColor="16317694" visSizeX="0" visSizeX2="523" visSizeY="6" visSizeY2="441">
+    <table name="Tag" visPositionX="224" visPositionY="350" visSizeX="0" visSizeX2="118" visSizeY="0" visSizeY2="59">
       <column auto-increment="true" name="id" primary="true" required="true" type="integer"/>
       <column name="name" required="true" type="string"/>
-      <column name="tag_group_id" type="integer"/>
+      <column name="tag_group_id" required="true" type="integer"/>
     </table>
-    <table name="Video" visPositionX="28" visPositionY="34" visSizeX="0" visSizeX2="83" visSizeY="0" visSizeY2="59">
+    <table name="Video" visPositionX="35" visPositionY="31" visSizeX="0" visSizeX2="102" visSizeY="0" visSizeY2="73">
       <column auto-increment="true" name="id" primary="true" required="true" type="integer"/>
       <column name="vid" required="true" type="string"/>
       <column name="name" required="true" type="string"/>
       <column name="duration" required="true" type="decimal"/>
-      <column name="start" type="decimal"/>
-      <column name="end" type="decimal"/>
     </table>
-    <table name="TagGroup" visPositionX="310" visPositionY="361" visSizeX="0" visSizeX2="58" visSizeY="0" visSizeY2="45">
+    <table name="TagGroup" visPositionX="419" visPositionY="359" visSizeX="0" visSizeX2="83" visSizeY="0" visSizeY2="45">
       <column auto-increment="true" name="id" primary="true" required="true" type="integer"/>
       <column name="name" required="true" type="string"/>
     </table>
-    <table name="VideoTag" visPositionX="155" visPositionY="110" visSizeX="0" visSizeX2="100" visSizeY="0" visSizeY2="60">
-      <column name="tag_id" required="true" type="integer"/>
+    <table name="Trick" visPositionX="36" visPositionY="186" visSizeX="0" visSizeX2="100" visSizeY="0" visSizeY2="73">
+      <column auto-increment="true" name="id" primary="true" required="true" type="integer"/>
+      <column name="start" required="true" type="integer"/>
+      <column name="end" required="true" type="integer"/>
       <column name="video_id" required="true" type="integer"/>
+    </table>
+    <table name="TrickTag" visPositionX="30" visPositionY="342" visSizeX="0" visSizeX2="95" visSizeY="0" visSizeY2="74">
+      <column name="trick_id" required="true" type="integer"/>
+      <column name="tag_id" required="true" type="integer"/>
+      <index name="unique_trick_tag" unique="true">
+        <index-column name="trick_id"/>
+        <index-column name="tag_id"/>
+      </index>
     </table>
     <foreign-key caption="tag group" from="Tag" inverse-alias="Group" name="FK_tag_tag_group_id" owning-alias="Tags" to="TagGroup">
       <foreign-key-column from="tag_group_id" to="id"/>
     </foreign-key>
-    <foreign-key caption="tag video_tag" from="VideoTag" inverse-alias="Tag" name="FK_video_tag_tag_id" owning-alias="Videos" to="Tag">
-      <foreign-key-column from="tag_id" to="id"/>
-    </foreign-key>
-    <foreign-key caption="video video_tag" from="VideoTag" inverse-alias="Video" name="FK_video_tag_video_id" owning-alias="Tags" to="Video">
+    <foreign-key caption="Video Trick" from="Trick" inverse-alias="Video" name="FK_Trick_Video_id" owning-alias="Tricks" to="Video">
       <foreign-key-column from="video_id" to="id"/>
     </foreign-key>
-    <many-to-many-relation mn-table="VideoTag">
-      <many-to-many-foreign-key foreign-key="FK_video_tag_tag_id" relation-alias="Tags"/>
-      <many-to-many-foreign-key foreign-key="FK_video_tag_video_id" relation-alias="Videos"/>
+    <foreign-key caption="Trick TrickTag" from="TrickTag" name="FK_TrickTag_Trick_id" to="Trick">
+      <foreign-key-column from="trick_id" to="id"/>
+    </foreign-key>
+    <foreign-key caption="Tag TrickTag" from="TrickTag" name="FK_TrickTag_Tag_id" to="Tag">
+      <foreign-key-column from="tag_id" to="id"/>
+    </foreign-key>
+    <many-to-many-relation mn-table="TrickTag">
+      <many-to-many-foreign-key foreign-key="FK_TrickTag_Trick_id" relation-alias="Tricks"/>
+      <many-to-many-foreign-key foreign-key="FK_TrickTag_Tag_id" relation-alias="Tags"/>
     </many-to-many-relation>
   </module>
 

@@ -13,20 +13,25 @@
     {{ parent() }}
     <script src='http://ajax.googleapis.com/ajax/libs/swfobject/2.2/swfobject.js'></script>
     <script src="{{ asset('vendor/jquery/ui/js/jquery-ui-1.10.1.custom.js') }}"></script>
-    <script src='{{ asset('js/upload.js') }}'></script>
+    {#<script src='{{ asset('js/upload.js') }}'></script>#}
 {% endblock %}
 
 {% block content %}
     <div class="container">
-        <div class="row">
+        <div class="row" ng-controller="YtController">
             <div class="span4">
                 <fieldset>
                     <div class="input-prepend">
                         <span class="add-on"><i class="icon-globe"></i></span>
-                        <input autofocus="autofocus" class="span4" id="yt-url" type="text"
-                               placeholder="Youtube video url">
+                        <input required="required" autofocus="autofocus"
+                               class="span4"
+                               id="yt-url"
+                               type="text"
+                               placeholder="Youtube video url"
+                               ng-model="ytUrl">
                     </div>
                 </fieldset>
+                        {{'{{ ytUrl }}'}}
                 <ul id="yt-meta" class="unstyled hide">
                     <li rel="tooltip" title="Title"><i class="icon-pencil"></i> <span id="yt-title">-</span></li>
                     <li rel="tooltip" title="Author"><i class="icon-user"></i> <span id="yt-uploader">-</span></li>
@@ -46,7 +51,7 @@
                                 <button id="yt-preview" class="btn"><i class="icon-arrow-left"></i></button>
                         <span rel="tooltip" title="Current player position" id="yt-player-position"
                                 ></span>
-                                <button id="yt-submit"  class="btn"><i class="icon-arrow-right"></i></button>
+                                <button id="yt-submit" class="btn"><i class="icon-arrow-right"></i></button>
                             </div>
                         </div>
                         <div id="yt-trick-end-container" rel="tooltip" title="End trick time" class="span1">
@@ -78,18 +83,19 @@
                 </ul>
             </div>
         </div>
-        <div class="row">
+
+        <div class="row" ng-controller="TagController">
             {% for group in taggroups %}
                 <div class="span4 tag">
                     <strong> {{ group.name }}:</strong>
                     <br>
                     {% for tag in group.tags %}
-                        <span class="label label-off">{{ tag.name }}</span>
+                        <span ng-click="toggleTag({{ tag.id }})" ng-class="isSelected({{ tag.id }})" class="label">{{tag.name}}</span>
                     {% endfor %}
                 </div>
             {% endfor %}
-
         </div>
+
         {#<div class="row">#}
         {#<div class="span12">#}
         {#<button id="load" class="btn">load</button>#}

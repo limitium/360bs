@@ -1,13 +1,32 @@
+var bs = angular.module('bs', []);
 
-$(document).ready(function () {
+bs.directive("rel", function () {
+    return {
+        restrict: 'A',
+        link: function (scope, el, attr) {
+            if (attr.rel == "tooltip") {
+                $(el).tooltip();
+            }
+        }
+    }
+});
 
-    $("[rel=tooltip]").tooltip();
+bs.controller("TagController", function ($scope) {
+    var selected = [];
 
-    $(".label").click(function () {
-        $(this).toggleClass("label-on");
-    });
+    $scope.toggleTag = function (id) {
+        var indx = selected.indexOf(id);
+        if (indx == -1) {
+            selected.push(id);
+        } else {
+            selected.splice(indx, 1);
+        }
+    };
+    $scope.isSelected = function (id) {
+        return selected.indexOf(id) == -1 ? "label-off" : "label-on";
+    };
+});
 
-    $("#load").click(function () {
+bs.controller("YtController", function ($scope) {
 
-    });
 });

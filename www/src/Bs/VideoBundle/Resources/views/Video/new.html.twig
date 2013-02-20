@@ -2,9 +2,9 @@
 
 {% block stylesheets %}
     {{ parent() }}
-    <link type="text/css" href="{{ asset('css/jquery-ui-1.10.0.custom.css') }}" rel="stylesheet"/>
+    <link type="text/css" href="{{ asset('vendor/jquery/ui/css/jquery-ui-1.10.0.custom.css') }}" rel="stylesheet"/>
     <!--[if IE 7]>
-    <link type="text/css" href="{{ asset('css/jquery.ui.1.10.0.ie.css') }}" rel="stylesheet"/>
+    <link type="text/css" href="{{ asset('vendor/jquery/ui/css/jquery.ui.1.10.0.ie.css') }}" rel="stylesheet"/>
     <![endif]-->
     <link type="text/css" href="{{ asset('css/upload.css') }}" rel="stylesheet"/>
 {% endblock %}
@@ -12,7 +12,7 @@
 {% block javascripts %}
     {{ parent() }}
     <script src='http://ajax.googleapis.com/ajax/libs/swfobject/2.2/swfobject.js'></script>
-    <script src="{{ asset('js/vendor/jquery-ui-1.10.1.custom.js') }}"></script>
+    <script src="{{ asset('vendor/jquery/ui/js/jquery-ui-1.10.1.custom.js') }}"></script>
     <script src='{{ asset('js/upload.js') }}'></script>
 {% endblock %}
 

@@ -26,7 +26,50 @@ bs.controller("TagController", function ($scope) {
         return selected.indexOf(id) == -1 ? "label-off" : "label-on";
     };
 });
+bs.factory("YouTubeService", function () {
+    return {
+        getVideoId: function (url) {
+            var regExp = /^.*(youtu.be\/|v\/|e\/|u\/\w+\/|embed\/|v=)([^#\&\?]*).*/;
+            var match = url.match(regExp);
+            if (match && match[2].length == 11) {
+                return match[2];
+            }
+            return false;
+        }
+    }
+});
 
-bs.controller("YtController", function ($scope) {
+bs.controller("YtController", function ($scope, $window, YouTubeService) {
+    $window.onYouTubePlayerReady = function () {
+        console.log("player loaded");
+        $scope.$apply(function () {
+            $scope.player = document.getElementById("player-swf");
+        })
+    };
 
+    $scope.videoUrl = "";
+    $scope.player = null;
+
+    $scope.isValidUrl = function () {
+        return !!YouTubeService.getVideoId($scope.videoUrl);
+    };
+
+    $scope.loadVideo = function () {
+        var vid = YouTubeService.getVideoId($scope.videoUrl);
+        if (vid) {
+            if (!$scope.player) {
+                swfobject.embedSWF(
+                    "http://www.youtube.com/v/" + vid + "?hl=en_US&fs=1&enablejsapi=1&playerapiid=ytplayer",
+                    "player",
+                    "100%", "300",
+                    "8",
+                    null, null,
+                    { allowScriptAccess: 'always' },
+                    { id: 'player-swf' }
+                );
+            } else {
+
+            }
+        }
+    };
 });

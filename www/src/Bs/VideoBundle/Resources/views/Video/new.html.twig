@@ -20,18 +20,19 @@
     <div class="container">
         <div class="row" ng-controller="YtController">
             <div class="span4">
-                <fieldset>
-                    <div class="input-prepend">
-                        <span class="add-on"><i class="icon-globe"></i></span>
-                        <input required="required" autofocus="autofocus"
-                               class="span4"
-                               id="yt-url"
-                               type="text"
-                               placeholder="Youtube video url"
-                               ng-model="ytUrl">
-                    </div>
-                </fieldset>
-                        {{'{{ ytUrl }}'}}
+                <form ng-submit="loadVideo()">
+                    <fieldset>
+                        <div class="input-prepend">
+                            <span class="add-on"><i class="icon-globe"></i></span>
+                            <input required="required" autofocus="autofocus"
+                                   class="span4"
+                                   id="yt-url"
+                                   type="text"
+                                   placeholder="Youtube video url"
+                                   ng-model="videoUrl">
+                        </div>
+                    </fieldset>
+                </form>
                 <ul id="yt-meta" class="unstyled hide">
                     <li rel="tooltip" title="Title"><i class="icon-pencil"></i> <span id="yt-title">-</span></li>
                     <li rel="tooltip" title="Author"><i class="icon-user"></i> <span id="yt-uploader">-</span></li>
@@ -67,14 +68,13 @@
                 </div>
             </div>
             <div class="span5">
-                <div id="wrong-url" class="alert alert-error hide">
+                <div id="wrong-url" class="alert alert-error" ng-cloak ng-show="videoUrl && !isValidUrl()">
                     <strong>Oh snap</strong>
                     Seems wrong youtube URL.
                 </div>
                 <div id="player-container">
                     <div id="player"></div>
                 </div>
-
             </div>
             <div id="tricks-list" class="span3 hide">
                 Tricks list:
@@ -90,7 +90,7 @@
                     <strong> {{ group.name }}:</strong>
                     <br>
                     {% for tag in group.tags %}
-                        <span ng-click="toggleTag({{ tag.id }})" ng-class="isSelected({{ tag.id }})" class="label">{{tag.name}}</span>
+                        <span ng-click="toggleTag({{ tag.id }})" ng-class="isSelected({{ tag.id }})" class="label">{{ tag.name }}</span>
                     {% endfor %}
                 </div>
             {% endfor %}

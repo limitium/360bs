@@ -2,11 +2,41 @@ var bs = angular.module('bs', []);
 
 bs.directive("rel", function () {
     return {
-        restrict: 'A',
+        restrict: "A",
         link: function (scope, el, attr) {
             if (attr.rel == "tooltip") {
                 $(el).tooltip();
             }
+        }
+    }
+});
+
+bs.directive("slider", function () {
+    return {
+        restrict: "A",
+        scope: {
+            slider: "="
+        },
+        link: function (scope, el, attr) {
+            scope.$watch("slider.start", function () {
+                el.slider("option", {values: [  scope.slider.start, scope.slider.end] })
+            });
+            scope.$watch("slider.end", function () {
+                el.slider("option", {values: [  scope.slider.start, scope.slider.end] })
+            });
+
+            el.slider({
+                range: true,
+                min: scope.slider.start,
+                max: scope.slider.end,
+                values: [scope.slider.start, scope.slider.end],
+                slide: function (e, ui) {
+                    scope.$apply(function () {
+                        scope.slider.start = ui.values[0]
+                        scope.slider.end = ui.values[1]
+                    });
+                }
+            })
         }
     }
 });
@@ -26,7 +56,8 @@ bs.controller("TagController", function ($scope) {
         return selected.indexOf(id) == -1 ? "label-off" : "label-on";
     };
 });
-bs.factory("YouTubeService", function () {
+
+bs.factory("YouTubeService", function ($http) {
     return {
         getVideoId: function (url) {
             var regExp = /^.*(youtu.be\/|v\/|e\/|u\/\w+\/|embed\/|v=)([^#\&\?]*).*/;
@@ -35,6 +66,9 @@ bs.factory("YouTubeService", function () {
                 return match[2];
             }
             return false;
+        },
+        loadMeta: function (vid) {
+
         }
     }
 });
@@ -49,6 +83,10 @@ bs.controller("YtController", function ($scope, $window, YouTubeService) {
 
     $scope.videoUrl = "";
     $scope.player = null;
+    $scope.trick = {
+        start: 0,
+        end: 100
+    }
 
     $scope.isValidUrl = function () {
         return !!YouTubeService.getVideoId($scope.videoUrl);
@@ -68,7 +106,7 @@ bs.controller("YtController", function ($scope, $window, YouTubeService) {
                     { id: 'player-swf' }
                 );
             } else {
-
+                $scope.player.loadVideoById(vid);
             }
         }
     };

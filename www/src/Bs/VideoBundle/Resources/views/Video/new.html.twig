@@ -42,11 +42,11 @@
                 </ul>
                 <div id="yt-trick-control">
                     {{ '{{ trick.start }} {{ trick.end }}' }}
-                    <div slider="trick" id="yt-scroll"
+                    <div ng-slider="trick" id="yt-scroll"
                          class="ui-slider ui-slider-horizontal ui-widget ui-widget-content ui-corner-all"></div>
                     <div class="row">
                         <div rel="tooltip" title="Start trick time" class="span1">
-                            <input class="span1" id="yt-trick-start" type="text">
+                            <input class="span1" id="yt-trick-start" type="text" ng-spinner="trick.start">
                         </div>
                         <div class="span2">
                             <div id="yt-player-position-container">
@@ -57,7 +57,7 @@
                             </div>
                         </div>
                         <div id="yt-trick-end-container" rel="tooltip" title="End trick time" class="span1">
-                            <input class="span1" id="yt-trick-end" type="text">
+                            <input class="span1" id="yt-trick-end" type="text" ng-spinner="trick.end">
                         </div>
                     </div>
                     <div class="row">

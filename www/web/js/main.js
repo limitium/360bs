@@ -11,17 +11,45 @@ bs.directive("rel", function () {
     }
 });
 
-bs.directive("slider", function () {
+bs.directive("ngSpinner", function ($timeout) {
     return {
         restrict: "A",
         scope: {
-            slider: "="
+            spinner: "=ngSpinner"
         },
         link: function (scope, el, attr) {
-            scope.$watch("slider.start", function () {
-                el.slider("option", {values: [  scope.slider.start, scope.slider.end] })
+            scope.$watch("spinner", function () {
+                $timeout(function () {
+                    el.val(scope.spinner)
+                }, 50);
             });
-            scope.$watch("slider.end", function () {
+
+            el
+                .spinner({
+                    min: 0,
+                    change: function () {
+                        scope.$apply(function () {
+                            scope.spinner = el.val();
+                        });
+                    },
+                    spin: function (e, ui) {
+                        scope.$apply(function () {
+                            scope.spinner = ui.value;
+                        });
+                    }
+                })
+                .val(scope.spinner);
+        }
+    }
+});
+bs.directive("ngSlider", function () {
+    return {
+        restrict: "A",
+        scope: {
+            slider: "=ngSlider"
+        },
+        link: function (scope, el, attr) {
+            scope.$watch("slider.start+slider.end", function () {
                 el.slider("option", {values: [  scope.slider.start, scope.slider.end] })
             });
 
@@ -74,15 +102,9 @@ bs.factory("YouTubeService", function ($http) {
 });
 
 bs.controller("YtController", function ($scope, $window, YouTubeService) {
-    $window.onYouTubePlayerReady = function () {
-        console.log("player loaded");
-        $scope.$apply(function () {
-            $scope.player = document.getElementById("player-swf");
-        })
-    };
-
     $scope.videoUrl = "";
     $scope.player = null;
+    $scope.duration = 100;
     $scope.trick = {
         start: 0,
         end: 100
@@ -110,4 +132,32 @@ bs.controller("YtController", function ($scope, $window, YouTubeService) {
             }
         }
     };
+
+    $window.onYouTubePlayerReady = function () {
+        console.log("player loaded");
+        $scope.$apply(function () {
+            $scope.player = document.getElementById("player-swf");
+        })
+    };
+
+    $scope.$watch("duration", function () {
+        $scope.trick.start = 0;
+        $scope.trick.end = $scope.duration;
+    });
+    $scope.$watch("trick.start", function () {
+        if ($scope.trick.start < 0) {
+            $scope.trick.start = 0;
+        }
+        if ($scope.trick.start > $scope.trick.end) {
+            $scope.trick.start = $scope.trick.end;
+        }
+    });
+    $scope.$watch("trick.end", function () {
+        if ($scope.trick.end > $scope.duration) {
+            $scope.trick.end = $scope.duration;
+        }
+        if ($scope.trick.end < $scope.trick.start) {
+            $scope.trick.end = $scope.trick.start;
+        }
+    });
 });

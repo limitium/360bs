@@ -1,13 +1,13 @@
-#yt-trick-end, #yt-trick-start {
+.ui-spinner-input[ng-spinner] {
     margin: 0;
     border: none;
 }
 
-#yt-scroll {
+.ui-slider[ng-slider] {
     margin-bottom: 10px;
 }
 
-#yt-player-position-container {
+.yt-player-position-container {
     margin: 0 auto;
     display: table;
 }
@@ -16,6 +16,6 @@
     vertical-align: super;
 }
 
-#yt-trick-end-container .ui-spinner {
+.end-trick-slider .ui-spinner {
     float: right;
 }

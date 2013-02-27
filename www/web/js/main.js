@@ -47,17 +47,21 @@ bs.directive("ngSlider", function () {
     return {
         restrict: "A",
         scope: {
-            slider: "=ngSlider"
+            slider: "=ngSlider",
+            max: "="
         },
         link: function (scope, el, attr) {
             scope.$watch("slider.start+slider.end", function () {
                 el.slider("option", {values: [  scope.slider.start, scope.slider.end] })
             });
+            scope.$watch("max", function () {
+                el.slider("option", "max", scope.max);
+            });
 
             el.slider({
                 range: true,
-                min: scope.slider.start,
-                max: scope.slider.end,
+                min: 0,
+                max: scope.max,
                 values: [scope.slider.start, scope.slider.end],
                 slide: function (e, ui) {
                     scope.$apply(function () {
@@ -109,7 +113,7 @@ bs.controller("YtController", function ($scope, $window, YouTubeService) {
 
     $scope.video = {
         id: "",
-        duration: 100,
+        duration: 0,
         title: "",
         uploader: "",
         uploaded: "",
@@ -118,7 +122,7 @@ bs.controller("YtController", function ($scope, $window, YouTubeService) {
 
     $scope.trick = {
         start: 0,
-        end: 100
+        end: 0
     }
 
     $scope.isValidUrl = function () {
@@ -132,6 +136,7 @@ bs.controller("YtController", function ($scope, $window, YouTubeService) {
 
             YouTubeService.loadMeta(vid, function (resp) {
                 $scope.video.title = resp.entry.title.$t;
+                $scope.video.duration = resp.entry.media$group.yt$duration.seconds;
                 $scope.video.uploader = resp.entry.author[0].name.$t;
                 $scope.video.uploaded = resp.entry.published.$t;
                 $scope.video.views = resp.entry.yt$statistics.viewCount;

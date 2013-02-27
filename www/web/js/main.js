@@ -42,6 +42,7 @@ bs.directive("ngSpinner", function ($timeout) {
         }
     }
 });
+
 bs.directive("ngSlider", function () {
     return {
         restrict: "A",
@@ -95,16 +96,26 @@ bs.factory("YouTubeService", function ($http) {
             }
             return false;
         },
-        loadMeta: function (vid) {
-
+        loadMeta: function (vid, cb) {
+            $.getJSON("http://gdata.youtube.com/feeds/api/videos/" + vid + "?v=2&alt=json&prettyprint=true", cb);
         }
     }
 });
 
 bs.controller("YtController", function ($scope, $window, YouTubeService) {
+
     $scope.videoUrl = "";
     $scope.player = null;
-    $scope.duration = 100;
+
+    $scope.video = {
+        id: "",
+        duration: 100,
+        title: "",
+        uploader: "",
+        uploaded: "",
+        views: ""
+    }
+
     $scope.trick = {
         start: 0,
         end: 100
@@ -117,6 +128,16 @@ bs.controller("YtController", function ($scope, $window, YouTubeService) {
     $scope.loadVideo = function () {
         var vid = YouTubeService.getVideoId($scope.videoUrl);
         if (vid) {
+            $scope.video.id = vid;
+
+            YouTubeService.loadMeta(vid, function (resp) {
+                $scope.video.title = resp.entry.title.$t;
+                $scope.video.uploader = resp.entry.author[0].name.$t;
+                $scope.video.uploaded = resp.entry.published.$t;
+                $scope.video.views = resp.entry.yt$statistics.viewCount;
+                $scope.$apply();
+            });
+
             if (!$scope.player) {
                 swfobject.embedSWF(
                     "http://www.youtube.com/v/" + vid + "?hl=en_US&fs=1&enablejsapi=1&playerapiid=ytplayer",
@@ -140,9 +161,9 @@ bs.controller("YtController", function ($scope, $window, YouTubeService) {
         })
     };
 
-    $scope.$watch("duration", function () {
+    $scope.$watch("video.duration", function () {
         $scope.trick.start = 0;
-        $scope.trick.end = $scope.duration;
+        $scope.trick.end = $scope.video.duration;
     });
     $scope.$watch("trick.start", function () {
         if ($scope.trick.start < 0) {
@@ -153,8 +174,8 @@ bs.controller("YtController", function ($scope, $window, YouTubeService) {
         }
     });
     $scope.$watch("trick.end", function () {
-        if ($scope.trick.end > $scope.duration) {
-            $scope.trick.end = $scope.duration;
+        if ($scope.trick.end > $scope.video.duration) {
+            $scope.trick.end = $scope.video.duration;
         }
         if ($scope.trick.end < $scope.trick.start) {
             $scope.trick.end = $scope.trick.start;

@@ -34,11 +34,17 @@
                     </fieldset>
                 </form>
                 <ul id="yt-meta" class="unstyled">
-                    <li rel="tooltip" title="Title"><i class="icon-pencil"></i> <span id="yt-title">-</span></li>
-                    <li rel="tooltip" title="Author"><i class="icon-user"></i> <span id="yt-uploader">-</span></li>
-                    <li rel="tooltip" title="Uploaded"><i class="icon-upload"></i> <span id="yt-uploaded">-</span></li>
-                    <li rel="tooltip" title="Views"><i class="icon-eye-open"></i> <span id="yt-views">-</span></li>
-                    <li rel="tooltip" title="Duration"><i class="icon-time"></i> <span id="yt-duration">-</span>s</li>
+                    <li rel="tooltip" title="Title"><i class="icon-pencil"></i>
+                        <span id="yt-title">{{ '{{ video.title }}' }}</span></li>
+                    <li rel="tooltip" title="Author"><i class="icon-user"></i>
+                        <span id="yt-uploader">{{ '{{ video.uploader }}' }}</span></li>
+                    <li rel="tooltip" title="Uploaded"><i class="icon-upload"></i>
+                        <span id="yt-uploaded">{{ '{{ video.uploaded | date:"dd/MM/yyyy" }}' }}</span></li>
+                    <li rel="tooltip" title="Views"><i class="icon-eye-open"></i>
+                        <span id="yt-views">{{ '{{ video.views | number:0}}' }}</span></li>
+                    <li rel="tooltip" title="Duration"><i class="icon-time"></i>
+                        <span id="yt-duration">{{ '{{ video.duration | number:0 }}' }}</span>s
+                    </li>
                 </ul>
                 <div id="yt-trick-control">
                     {{ '{{ trick.start }} {{ trick.end }}' }}

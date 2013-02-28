@@ -11,6 +11,24 @@ bs.directive("rel", function () {
     }
 });
 
+bs.directive("ngToggleClass", function () {
+    return {
+        restrict: "A",
+        scope: {
+            toggle: "=ngToggleClass",
+            on: "@",
+            off: "@"
+        },
+        link: function (scope, el, attr) {
+            scope.$watch("toggle", function () {
+                el
+                    .removeClass(scope.toggle ? scope.on : scope.off)
+                    .addClass(scope.toggle ? scope.off : scope.on);
+            });
+        }
+    }
+});
+
 bs.directive("ngSpinner", function ($timeout) {
     return {
         restrict: "A",
@@ -106,18 +124,22 @@ bs.factory("YouTubeService", function ($http) {
     }
 });
 
-bs.controller("YtController", function ($scope, $window, YouTubeService) {
+bs.controller("YtController", function ($scope, $timeout, $window, YouTubeService) {
 
     $scope.videoUrl = "";
-    $scope.player = null;
 
     $scope.video = {
         id: "",
+        player: null,
+        position: 0,
+        status: "",
         duration: 0,
         title: "",
         uploader: "",
         uploaded: "",
-        views: ""
+        views: "",
+        preview: false,
+        playback: false
     }
 
     $scope.trick = {
@@ -133,6 +155,7 @@ bs.controller("YtController", function ($scope, $window, YouTubeService) {
         var vid = YouTubeService.getVideoId($scope.videoUrl);
         if (vid) {
             $scope.video.id = vid;
+            $scope.video.preview = false;
 
             YouTubeService.loadMeta(vid, function (resp) {
                 $scope.video.title = resp.entry.title.$t;
@@ -143,7 +166,7 @@ bs.controller("YtController", function ($scope, $window, YouTubeService) {
                 $scope.$apply();
             });
 
-            if (!$scope.player) {
+            if (!$scope.video.player) {
                 swfobject.embedSWF(
                     "http://www.youtube.com/v/" + vid + "?hl=en_US&fs=1&enablejsapi=1&playerapiid=ytplayer",
                     "player",
@@ -154,16 +177,43 @@ bs.controller("YtController", function ($scope, $window, YouTubeService) {
                     { id: 'player-swf' }
                 );
             } else {
-                $scope.player.loadVideoById(vid);
+                $scope.video.player.loadVideoById(vid);
             }
         }
     };
 
+    $scope.togglePlay = function () {
+        if ($scope.video.playback) {
+            $scope.video.player.stopVideo();
+        } else {
+            $scope.video.player.playVideo();
+        }
+    }
+
+    $scope.Math = $window.Math;
+
     $window.onYouTubePlayerReady = function () {
-        console.log("player loaded");
+        var player = document.getElementById("player-swf");
         $scope.$apply(function () {
-            $scope.player = document.getElementById("player-swf");
-        })
+            $scope.video.player = player;
+        });
+
+        player.addEventListener("onStateChange", "onStateChange");
+
+        function setCurrentTime() {
+            $scope.video.position = player.getCurrentTime();
+            $timeout(setCurrentTime, 333);
+        }
+
+        setCurrentTime();
+
+        player.playVideo();
+    };
+    $window.onStateChange = function (status) {
+        $scope.video.playback = status == 1 || status == 3;
+        if (!$scope.$$phase) {
+            $scope.$apply();
+        }
     };
 
     $scope.$watch("video.duration", function () {

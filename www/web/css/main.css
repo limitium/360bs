@@ -28,7 +28,7 @@
 
 body {
     background: #f2f2f2;
-    background: url(../img/body-bg.png) repeat;
+    background: url(../img/bg.png) repeat;
     /*font-family: segoeui;*/
 }
 
@@ -181,6 +181,10 @@ header a {
 
 footer {
     margin-bottom: 20px;
+    color: #A6A6A6;
+    font-size: 12px;
+    text-align: center;
+    text-shadow: 0 1px 0 rgba(255, 255, 255, 0.7);
 }
 
 footer ul {
@@ -195,8 +199,8 @@ footer ul li {
 
 footer ul li a {
     margin-left: 15px;
-    color: #222;
     text-decoration: underline;
+    color: #A6A6A6;
 }
 
 footer ul li a:hover {
@@ -206,8 +210,8 @@ footer ul li a:hover {
 /* .: TYPHOGRAPHY :. */
 
 hr.alt {
-    border-top: 1px solid #ccc !important;
-    border-bottom: 1px solid #fff !important;
+    border-bottom: 1px dashed #F7F7F7;
+    border-top: 1px dashed #C5C5C5;
 }
 
 .auto {

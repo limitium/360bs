@@ -140,12 +140,12 @@ bs.controller("YtController", function ($scope, $timeout, $window, YouTubeServic
         views: "",
         preview: false,
         playback: false
-    }
+    };
 
     $scope.trick = {
         start: 0,
         end: 0
-    }
+    };
 
     $scope.isValidUrl = function () {
         return !!YouTubeService.getVideoId($scope.videoUrl);
@@ -188,7 +188,13 @@ bs.controller("YtController", function ($scope, $timeout, $window, YouTubeServic
         } else {
             $scope.video.player.playVideo();
         }
-    }
+    };
+
+    $scope.previewVideo = function () {
+        $scope.video.player.seekTo($scope.trick.start, true);
+        $scope.video.player.playVideo();
+        $scope.video.preview = true;
+    };
 
     $scope.Math = $window.Math;
 
@@ -202,9 +208,12 @@ bs.controller("YtController", function ($scope, $timeout, $window, YouTubeServic
 
         function setCurrentTime() {
             $scope.video.position = player.getCurrentTime();
-            $timeout(setCurrentTime, 333);
+            if ($scope.video.preview && $scope.video.position >= $scope.trick.end) {
+                $scope.video.preview = false;
+                $scope.video.player.pauseVideo();
+            }
+            $timeout(setCurrentTime, 200);
         }
-
         setCurrentTime();
 
         player.playVideo();

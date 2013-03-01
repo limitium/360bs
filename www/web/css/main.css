@@ -29,7 +29,11 @@
 body {
     background: #f2f2f2;
     background: url(../img/bg.png) repeat;
-    /*font-family: segoeui;*/
+    color: #4D4D4D;
+    font-size: 15px;
+    font-weight: 300;
+    line-height: 1.5;
+    font-family: "Helvetica Neue",Helvetica,Arial,sans-serif;
 }
 
 a {

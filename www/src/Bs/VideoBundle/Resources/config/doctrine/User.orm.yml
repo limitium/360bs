@@ -1,0 +1,8 @@
+Bs\VideoBundle\Entity\User:
+  type: entity
+  fields:
+    id:
+      id: true
+      type: integer
+      generator:
+        strategy: AUTO

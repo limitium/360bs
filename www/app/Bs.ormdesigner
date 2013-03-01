@@ -35,6 +35,9 @@
         <index-column name="tag_id"/>
       </index>
     </table>
+    <table name="User" visPositionX="220" visPositionY="105" visSizeX="0" visSizeX2="20" visSizeY="0" visSizeY2="20">
+      <column auto-increment="true" name="id" primary="true" required="true" type="integer"/>
+    </table>
     <foreign-key caption="tag group" from="Tag" inverse-alias="Group" name="FK_tag_tag_group_id" owning-alias="Tags" to="TagGroup">
       <foreign-key-column from="tag_group_id" to="id"/>
     </foreign-key>

@@ -34,6 +34,29 @@ class VideoController extends Controller
     }
 
     /**
+     * Lists all Video tags
+     *
+     * @Route("/tags", name="video_tags")
+     * @Template()
+     */
+    public function tagsAction()
+    {
+        $em = $this->getDoctrine()->getManager();
+
+        $tagsHash = array();
+        foreach ($em->getRepository('BsVideoBundle:TagGroup')->findAll() as $tagGroup) {
+            foreach ($tagGroup->getTags() as $tag) {
+                $tagsHash[$tag->getId()] = $tag->getName();
+            }
+
+        }
+
+        return array(
+            'tags' => $tagsHash,
+        );
+    }
+
+    /**
      * Finds and displays a Video entity.
      *
      * @Route("/{id}/show", name="video_show")
@@ -52,7 +75,7 @@ class VideoController extends Controller
         $deleteForm = $this->createDeleteForm($id);
 
         return array(
-            'entity'      => $entity,
+            'entity' => $entity,
             'delete_form' => $deleteForm->createView(),
         );
     }
@@ -66,11 +89,11 @@ class VideoController extends Controller
     public function newAction()
     {
         $entity = new Video();
-        $form   = $this->createForm(new VideoType(), $entity);
+        $form = $this->createForm(new VideoType(), $entity);
         $em = $this->getDoctrine()->getManager();
         return array(
             'entity' => $entity,
-            'form'   => $form->createView(),
+            'form' => $form->createView(),
             'taggroups' => $em->getRepository('BsVideoBundle:TagGroup')->findAll(),
         );
     }
@@ -84,7 +107,7 @@ class VideoController extends Controller
      */
     public function createAction(Request $request)
     {
-        $entity  = new Video();
+        $entity = new Video();
         $form = $this->createForm(new VideoType(), $entity);
         $form->bind($request);
 
@@ -98,7 +121,7 @@ class VideoController extends Controller
 
         return array(
             'entity' => $entity,
-            'form'   => $form->createView(),
+            'form' => $form->createView(),
         );
     }
 
@@ -122,8 +145,8 @@ class VideoController extends Controller
         $deleteForm = $this->createDeleteForm($id);
 
         return array(
-            'entity'      => $entity,
-            'edit_form'   => $editForm->createView(),
+            'entity' => $entity,
+            'edit_form' => $editForm->createView(),
             'delete_form' => $deleteForm->createView(),
         );
     }
@@ -157,8 +180,8 @@ class VideoController extends Controller
         }
 
         return array(
-            'entity'      => $entity,
-            'edit_form'   => $editForm->createView(),
+            'entity' => $entity,
+            'edit_form' => $editForm->createView(),
             'delete_form' => $deleteForm->createView(),
         );
     }
@@ -193,7 +216,6 @@ class VideoController extends Controller
     {
         return $this->createFormBuilder(array('id' => $id))
             ->add('id', 'hidden')
-            ->getForm()
-        ;
+            ->getForm();
     }
 }

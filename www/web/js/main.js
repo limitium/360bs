@@ -92,6 +92,41 @@ bs.directive("ngSlider", function () {
     }
 });
 
+bs.filter("tagName", function (TagService) {
+    return function (input) {
+        return TagService.getName(input);
+    }
+});
+
+
+bs.factory("TagService", function ($http) {
+    var tags = {};
+    $http.get('tags').success(function (responseTags) {
+        tags = responseTags;
+    });
+    return {
+        getName: function (id) {
+            return tags[id];
+        }
+    }
+});
+
+bs.factory("YouTubeService", function () {
+    return {
+        getVideoId: function (url) {
+            var regExp = /^.*(youtu.be\/|v\/|e\/|u\/\w+\/|embed\/|v=)([^#\&\?]*).*/;
+            var match = url.match(regExp);
+            if (match && match[2].length == 11) {
+                return match[2];
+            }
+            return false;
+        },
+        loadMeta: function (vid, cb) {
+            $.getJSON("http://gdata.youtube.com/feeds/api/videos/" + vid + "?v=2&alt=json&prettyprint=true", cb);
+        }
+    }
+});
+
 bs.controller("TagController", function ($scope) {
     var selected = [];
 
@@ -106,22 +141,6 @@ bs.controller("TagController", function ($scope) {
     $scope.isSelected = function (id) {
         return selected.indexOf(id) == -1 ? "label-off" : "label-on";
     };
-});
-
-bs.factory("YouTubeService", function ($http) {
-    return {
-        getVideoId: function (url) {
-            var regExp = /^.*(youtu.be\/|v\/|e\/|u\/\w+\/|embed\/|v=)([^#\&\?]*).*/;
-            var match = url.match(regExp);
-            if (match && match[2].length == 11) {
-                return match[2];
-            }
-            return false;
-        },
-        loadMeta: function (vid, cb) {
-            $.getJSON("http://gdata.youtube.com/feeds/api/videos/" + vid + "?v=2&alt=json&prettyprint=true", cb);
-        }
-    }
 });
 
 bs.controller("YtController", function ($scope, $timeout, $window, YouTubeService) {
@@ -146,6 +165,29 @@ bs.controller("YtController", function ($scope, $timeout, $window, YouTubeServic
         start: 0,
         end: 0
     };
+
+    $scope.tricks = [
+        {
+            start: 10,
+            end: 15,
+            tags: [1, 4, 6, 9, 11, 22]
+        },
+        {
+            start: 20,
+            end: 25,
+            tags: [2, 7, 8]
+        },
+        {
+            start: 25,
+            end: 26,
+            tags: [22, 33, 55]
+        },
+        {
+            start: 30,
+            end: 44,
+            tags: [34, 67, 88]
+        },
+    ];
 
     $scope.isValidUrl = function () {
         return !!YouTubeService.getVideoId($scope.videoUrl);
@@ -214,6 +256,7 @@ bs.controller("YtController", function ($scope, $timeout, $window, YouTubeServic
             }
             $timeout(setCurrentTime, 200);
         }
+
         setCurrentTime();
 
         player.playVideo();

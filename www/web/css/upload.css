@@ -1,3 +1,32 @@
+.tricks-list h4 {
+    color: rgba(255, 255, 255, 0.3);
+    font-weight: bold;
+    text-rendering: optimizelegibility;
+    text-shadow: -1px -1px rgba(0, 0, 0, 0.2);
+}
+
+.tricks-list div {
+    border: 0 none;
+    color: inherit;
+    font-family: inherit;
+    background: none repeat scroll 0 0 rgba(0, 0, 0, 0.1);
+    border-radius: 3px 3px 3px 3px;
+    box-shadow: 0 -1px 0 0 rgba(0, 0, 0, 0.2);
+    font-size: 11px;
+    line-height: 20px;
+    padding: 0 10px;
+    margin: 5px 0;
+    text-decoration: none;
+    cursor: pointer;
+}
+.tricks-list div:hover {
+    background: none repeat scroll 0 0 rgba(0, 0, 0, 0.15);
+    box-shadow: 0 -1px 0 0 rgba(0, 0, 0, 0.3);
+}
+.tricks-list .time {
+    color: #B83F45;
+}
+
 .ui-spinner-input[ng-spinner] {
     margin: 0;
     border: none;

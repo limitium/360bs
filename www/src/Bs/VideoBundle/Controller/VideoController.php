@@ -2,6 +2,8 @@
 
 namespace Bs\VideoBundle\Controller;
 
+use Bs\VideoBundle\Entity\Trick;
+use Bs\VideoBundle\Form\TrickType;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
@@ -57,6 +59,35 @@ class VideoController extends Controller
     }
 
     /**
+     * Creates a new Video entity.
+     *
+     * @Route("/trick", name="trick_create")
+     * @Method("POST")
+     * @Template("BsVideoBundle:Video:trick.html.twig")
+     */
+    public function trickAction(Request $request)
+    {
+
+        $trick = new Trick();
+        $video = new Video();
+        $trick->setVideo($video);
+        $video->addTrick($trick);
+        $form = $this->createForm(new TrickType(), $trick);
+        $form->bind($request);
+
+        if ($form->isValid()) {
+            echo $video->getVid();
+            echo $trick->getEnd();
+            foreach ($trick->getTags() as $tag) {
+                echo "\r\n";
+                echo $tag->getId();
+            }
+
+        }
+        die;
+    }
+
+    /**
      * Finds and displays a Video entity.
      *
      * @Route("/{id}/show", name="video_show")
@@ -88,11 +119,13 @@ class VideoController extends Controller
      */
     public function newAction()
     {
-        $entity = new Video();
-        $form = $this->createForm(new VideoType(), $entity);
+        $video = new Video();
+        $trick = new Trick();
+        $trick->setVideo($video);
+        $form = $this->createForm(new TrickType(), $trick);
         $em = $this->getDoctrine()->getManager();
         return array(
-            'entity' => $entity,
+            'entity' => $trick,
             'form' => $form->createView(),
             'taggroups' => $em->getRepository('BsVideoBundle:TagGroup')->findAll(),
         );

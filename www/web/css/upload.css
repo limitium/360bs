@@ -3,6 +3,7 @@
     font-weight: bold;
     text-rendering: optimizelegibility;
     text-shadow: -1px -1px rgba(0, 0, 0, 0.2);
+    margin:0
 }
 
 .tricks-list div {

@@ -104,9 +104,24 @@ bs.factory("TagService", function ($http) {
     $http.get('tags').success(function (responseTags) {
         tags = responseTags;
     });
+    var selected = [];
     return {
         getName: function (id) {
             return tags[id];
+        },
+        toggleTag: function (id) {
+            var indx = selected.indexOf(id);
+            if (indx == -1) {
+                selected.push(id);
+            } else {
+                selected.splice(indx, 1);
+            }
+        },
+        isSelected: function (id) {
+            return selected.indexOf(id) == -1;
+        },
+        getSelected: function () {
+            return selected;
         }
     }
 });
@@ -126,24 +141,14 @@ bs.factory("YouTubeService", function () {
         }
     }
 });
-
-bs.controller("TagController", function ($scope) {
-    var selected = [];
-
-    $scope.toggleTag = function (id) {
-        var indx = selected.indexOf(id);
-        if (indx == -1) {
-            selected.push(id);
-        } else {
-            selected.splice(indx, 1);
-        }
-    };
+bs.controller("TagController", function ($scope, TagService) {
+    $scope.toggleTag = TagService.toggleTag;
     $scope.isSelected = function (id) {
-        return selected.indexOf(id) == -1 ? "label-off" : "label-on";
+        return TagService.isSelected(id) ? "label-off" : "label-on";
     };
 });
 
-bs.controller("YtController", function ($scope, $timeout, $window, YouTubeService) {
+bs.controller("YtController", function ($scope, $http, $timeout, $window, YouTubeService, TagService) {
 
     $scope.videoUrl = "";
 
@@ -186,7 +191,7 @@ bs.controller("YtController", function ($scope, $timeout, $window, YouTubeServic
             start: 30,
             end: 44,
             tags: [34, 67, 88]
-        },
+        }
     ];
 
     $scope.isValidUrl = function () {
@@ -236,6 +241,24 @@ bs.controller("YtController", function ($scope, $timeout, $window, YouTubeServic
         $scope.video.player.seekTo($scope.trick.start, true);
         $scope.video.player.playVideo();
         $scope.video.preview = true;
+    };
+
+    $scope.addVideo = function () {
+        $http({
+            method: "POST",
+            url: "trick",
+            headers: {'Content-Type': 'application/x-www-form-urlencoded'},
+            data: $.param({
+                "bs_videobundle_tricktype[Video][vid]": $scope.video.id,
+                "bs_videobundle_tricktype[Video][name]": $scope.video.title,
+                "bs_videobundle_tricktype[Video][duration]": $scope.video.duration,
+                "bs_videobundle_tricktype[start]": $scope.trick.start,
+                "bs_videobundle_tricktype[end]": $scope.trick.end,
+                "bs_videobundle_tricktype[Tags][]": TagService.getSelected()
+            })
+        }).success(function () {
+                console.log(arguments);
+            });
     };
 
     $scope.Math = $window.Math;

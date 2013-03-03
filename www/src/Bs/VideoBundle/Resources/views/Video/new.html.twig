@@ -33,7 +33,7 @@
                         </div>
                     </fieldset>
                 </form>
-                <div ng-cloak ng-show="video.title">
+                <div ng-cloak ng-show="video.title && video.player">
                     <ul class="unstyled">
                         <li rel="tooltip" title="Title"><i class="icon-pencil"></i>
                             <span id="yt-title">{{ '{{ video.title }}' }}</span></li>
@@ -57,7 +57,8 @@
                             <div class="yt-player-position-container">
                                 <button class="btn" ng-click="trick.start=Math.round(video.position)">
                                     <i class="icon-arrow-left"></i></button>
-                                <span rel="tooltip" title="Current player position">{{ '{{ video.position | number:0 }}' }}</span>
+                                <span rel="tooltip"
+                                      title="Current player position">{{ '{{ video.position | number:0 }}' }}</span>
                                 <button class="btn" ng-click="trick.end=Math.round(video.position)">
                                     <i class="icon-arrow-right"></i></button>
                             </div>
@@ -69,7 +70,8 @@
                     <div class="row">
                         <button ng-click="previewVideo()" class="span1 btn btn-success">Preview</button>
                         <button ng-click="togglePlay()" class="span2 btn btn-info">
-                            <i ng-toggle-class="video.playback" on="icon-play" off="icon-pause" class="icon icon-play"></i>
+                            <i ng-toggle-class="video.playback" on="icon-play" off="icon-pause"
+                               class="icon icon-play"></i>
                         </button>
                         <button ng-click="addVideo()" class="span1 btn btn-danger pull-right">Submit</button>
                     </div>
@@ -103,22 +105,11 @@
                     <strong> {{ group.name }}:</strong>
                     <br>
                     {% for tag in group.tags %}
-                        <span ng-click="toggleTag({{ tag.id }})" ng-class="isSelected({{ tag.id }})" class="label">{{ tag.name }}</span>
+                        <span ng-click="toggleTag('{{ tag.id }}')" ng-class="isSelected('{{ tag.id }}')"
+                              class="label">{{ tag.name }}</span>
                     {% endfor %}
                 </div>
             {% endfor %}
         </div>
-
-        {#<div class="row">#}
-        {#<div class="span12">#}
-        {#<button id="load" class="btn">load</button>#}
-        {#<form action="{{ path('video_create') }}" method="post" {{ form_enctype(form) }}>#}
-        {#{{ form_widget(form) }}#}
-        {#<p>#}
-        {#<button type="submit">Edit</button>#}
-        {#</p>#}
-        {#</form>#}
-        {#</div>#}
-        {#</div>#}
     </div>
 {% endblock %}

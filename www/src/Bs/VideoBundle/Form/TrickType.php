@@ -6,26 +6,28 @@ use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolverInterface;
 
-class VideoType extends AbstractType
+class TrickType extends AbstractType
 {
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-            ->add('vid')
-            ->add('name')
-            ->add('duration')
+            ->add('start')
+            ->add('end')
+            ->add('Tags')
+            ->add('Video', new VideoType())
         ;
     }
 
     public function setDefaultOptions(OptionsResolverInterface $resolver)
     {
         $resolver->setDefaults(array(
-            'data_class' => 'Bs\VideoBundle\Entity\Video'
+            'data_class' => 'Bs\VideoBundle\Entity\Trick',
+            'csrf_protection'   => false,
         ));
     }
 
     public function getName()
     {
-        return 'bs_videobundle_videotype';
+        return 'bs_videobundle_tricktype';
     }
 }

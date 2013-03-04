@@ -26,6 +26,10 @@
 }
 .tricks-list .time {
     color: #B83F45;
+    font-weight: 900;
+}
+.tricks-list .tag {
+    margin-left: 5px;
 }
 
 .ui-spinner-input[ng-spinner] {

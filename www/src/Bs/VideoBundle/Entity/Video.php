@@ -25,16 +25,21 @@ class Video
     private $name;
 
     /**
+     * @var float
+     */
+    private $duration;
+
+    /**
      * @var \Doctrine\Common\Collections\Collection
      */
-    private $Tags;
+    private $Tricks;
 
     /**
      * Constructor
      */
     public function __construct()
     {
-        $this->Tags = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->Tricks = new \Doctrine\Common\Collections\ArrayCollection();
     }
     
     /**
@@ -94,54 +99,6 @@ class Video
     }
 
     /**
-     * Add Tags
-     *
-     * @param \Bs\VideoBundle\Entity\Tag $tags
-     * @return Video
-     */
-    public function addTag(\Bs\VideoBundle\Entity\Tag $tags)
-    {
-        $this->Tags[] = $tags;
-    
-        return $this;
-    }
-
-    /**
-     * Remove Tags
-     *
-     * @param \Bs\VideoBundle\Entity\Tag $tags
-     */
-    public function removeTag(\Bs\VideoBundle\Entity\Tag $tags)
-    {
-        $this->Tags->removeElement($tags);
-    }
-
-    /**
-     * Get Tags
-     *
-     * @return \Doctrine\Common\Collections\Collection 
-     */
-    public function getTags()
-    {
-        return $this->Tags;
-    }
-    /**
-     * @var float
-     */
-    private $duration;
-
-    /**
-     * @var float
-     */
-    private $start;
-
-    /**
-     * @var float
-     */
-    private $end;
-
-
-    /**
      * Set duration
      *
      * @param float $duration
@@ -163,57 +120,6 @@ class Video
     {
         return $this->duration;
     }
-
-    /**
-     * Set start
-     *
-     * @param float $start
-     * @return Video
-     */
-    public function setStart($start)
-    {
-        $this->start = $start;
-    
-        return $this;
-    }
-
-    /**
-     * Get start
-     *
-     * @return float 
-     */
-    public function getStart()
-    {
-        return $this->start;
-    }
-
-    /**
-     * Set end
-     *
-     * @param float $end
-     * @return Video
-     */
-    public function setEnd($end)
-    {
-        $this->end = $end;
-    
-        return $this;
-    }
-
-    /**
-     * Get end
-     *
-     * @return float 
-     */
-    public function getEnd()
-    {
-        return $this->end;
-    }
-    /**
-     * @var \Doctrine\Common\Collections\Collection
-     */
-    private $Tricks;
-
 
     /**
      * Add Tricks
@@ -246,5 +152,9 @@ class Video
     public function getTricks()
     {
         return $this->Tricks;
+    }
+
+    public function __toString(){
+        return $this->getName();
     }
 }

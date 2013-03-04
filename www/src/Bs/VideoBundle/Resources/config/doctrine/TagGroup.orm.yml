@@ -1,15 +1,16 @@
 Bs\VideoBundle\Entity\TagGroup:
-  type: entity
-  fields:
-    id:
-      id: true
-      type: integer
-      generator:
-        strategy: AUTO
-    name:
-      type: string
-      nullable: false
-  oneToMany:
-    Tags:
-      targetEntity: Bs\VideoBundle\Entity\Tag
-      mappedBy: Group
+    type: entity
+    fields:
+        id:
+            id: true
+            type: integer
+            generator:
+                strategy: AUTO
+        name:
+            type: string
+            nullable: false
+    oneToMany:
+        Tags:
+            targetEntity: Bs\VideoBundle\Entity\Tag
+            mappedBy: Group
+            orphanRemoval: true

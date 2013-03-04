@@ -10,7 +10,7 @@ use Doctrine\ORM\Mapping as ORM;
 class TagGroup
 {
     /**
-     * @var string
+     * @var integer
      */
     private $id;
 
@@ -35,7 +35,7 @@ class TagGroup
     /**
      * Get id
      *
-     * @return string 
+     * @return integer 
      */
     public function getId()
     {

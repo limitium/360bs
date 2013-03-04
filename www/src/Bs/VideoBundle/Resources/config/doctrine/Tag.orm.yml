@@ -1,23 +1,26 @@
 Bs\VideoBundle\Entity\Tag:
-  type: entity
-  fields:
-    id:
-      id: true
-      type: integer
-      generator:
-        strategy: AUTO
-    name:
-      type: string
-      nullable: false
-  manyToOne:
-    Group:
-      targetEntity: Bs\VideoBundle\Entity\TagGroup
-      inversedBy: Tags
-      joinColumns:
-        tag_group_id:
-          referencedColumnName: id
-          nullable: false
-  manyToMany:
-    Tricks:
-      targetEntity: Trick
-      mappedBy: Tags
+    type: entity
+    fields:
+        id:
+            id: true
+            type: integer
+            generator:
+                strategy: AUTO
+        name:
+            type: string
+            nullable: false
+    manyToOne:
+        Group:
+            targetEntity: Bs\VideoBundle\Entity\TagGroup
+            inversedBy: Tags
+            orphanRemoval: true
+            joinColumns:
+                tag_group_id:
+                    referencedColumnName: id
+                    nullable: false
+                    onDelete: CASCADE
+                    onUpdate: CASCADE
+    manyToMany:
+        Tricks:
+            targetEntity: Trick
+            mappedBy: Tags

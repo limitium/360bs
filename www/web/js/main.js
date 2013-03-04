@@ -171,28 +171,7 @@ bs.controller("YtController", function ($scope, $http, $timeout, $window, YouTub
         end: 0
     };
 
-    $scope.tricks = [
-        {
-            start: 10,
-            end: 15,
-            tags: [1, 4, 6, 9, 11, 22]
-        },
-        {
-            start: 20,
-            end: 25,
-            tags: [2, 7, 8]
-        },
-        {
-            start: 25,
-            end: 26,
-            tags: [22, 33, 55]
-        },
-        {
-            start: 30,
-            end: 44,
-            tags: [34, 67, 88]
-        }
-    ];
+    $scope.tricks = [];
 
     $scope.isValidUrl = function () {
         return !!YouTubeService.getVideoId($scope.videoUrl);
@@ -212,6 +191,7 @@ bs.controller("YtController", function ($scope, $http, $timeout, $window, YouTub
                 $scope.video.views = resp.entry.yt$statistics.viewCount;
                 $scope.$apply();
             });
+            $scope.loadTricks();
 
             if (!$scope.video.player) {
                 swfobject.embedSWF(
@@ -243,10 +223,19 @@ bs.controller("YtController", function ($scope, $http, $timeout, $window, YouTub
         $scope.video.preview = true;
     };
 
+    $scope.loadTricks = function () {
+        $http({
+            method: "GET",
+            url: "tricks/" + $scope.video.id
+        }).success(function (tricks) {
+                $scope.tricks = tricks
+            });
+    };
+
     $scope.addVideo = function () {
         $http({
             method: "POST",
-            url: "trick",
+            url: "trick/" + $scope.video.id,
             headers: {'Content-Type': 'application/x-www-form-urlencoded'},
             data: $.param({
                 "bs_videobundle_tricktype[Video][vid]": $scope.video.id,
@@ -256,8 +245,8 @@ bs.controller("YtController", function ($scope, $http, $timeout, $window, YouTub
                 "bs_videobundle_tricktype[end]": $scope.trick.end,
                 "bs_videobundle_tricktype[Tags][]": TagService.getSelected()
             })
-        }).success(function () {
-                console.log(arguments);
+        }).success(function (tricks) {
+                $scope.tricks = tricks
             });
     };
 

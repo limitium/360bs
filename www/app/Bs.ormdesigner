@@ -17,7 +17,7 @@
       <column name="name" required="true" type="string"/>
       <column name="duration" required="true" type="decimal"/>
     </table>
-    <table name="TagGroup" visPositionX="419" visPositionY="359" visSizeX="0" visSizeX2="83" visSizeY="0" visSizeY2="45">
+    <table name="TagGroup" visPositionX="420" visPositionY="351" visSizeX="0" visSizeX2="83" visSizeY="0" visSizeY2="45">
       <column auto-increment="true" name="id" primary="true" required="true" type="integer"/>
       <column name="name" required="true" type="string"/>
     </table>
@@ -26,6 +26,10 @@
       <column name="start" required="true" type="integer"/>
       <column name="end" required="true" type="integer"/>
       <column name="video_id" required="true" type="integer"/>
+      <index name="uniq_start" unique="true">
+        <index-column name="start"/>
+        <index-column name="video_id"/>
+      </index>
     </table>
     <table name="TrickTag" visPositionX="30" visPositionY="342" visSizeX="0" visSizeX2="95" visSizeY="0" visSizeY2="74">
       <column name="trick_id" required="true" type="integer"/>
@@ -40,15 +44,55 @@
     </table>
     <foreign-key caption="tag group" from="Tag" inverse-alias="Group" name="FK_tag_tag_group_id" owning-alias="Tags" to="TagGroup">
       <foreign-key-column from="tag_group_id" to="id"/>
+      <orm-properties>
+        <attribute name="on-update">CASCADE</attribute>
+        <attribute name="on-delete">CASCADE</attribute>
+        <attribute name="side-inverse">
+          <attribute name="orphan-removal">true</attribute>
+        </attribute>
+        <attribute name="side-owning">
+          <attribute name="orphan-removal">true</attribute>
+        </attribute>
+      </orm-properties>
     </foreign-key>
     <foreign-key caption="Video Trick" from="Trick" inverse-alias="Video" name="FK_Trick_Video_id" owning-alias="Tricks" to="Video">
       <foreign-key-column from="video_id" to="id"/>
+      <orm-properties>
+        <attribute name="on-delete">CASCADE</attribute>
+        <attribute name="on-update">CASCADE</attribute>
+        <attribute name="side-inverse">
+          <attribute name="orphan-removal">true</attribute>
+        </attribute>
+        <attribute name="side-owning">
+          <attribute name="orphan-removal">true</attribute>
+        </attribute>
+      </orm-properties>
     </foreign-key>
-    <foreign-key caption="Trick TrickTag" from="TrickTag" name="FK_TrickTag_Trick_id" to="Trick">
+    <foreign-key caption="Trick TrickTag" from="TrickTag" name="FK_TrickTag_Trick_id" to="Trick" visCaption1X="0" visCaption1Y="-1" visCenterX="0" visCenterY="0">
       <foreign-key-column from="trick_id" to="id"/>
+      <orm-properties>
+        <attribute name="on-delete">CASCADE</attribute>
+        <attribute name="on-update">CASCADE</attribute>
+        <attribute name="side-owning">
+          <attribute name="orphan-removal">true</attribute>
+        </attribute>
+        <attribute name="side-inverse">
+          <attribute name="orphan-removal">true</attribute>
+        </attribute>
+      </orm-properties>
     </foreign-key>
     <foreign-key caption="Tag TrickTag" from="TrickTag" name="FK_TrickTag_Tag_id" to="Tag">
       <foreign-key-column from="tag_id" to="id"/>
+      <orm-properties>
+        <attribute name="on-delete">CASCADE</attribute>
+        <attribute name="on-update">CASCADE</attribute>
+        <attribute name="side-inverse">
+          <attribute name="orphan-removal">true</attribute>
+        </attribute>
+        <attribute name="side-owning">
+          <attribute name="orphan-removal">true</attribute>
+        </attribute>
+      </orm-properties>
     </foreign-key>
     <many-to-many-relation mn-table="TrickTag">
       <many-to-many-foreign-key foreign-key="FK_TrickTag_Trick_id" relation-alias="Tricks"/>

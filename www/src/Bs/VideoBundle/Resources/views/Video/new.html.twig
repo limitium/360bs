@@ -86,13 +86,13 @@
                     <div id="player"></div>
                 </div>
             </div>
-            <div class="span3 tricks-list">
+            <div class="span3 tricks-list" ng-cloack ng-show="tricks">
                 <h4>Tricks list:</h4>
                 <ul class="unstyled">
                     <li ng-repeat="trick in tricks">
                         <div ng-class-odd="'odd'" ng-class-even="'even'">
                             <span class="time">{{ '{{ trick.start }}' }}:</span>
-                            <span ng-repeat="tag in trick.tags">{{ '{{ tag | tagName}}' }}</span>
+                            <span class="tag" ng-repeat="tag in trick.tags">{{ '{{ tag | tagName}}' }}</span>
                         </div>
                     </li>
                 </ul>

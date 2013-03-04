@@ -46,11 +46,8 @@ class VideoController extends Controller
         $em = $this->getDoctrine()->getManager();
 
         $tagsHash = array();
-        foreach ($em->getRepository('BsVideoBundle:TagGroup')->findAll() as $tagGroup) {
-            foreach ($tagGroup->getTags() as $tag) {
-                $tagsHash[$tag->getId()] = $tag->getName();
-            }
-
+        foreach ($em->getRepository('BsVideoBundle:Tag')->findAll() as $tag) {
+            $tagsHash[$tag->getId()] = $tag->getName();
         }
 
         return array(
@@ -59,32 +56,77 @@ class VideoController extends Controller
     }
 
     /**
-     * Creates a new Video entity.
-     *
-     * @Route("/trick", name="trick_create")
-     * @Method("POST")
-     * @Template("BsVideoBundle:Video:trick.html.twig")
+     * @Route("/tricks/{vid}", name="tricks_load")
+     * @Method("GET")
+     * @Template("BsVideoBundle:Video:tricks.html.twig")
      */
-    public function trickAction(Request $request)
+    public function loadtricksAction(Request $request, $vid)
     {
+        $em = $this->getDoctrine()->getManager();
 
+        return array(
+            "tricks" => $this->getTricks($vid, $em)
+        );
+    }
+
+    /**
+     * @param $vid
+     * @param $em
+     * @return array
+     */
+    private function getTricks($vid, $em)
+    {
+        $video = $em->getRepository('BsVideoBundle:Video')->findOneBy(array("vid" => $vid));
+
+        $tricks = array();
+        if ($video) {
+            $tricks = $video->getTricks();
+        }
+        $tricksData = array();
+        foreach ($tricks as $trick) {
+            $tags = array();
+            foreach ($trick->getTags() as $tag) {
+                $tags[] = $tag->getId();
+            }
+            $tricksData[] = array(
+                "start" => $trick->getStart(),
+                "end" => $trick->getEnd(),
+                "tags" => $tags
+            );
+        }
+        usort($tricksData, function ($a, $b) {
+            return $a['start'] - $b['start'];
+        });
+
+        return $tricksData;
+    }
+
+    /**
+     * @Route("/trick/{vid}", name="trick_create")
+     * @Method("POST")
+     * @Template("BsVideoBundle:Video:tricks.html.twig")
+     */
+    public function createtrickAction(Request $request, $vid)
+    {
+        $em = $this->getDoctrine()->getManager();
         $trick = new Trick();
-        $video = new Video();
-        $trick->setVideo($video);
-        $video->addTrick($trick);
         $form = $this->createForm(new TrickType(), $trick);
         $form->bind($request);
 
         if ($form->isValid()) {
-            echo $video->getVid();
-            echo $trick->getEnd();
-            foreach ($trick->getTags() as $tag) {
-                echo "\r\n";
-                echo $tag->getId();
+            $video = $em->getRepository('BsVideoBundle:Video')->findOneBy(array("vid" => $vid));
+            if (!$video) {
+                $video = $trick->getVideo();
+                $em->persist($video);
+            } else {
+                $trick->setVideo($video);
             }
-
+            $em->persist($trick);
+            $em->flush();
         }
-        die;
+        return array(
+            "tricks" => $this->getTricks($vid, $em)
+        );
     }
 
     /**

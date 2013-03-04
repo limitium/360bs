@@ -27,14 +27,14 @@ class Tag
     /**
      * @var \Doctrine\Common\Collections\Collection
      */
-    private $Videos;
+    private $Tricks;
 
     /**
      * Constructor
      */
     public function __construct()
     {
-        $this->Videos = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->Tricks = new \Doctrine\Common\Collections\ArrayCollection();
     }
     
     /**
@@ -76,7 +76,7 @@ class Tag
      * @param \Bs\VideoBundle\Entity\TagGroup $group
      * @return Tag
      */
-    public function setGroup(\Bs\VideoBundle\Entity\TagGroup $group = null)
+    public function setGroup(\Bs\VideoBundle\Entity\TagGroup $group)
     {
         $this->Group = $group;
     
@@ -92,50 +92,6 @@ class Tag
     {
         return $this->Group;
     }
-
-    /**
-     * Add Videos
-     *
-     * @param \Bs\VideoBundle\Entity\Video $videos
-     * @return Tag
-     */
-    public function addVideo(\Bs\VideoBundle\Entity\Video $videos)
-    {
-        $this->Videos[] = $videos;
-    
-        return $this;
-    }
-
-    /**
-     * Remove Videos
-     *
-     * @param \Bs\VideoBundle\Entity\Video $videos
-     */
-    public function removeVideo(\Bs\VideoBundle\Entity\Video $videos)
-    {
-        $this->Videos->removeElement($videos);
-    }
-
-    /**
-     * Get Videos
-     *
-     * @return \Doctrine\Common\Collections\Collection 
-     */
-    public function getVideos()
-    {
-        return $this->Videos;
-    }
-
-    function __toString()
-    {
-        return $this->name;
-    }
-
-    /**
-     * @var \Doctrine\Common\Collections\Collection
-     */
-    private $Tricks;
-
 
     /**
      * Add Tricks
@@ -168,5 +124,9 @@ class Tag
     public function getTricks()
     {
         return $this->Tricks;
+    }
+
+    public function __toString(){
+        return $this->getName();
     }
 }

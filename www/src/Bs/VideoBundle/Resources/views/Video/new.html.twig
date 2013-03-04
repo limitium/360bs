@@ -73,7 +73,7 @@
                             <i ng-toggle-class="video.playback" on="icon-play" off="icon-pause"
                                class="icon icon-play"></i>
                         </button>
-                        <button ng-click="addVideo()" class="span1 btn btn-danger pull-right">Submit</button>
+                        <button ng-disabled="trick.adding" ng-click="addVideo()" class="span1 btn btn-danger pull-right">Submit</button>
                     </div>
                 </div>
             </div>

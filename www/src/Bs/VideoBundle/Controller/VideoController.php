@@ -63,21 +63,20 @@ class VideoController extends Controller
     public function loadtricksAction(Request $request, $vid)
     {
         $em = $this->getDoctrine()->getManager();
-
+        $video = $em->getRepository('BsVideoBundle:Video')->findOneBy(array("vid" => $vid));
         return array(
-            "tricks" => $this->getTricks($vid, $em)
+            "tricks" => $this->getTricks($video)
         );
     }
 
     /**
-     * @param $vid
-     * @param $em
+     * @param $video
+     * @internal param $vid
+     * @internal param $em
      * @return array
      */
-    private function getTricks($vid, $em)
+    private function getTricks($video)
     {
-        $video = $em->getRepository('BsVideoBundle:Video')->findOneBy(array("vid" => $vid));
-
         $tricks = array();
         if ($video) {
             $tricks = $video->getTricks();
@@ -112,11 +111,12 @@ class VideoController extends Controller
         $trick = new Trick();
         $form = $this->createForm(new TrickType(), $trick);
         $form->bind($request);
-
+        $video = null;
         if ($form->isValid()) {
             $video = $em->getRepository('BsVideoBundle:Video')->findOneBy(array("vid" => $vid));
             if (!$video) {
                 $video = $trick->getVideo();
+                $video->addTrick($trick);
                 $em->persist($video);
             } else {
                 $trick->setVideo($video);
@@ -125,7 +125,7 @@ class VideoController extends Controller
             $em->flush();
         }
         return array(
-            "tricks" => $this->getTricks($vid, $em)
+            "tricks" => $this->getTricks($video)
         );
     }
 

@@ -171,7 +171,8 @@ bs.controller("YtController", function ($scope, $http, $timeout, $window, YouTub
 
     $scope.trick = {
         start: 0,
-        end: 0
+        end: 0,
+        adding: false
     };
 
     $scope.tricks = [];
@@ -234,7 +235,7 @@ bs.controller("YtController", function ($scope, $http, $timeout, $window, YouTub
         });
         TagService.setTags(trick.tags);
         $scope.previewVideo();
-    }
+    };
     $scope.loadTricks = function () {
         $http({
             method: "GET",
@@ -245,6 +246,7 @@ bs.controller("YtController", function ($scope, $http, $timeout, $window, YouTub
     };
 
     $scope.addVideo = function () {
+        $scope.trick.adding = true;
         $http({
             method: "POST",
             url: "trick/" + $scope.video.id,
@@ -259,6 +261,9 @@ bs.controller("YtController", function ($scope, $http, $timeout, $window, YouTub
             })
         }).success(function (tricks) {
                 $scope.tricks = tricks
+                $scope.trick.adding = false;
+            }).error(function () {
+                $scope.trick.adding = false;
             });
     };
 

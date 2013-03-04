@@ -32,6 +32,7 @@ class VideoController extends Controller
 
         return array(
             'taggroups' => $em->getRepository('BsVideoBundle:TagGroup')->findAll(),
+            'videos' => $em->getRepository('BsVideoBundle:Video')->findAll(),
         );
     }
 

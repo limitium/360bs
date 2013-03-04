@@ -1,0 +1,8 @@
+.title {
+    max-height: 45px;
+    overflow: hidden;
+}
+
+.title a {
+    word-wrap: break-word;
+}

@@ -2,6 +2,10 @@
 {% block javascripts %}
     {{ parent() }}
 {% endblock %}
+{% block stylesheets %}
+    {{ parent() }}
+    <link href="{{ asset('css/videos.css') }}" rel="stylesheet"/>
+{% endblock %}
 {% block content %}
     <div class="container">
         <div class="row">
@@ -28,23 +32,9 @@
     </div>
     <div class="container videos">
         <div class="row">
-
-
-            {% include 'BsVideoBundle:Video:vid.html.twig' %}
-            {% include 'BsVideoBundle:Video:vid.html.twig' %}
-            {% include 'BsVideoBundle:Video:vid.html.twig' %}
-            {% include 'BsVideoBundle:Video:vid.html.twig' %}
-            {% include 'BsVideoBundle:Video:vid.html.twig' %}
-            {% include 'BsVideoBundle:Video:vid.html.twig' %}
-
-            {% include 'BsVideoBundle:Video:vid.html.twig' %}
-            {% include 'BsVideoBundle:Video:vid.html.twig' %}
-            {% include 'BsVideoBundle:Video:vid.html.twig' %}
-            {% include 'BsVideoBundle:Video:vid.html.twig' %}
-            {% include 'BsVideoBundle:Video:vid.html.twig' %}
-            {% include 'BsVideoBundle:Video:vid.html.twig' %}
-
-
+            {% for video in videos %}
+                {% include 'BsVideoBundle:Video:vid.html.twig' %}
+            {% endfor %}
         </div>
 
 

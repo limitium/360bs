@@ -122,6 +122,9 @@ bs.factory("TagService", function ($http) {
         },
         getSelected: function () {
             return selected;
+        },
+        setTags: function (tags) {
+            selected = tags;
         }
     }
 });
@@ -223,6 +226,15 @@ bs.controller("YtController", function ($scope, $http, $timeout, $window, YouTub
         $scope.video.preview = true;
     };
 
+    $scope.setTrick = function (trick) {
+        $scope.trick.start = trick.start;
+        $scope.trick.end = trick.end;
+        angular.forEach(trick.tags, function (val, i, tags) {
+            tags[i] = val.toString();
+        });
+        TagService.setTags(trick.tags);
+        $scope.previewVideo();
+    }
     $scope.loadTricks = function () {
         $http({
             method: "GET",

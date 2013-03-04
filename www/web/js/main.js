@@ -262,8 +262,12 @@ bs.controller("YtController", function ($scope, $http, $timeout, $window, YouTub
         }).success(function (tricks) {
                 $scope.tricks = tricks
                 $scope.trick.adding = false;
+                $scope.trick.start = $scope.trick.end;
+                $scope.trick.end = $scope.video.duration;
+                TagService.setTags([]);
             }).error(function () {
                 $scope.trick.adding = false;
+                alert("Error");
             });
     };
 

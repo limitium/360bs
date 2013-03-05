@@ -64,13 +64,13 @@ CREATE TABLE `trick` (
   UNIQUE KEY `uniq_start` (`start`,`video_id`),
   KEY `IDX_1931861A29C1004E` (`video_id`),
   CONSTRAINT `FK_1931861A29C1004E` FOREIGN KEY (`video_id`) REFERENCES `video` (`id`) ON DELETE CASCADE
-) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=29 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 /*Data for the table `trick` */
 
 LOCK TABLES `trick` WRITE;
 
-insert  into `trick`(`id`,`video_id`,`start`,`end`) values (1,1,0,177),(2,1,33,138),(3,1,31,138),(4,1,8,112),(5,1,34,118);
+insert  into `trick`(`id`,`video_id`,`start`,`end`) values (1,1,0,177),(2,1,33,138),(3,1,31,138),(4,1,8,112),(5,1,34,118),(12,2,0,56),(14,2,13,56),(15,3,0,24),(16,3,3,16),(17,4,0,22),(18,5,0,48),(19,6,0,205),(20,7,0,113),(21,8,0,132),(22,9,0,116),(23,10,0,85),(24,11,0,69),(25,12,0,174),(26,12,39,94),(27,12,94,134),(28,12,134,156);
 
 UNLOCK TABLES;
 
@@ -92,7 +92,7 @@ CREATE TABLE `tricktag` (
 
 LOCK TABLES `tricktag` WRITE;
 
-insert  into `tricktag`(`trick_id`,`tag_id`) values (1,14),(1,26),(2,118),(2,119),(3,18),(3,19),(3,118),(3,119),(4,1),(4,9),(4,10),(5,54),(5,55);
+insert  into `tricktag`(`trick_id`,`tag_id`) values (1,14),(1,26),(2,118),(2,119),(3,18),(3,19),(3,118),(3,119),(4,1),(4,9),(4,10),(5,54),(5,55),(17,41),(18,41),(21,118),(22,118),(25,30),(25,118),(26,6),(26,118),(27,19),(27,21),(28,1),(28,118),(28,119);
 
 UNLOCK TABLES;
 
@@ -121,13 +121,13 @@ CREATE TABLE `video` (
   `name` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
   `duration` decimal(10,0) NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=13 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 /*Data for the table `video` */
 
 LOCK TABLES `video` WRITE;
 
-insert  into `video`(`id`,`vid`,`name`,`duration`) values (1,'3ohob-4TmC4','Urban MTB POV in Chile - Red Bull Valparaíso Cerro Abajo 2013','177');
+insert  into `video`(`id`,`vid`,`name`,`duration`) values (1,'3ohob-4TmC4','Urban MTB POV in Chile - Red Bull Valparaíso Cerro Abajo 2013','177'),(2,'Ir2TdfSwH8g','Harlem Shake Miami HEAT Edition','56'),(3,'-j-DxLXFEx4','AMBA0902','24'),(4,'an-dw_CCUiU','Дебил на Жигулях','22'),(5,'2jvLalY6ubc','Dynamic Robot Manipulation','48'),(6,'cNZPRsrwumQ','BigDog Overview (Updated March 2010)','205'),(7,'ISznqY3kESI','RHex Rough-Terrain Robot','113'),(8,'3gi6Ohnp9x8','BigDog Reflexes','132'),(9,'xqMVg5ixhd0','BigDog Evolution','116'),(10,'SSbZrQp-HOk','AlphaDog Proto','85'),(11,'6b4ZZQkcNEo','Sand Flea Jumping Robot','69'),(12,'0hkCcoenLW4','High power militar robotic exoskeleton','174');
 
 UNLOCK TABLES;
 

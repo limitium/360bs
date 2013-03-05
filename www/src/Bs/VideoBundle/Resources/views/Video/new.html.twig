@@ -18,7 +18,7 @@
 
 {% block content %}
     <div class="container">
-        <div class="row" ng-controller="YtController">
+        <div class="row" ng-controller="UploadController">
             <div class="span4">
                 <form ng-submit="loadVideo()">
                     <fieldset>
@@ -73,7 +73,9 @@
                             <i ng-toggle-class="video.playback" on="icon-play" off="icon-pause"
                                class="icon icon-play"></i>
                         </button>
-                        <button ng-disabled="trick.adding" ng-click="addVideo()" class="span1 btn btn-danger pull-right">Submit</button>
+                        <button ng-disabled="trick.adding" ng-click="addVideo()" class="span1 btn btn-danger pull-right">
+                            Submit
+                        </button>
                     </div>
                 </div>
             </div>
@@ -86,30 +88,10 @@
                     <div id="player"></div>
                 </div>
             </div>
-            <div class="span3 tricks-list" ng-cloack ng-show="tricks">
-                <h4>Tricks list:</h4>
-                <ul class="unstyled">
-                    <li ng-repeat="trick in tricks">
-                        <div ng-click="setTrick(trick)" ng-class-odd="'odd'" ng-class-even="'even'">
-                            <span class="time">{{ '{{ trick.start }}' }}:</span>
-                            <span class="tag" ng-repeat="tag in trick.tags">{{ '{{ tag | tagName}}' }}</span>
-                        </div>
-                    </li>
-                </ul>
+            <div class="span3">
+                {% include 'BsVideoBundle:Video:_tricks_list.html.twig' %}
             </div>
         </div>
-
-        <div class="row" ng-controller="TagController">
-            {% for group in taggroups %}
-                <div class="span4 tag">
-                    <strong> {{ group.name }}:</strong>
-                    <br>
-                    {% for tag in group.tags %}
-                        <span ng-click="toggleTag('{{ tag.id }}')" ng-class="isSelected('{{ tag.id }}')"
-                              class="label">{{ tag.name }}</span>
-                    {% endfor %}
-                </div>
-            {% endfor %}
-        </div>
+        {% include 'BsVideoBundle:Video:_tags.html.twig' %}
     </div>
 {% endblock %}

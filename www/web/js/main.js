@@ -141,6 +141,17 @@ bs.factory("YouTubeService", function () {
         },
         loadMeta: function (vid, cb) {
             $.getJSON("http://gdata.youtube.com/feeds/api/videos/" + vid + "?v=2&alt=json&prettyprint=true", cb);
+        },
+        loadPlayer: function (vid, height) {
+            swfobject.embedSWF(
+                "http://www.youtube.com/v/" + vid + "?hl=en_US&version=3&autoplay=1&autohide=1&cc_load_policy=1&iv_load_policy=3&enablejsapi=1&fs=1&modestbranding=1&rel=0&theme=light&vq=hd720&playerapiid=ytplayer&showinfo=0",
+                "player",
+                "100%", height,
+                "8",
+                null, null,
+                { allowScriptAccess: 'always' },
+                { id: 'player-swf' }
+            );
         }
     }
 });
@@ -151,7 +162,7 @@ bs.controller("TagController", function ($scope, TagService) {
     };
 });
 
-bs.controller("YtController", function ($scope, $http, $timeout, $window, YouTubeService, TagService) {
+bs.controller("UploadController", function ($scope, $http, $timeout, $window, YouTubeService, TagService) {
 
     $scope.videoUrl = "";
 
@@ -198,15 +209,7 @@ bs.controller("YtController", function ($scope, $http, $timeout, $window, YouTub
             $scope.loadTricks();
 
             if (!$scope.video.player) {
-                swfobject.embedSWF(
-                    "http://www.youtube.com/v/" + vid + "?hl=en_US&fs=1&enablejsapi=1&playerapiid=ytplayer",
-                    "player",
-                    "100%", "300",
-                    "8",
-                    null, null,
-                    { allowScriptAccess: 'always' },
-                    { id: 'player-swf' }
-                );
+                YouTubeService.loadPlayer(vid, "300");
             } else {
                 $scope.video.player.loadVideoById(vid);
             }

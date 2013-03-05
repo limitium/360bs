@@ -1,0 +1,14 @@
+<div class="row">
+    <div ng-controller="TagController">
+        {% for group in taggroups %}
+            <div class="span4 tag">
+                <strong> {{ group.name }}:</strong>
+                <br>
+                {% for tag in group.tags %}
+                    <span ng-click="toggleTag('{{ tag.id }}')" ng-class="isSelected('{{ tag.id }}')"
+                          class="label">{{ tag.name }}</span>
+                {% endfor %}
+            </div>
+        {% endfor %}
+    </div>
+</div>

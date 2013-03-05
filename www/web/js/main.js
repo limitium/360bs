@@ -98,7 +98,6 @@ bs.filter("tagName", function (TagService) {
     }
 });
 
-
 bs.factory("TagService", function ($http) {
     var tags = {};
     $http.get('tags').success(function (responseTags) {
@@ -129,8 +128,53 @@ bs.factory("TagService", function ($http) {
     }
 });
 
-bs.factory("YouTubeService", function () {
-    return {
+bs.factory("YouTubeService", function ($window, $timeout, $rootScope) {
+    var video = {
+            id: "",
+            player: null,
+            position: 0,
+            status: "",
+            duration: 0,
+            title: "",
+            uploader: "",
+            uploaded: "",
+            views: "",
+            playback: false
+        },
+        settings = {
+            height: 100
+        };
+
+    $window.onYouTubePlayerReady = function () {
+        var player = document.getElementById("player-swf");
+        video.player = player;
+
+        $rootScope.$broadcast("YTS_loaded_player");
+
+        player.addEventListener("onStateChange", "onStateChange");
+
+        function setCurrentTime() {
+            video.position = player.getCurrentTime();
+            $rootScope.$broadcast("YTS_change_position");
+            $timeout(setCurrentTime, 200);
+        }
+
+        setCurrentTime();
+
+        player.playVideo();
+    };
+    $window.onStateChange = function (status) {
+        video.playback = status == 1 || status == 3;
+        $rootScope.$broadcast("YTS_change_state_player");
+    };
+
+    var service = {
+        setHeight: function (height) {
+            settings.height = height;
+        },
+        getVideo: function () {
+            return video;
+        },
         getVideoId: function (url) {
             var regExp = /^.*(youtu.be\/|v\/|e\/|u\/\w+\/|embed\/|v=)([^#\&\?]*).*/;
             var match = url.match(regExp);
@@ -139,22 +183,55 @@ bs.factory("YouTubeService", function () {
             }
             return false;
         },
-        loadMeta: function (vid, cb) {
-            $.getJSON("http://gdata.youtube.com/feeds/api/videos/" + vid + "?v=2&alt=json&prettyprint=true", cb);
+        loadMeta: function (vid) {
+            $.getJSON("http://gdata.youtube.com/feeds/api/videos/" + vid + "?v=2&alt=json&prettyprint=true", function (resp) {
+                video.title = resp.entry.title.$t;
+                video.duration = resp.entry.media$group.yt$duration.seconds;
+                video.uploader = resp.entry.author[0].name.$t;
+                video.uploaded = resp.entry.published.$t;
+                video.views = resp.entry.yt$statistics.viewCount;
+                $rootScope.$broadcast("YTS_loaded_meta");
+            });
         },
-        loadPlayer: function (vid, height) {
+        playVideo: function (start) {
+            if (start) {
+                video.player.seekTo(start, true);
+            }
+            video.player.playVideo();
+        },
+        togglePlay: function () {
+            if (video.playback) {
+                video.player.stopVideo();
+            } else {
+                video.player.playVideo();
+            }
+        },
+        pauseVideo: function () {
+            video.player.pauseVideo()
+        },
+        loadVideo: function (vid) {
+            video.id = vid;
+            if (!video.player) {
+                this.loadPlayer(vid);
+            } else {
+                video.player.loadVideoById(vid);
+            }
+        },
+        loadPlayer: function (vid) {
             swfobject.embedSWF(
                 "http://www.youtube.com/v/" + vid + "?hl=en_US&version=3&autoplay=1&autohide=1&cc_load_policy=1&iv_load_policy=3&enablejsapi=1&fs=1&modestbranding=1&rel=0&theme=light&vq=hd720&playerapiid=ytplayer&showinfo=0",
                 "player",
-                "100%", height,
+                "100%", settings.height,
                 "8",
                 null, null,
                 { allowScriptAccess: 'always' },
                 { id: 'player-swf' }
             );
         }
-    }
+    };
+    return  service;
 });
+
 bs.controller("TagController", function ($scope, TagService) {
     $scope.toggleTag = TagService.toggleTag;
     $scope.isSelected = function (id) {
@@ -163,31 +240,17 @@ bs.controller("TagController", function ($scope, TagService) {
 });
 
 bs.controller("UploadController", function ($scope, $http, $timeout, $window, YouTubeService, TagService) {
+    YouTubeService.setHeight("300");
 
     $scope.videoUrl = "";
-
-    $scope.video = {
-        id: "",
-        player: null,
-        position: 0,
-        status: "",
-        duration: 0,
-        title: "",
-        uploader: "",
-        uploaded: "",
-        views: "",
-        preview: false,
-        playback: false
-    };
-
     $scope.trick = {
         start: 0,
         end: 0,
+        preview: false,
         adding: false
     };
-
     $scope.tricks = [];
-
+    $scope.video = YouTubeService.getVideo();
     $scope.isValidUrl = function () {
         return !!YouTubeService.getVideoId($scope.videoUrl);
     };
@@ -195,39 +258,18 @@ bs.controller("UploadController", function ($scope, $http, $timeout, $window, Yo
     $scope.loadVideo = function () {
         var vid = YouTubeService.getVideoId($scope.videoUrl);
         if (vid) {
-            $scope.video.id = vid;
-            $scope.video.preview = false;
-
-            YouTubeService.loadMeta(vid, function (resp) {
-                $scope.video.title = resp.entry.title.$t;
-                $scope.video.duration = resp.entry.media$group.yt$duration.seconds;
-                $scope.video.uploader = resp.entry.author[0].name.$t;
-                $scope.video.uploaded = resp.entry.published.$t;
-                $scope.video.views = resp.entry.yt$statistics.viewCount;
-                $scope.$apply();
-            });
-            $scope.loadTricks();
-
-            if (!$scope.video.player) {
-                YouTubeService.loadPlayer(vid, "300");
-            } else {
-                $scope.video.player.loadVideoById(vid);
-            }
+            $scope.trick.preview = false;
+            $scope.loadTricks(vid);
+            YouTubeService.loadMeta(vid);
+            YouTubeService.loadVideo(vid);
         }
     };
 
-    $scope.togglePlay = function () {
-        if ($scope.video.playback) {
-            $scope.video.player.stopVideo();
-        } else {
-            $scope.video.player.playVideo();
-        }
-    };
+    $scope.togglePlay = YouTubeService.togglePlay;
 
     $scope.previewVideo = function () {
-        $scope.video.player.seekTo($scope.trick.start, true);
-        $scope.video.player.playVideo();
-        $scope.video.preview = true;
+        YouTubeService.playVideo($scope.trick.start);
+        $scope.trick.preview = true;
     };
 
     $scope.setTrick = function (trick) {
@@ -239,16 +281,21 @@ bs.controller("UploadController", function ($scope, $http, $timeout, $window, Yo
         TagService.setTags(trick.tags);
         $scope.previewVideo();
     };
-    $scope.loadTricks = function () {
+
+    $scope.loadTricks = function (vid) {
         $http({
             method: "GET",
-            url: "tricks/" + $scope.video.id
+            url: "tricks/" + vid
         }).success(function (tricks) {
                 $scope.tricks = tricks
             });
     };
 
     $scope.addVideo = function () {
+        if (!TagService.getSelected().length) {
+            alert("Empty tricks");
+            return;
+        }
         $scope.trick.adding = true;
         $http({
             method: "POST",
@@ -266,7 +313,7 @@ bs.controller("UploadController", function ($scope, $http, $timeout, $window, Yo
                 $scope.tricks = tricks
                 $scope.trick.adding = false;
                 $scope.trick.start = $scope.trick.end;
-                $scope.trick.end = $scope.video.duration;
+                $scope.trick.end = $scope.trick.end + 5;
                 TagService.setTags([]);
             }).error(function () {
                 $scope.trick.adding = false;
@@ -275,34 +322,6 @@ bs.controller("UploadController", function ($scope, $http, $timeout, $window, Yo
     };
 
     $scope.Math = $window.Math;
-
-    $window.onYouTubePlayerReady = function () {
-        var player = document.getElementById("player-swf");
-        $scope.$apply(function () {
-            $scope.video.player = player;
-        });
-
-        player.addEventListener("onStateChange", "onStateChange");
-
-        function setCurrentTime() {
-            $scope.video.position = player.getCurrentTime();
-            if ($scope.video.preview && $scope.video.position >= $scope.trick.end) {
-                $scope.video.preview = false;
-                $scope.video.player.pauseVideo();
-            }
-            $timeout(setCurrentTime, 200);
-        }
-
-        setCurrentTime();
-
-        player.playVideo();
-    };
-    $window.onStateChange = function (status) {
-        $scope.video.playback = status == 1 || status == 3;
-        if (!$scope.$$phase) {
-            $scope.$apply();
-        }
-    };
 
     $scope.$watch("video.duration", function () {
         $scope.trick.start = 0;
@@ -324,4 +343,22 @@ bs.controller("UploadController", function ($scope, $http, $timeout, $window, Yo
             $scope.trick.end = $scope.trick.start;
         }
     });
+    $scope.$on("YTS_change_position", function () {
+        if ($scope.trick.preview && $scope.video.position >= $scope.trick.end) {
+            $scope.trick.preview = false;
+            YouTubeService.pauseVideo();
+        }
+        $scope.$apply();
+    });
+    $scope.$on("YTS_loaded_player", function () {
+        $scope.$apply();
+    });
+    $scope.$on("YTS_loaded_meta", function () {
+        $scope.$apply();
+    });
+    $scope.$on("YTS_change_state_player", function () {
+        if (!$scope.$$phase) {
+            $scope.$apply();
+        }
+    })
 });

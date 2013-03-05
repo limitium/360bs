@@ -10,3 +10,4 @@ composer.phar
 
 web/img/scans/*
 web/img/thumbnails/*
+app/config/parameters.yml

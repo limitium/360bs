@@ -11,8 +11,7 @@
 
             <div class="pull-right">
                 <a href="{{ path('video_new') }}" class="btn btn-danger btn-large"><strong><i
-                                class="icon-upload icon-white"></i> Add
-                        trick</strong></a>
+                                class="icon-upload icon-white"></i> I'll show</strong></a>
             </div>
         </div>
     </header>
@@ -32,15 +31,20 @@
                             <div class="nav-collapse">
                                 <ul class="nav">
                                     <li class="active">
-                                        <a href="index.html">
-                                            <i class="icon-film"></i> Watch tricks
+                                        <a href="{{ path('video') }}">
+                                            <i class="icon-film"></i> Cinema
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a href="{{ path('term') }}">
+                                            <i class="icon-book"></i> Library
                                         </a>
                                     </li>
                                 </ul>
                                 <ul class="nav pull-right ">
                                     <li class="divider-vertical"></li>
                                     <li rel="tooltip" title="Registration / Login"><a href="signin.html"><i
-                                                    class="icon-user"></i> Authorize</a></li>
+                                                    class="icon-check"></i> I'm with you</a></li>
                                     <li class="divider-vertical"></li>
                                 </ul>
                             </div>

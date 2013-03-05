@@ -313,7 +313,7 @@ bs.controller("UploadController", function ($scope, $http, $timeout, $window, Yo
                 $scope.tricks = tricks
                 $scope.trick.adding = false;
                 $scope.trick.start = $scope.trick.end;
-                $scope.trick.end = $scope.trick.end + 5;
+                $scope.trick.end = parseInt($scope.trick.end) + 5;
                 TagService.setTags([]);
             }).error(function () {
                 $scope.trick.adding = false;

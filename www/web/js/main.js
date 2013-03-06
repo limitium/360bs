@@ -402,6 +402,7 @@ bs.controller("PlaybackController", function ($scope, YouTubeService, TrickServi
 
     $scope.setTrick = function (trick) {
         $scope.tags = trick.tags;
+        YouTubeService.playVideo(trick.start);
     };
 
     $scope.isActive = function (trick) {

@@ -194,7 +194,7 @@ bs.factory("YouTubeService", function ($window, $timeout, $rootScope) {
             });
         },
         playVideo: function (start) {
-            if (start) {
+            if (angular.isNumber(start)) {
                 video.player.seekTo(start, true);
             }
             video.player.playVideo();

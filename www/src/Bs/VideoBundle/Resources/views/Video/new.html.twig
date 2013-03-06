@@ -17,19 +17,20 @@
 {% endblock %}
 
 {% block content %}
-    <div class="container">
-        <div class="row" ng-controller="UploadController">
+    <div class="container" ng-controller="UploadController">
+        <div class="row">
             <div class="span4">
                 <form ng-submit="loadVideo()">
                     <fieldset>
-                        <div class="input-prepend">
+                        <div class="input-prepend input-append">
                             <span class="add-on"><i class="icon-globe"></i></span>
                             <input required="required" autofocus="autofocus"
-                                   class="span4"
+                                   class="input-xlarge"
                                    id="yt-url"
                                    type="text"
                                    placeholder="Youtube video url"
                                    ng-model="videoUrl">
+                            <button class="btn" type="submit">Go!</button>
                         </div>
                     </fieldset>
                 </form>
@@ -92,6 +93,8 @@
                 {% include 'BsVideoBundle:Video:_tricks_list.html.twig' %}
             </div>
         </div>
-        {% include 'BsVideoBundle:Video:_tags.html.twig' %}
+        <div ng-cloak ng-show="video.title && video.player">
+            {% include 'BsVideoBundle:Video:_tags.html.twig' %}
+        </div>
     </div>
 {% endblock %}

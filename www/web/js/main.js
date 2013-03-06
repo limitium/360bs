@@ -258,6 +258,7 @@ bs.controller("UploadController", function ($scope, $http, $timeout, $window, Yo
     $scope.loadVideo = function () {
         var vid = YouTubeService.getVideoId($scope.videoUrl);
         if (vid) {
+            $scope.videoUrl = "http://youtube.com/watch?v=" + vid;
             $scope.trick.preview = false;
             $scope.loadTricks(vid);
             YouTubeService.loadMeta(vid);

@@ -1,9 +1,11 @@
 <div class="span2 galery">
-    <div class="video">
-        <img src="http://img.youtube.com/vi/{{ video.vid }}/hqdefault.jpg"/>
-    </div>
-    <div class="title">
-        <a class="group" rel="group1" href="img/4_b.jpg">{{ video.name }}</a>
+    <div ng-click="loadVideo('{{ video.vid }}')">
+        <div class="video">
+            <img src="http://img.youtube.com/vi/{{ video.vid }}/hqdefault.jpg"/>
+        </div>
+        <div class="title">
+            <a class="group" rel="group1" href="#">{{ video.name }}</a>
+        </div>
     </div>
     <div class="count">
         <ul class="pull-left">

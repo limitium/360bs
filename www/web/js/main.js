@@ -156,7 +156,7 @@ bs.factory("YouTubeService", function ($window, $timeout, $rootScope) {
         function setCurrentTime() {
             video.position = player.getCurrentTime();
             $rootScope.$broadcast("YTS_change_position");
-            $timeout(setCurrentTime, 200);
+            $timeout(setCurrentTime, 333);
         }
 
         setCurrentTime();
@@ -232,6 +232,28 @@ bs.factory("YouTubeService", function ($window, $timeout, $rootScope) {
     return  service;
 });
 
+bs.factory("TrickService", function ($http, $rootScope) {
+    var tricks = [];
+    var service = {
+        loadTricks: function (vid) {
+            $http({
+                method: "GET",
+                url: "tricks/" + vid
+            }).success(function (responseTags) {
+                    tricks = responseTags;
+                    $rootScope.$broadcast("TRS_loaded_tricks");
+                });
+        },
+        getTricks: function () {
+            return tricks;
+        },
+        isIn: function (trick, time) {
+            return trick.start <= time && time < trick.end;
+        }
+    };
+    return service;
+});
+
 bs.controller("TagController", function ($scope, TagService) {
     $scope.toggleTag = TagService.toggleTag;
     $scope.isSelected = function (id) {
@@ -239,7 +261,7 @@ bs.controller("TagController", function ($scope, TagService) {
     };
 });
 
-bs.controller("UploadController", function ($scope, $http, $timeout, $window, YouTubeService, TagService) {
+bs.controller("UploadController", function ($scope, $http, $timeout, $window, YouTubeService, TagService, TrickService) {
     YouTubeService.setHeight("300");
 
     $scope.videoUrl = "";
@@ -260,7 +282,7 @@ bs.controller("UploadController", function ($scope, $http, $timeout, $window, Yo
         if (vid) {
             $scope.videoUrl = "http://youtube.com/watch?v=" + vid;
             $scope.trick.preview = false;
-            $scope.loadTricks(vid);
+            TrickService.loadTricks(vid);
             YouTubeService.loadMeta(vid);
             YouTubeService.loadVideo(vid);
         }
@@ -283,13 +305,8 @@ bs.controller("UploadController", function ($scope, $http, $timeout, $window, Yo
         $scope.previewVideo();
     };
 
-    $scope.loadTricks = function (vid) {
-        $http({
-            method: "GET",
-            url: "tricks/" + vid
-        }).success(function (tricks) {
-                $scope.tricks = tricks
-            });
+    $scope.isActive = function (trick) {
+        return TrickService.isIn(trick, $scope.video.position) ? "active" : "";
     };
 
     $scope.addVideo = function () {
@@ -361,5 +378,43 @@ bs.controller("UploadController", function ($scope, $http, $timeout, $window, Yo
         if (!$scope.$$phase) {
             $scope.$apply();
         }
-    })
+    });
+    $scope.$on("TRS_loaded_tricks", function () {
+        $scope.tricks = TrickService.getTricks();
+        if (!$scope.$$phase) {
+            $scope.$apply();
+        }
+    });
+});
+
+bs.controller("PlaybackController", function ($scope, YouTubeService, TrickService) {
+    YouTubeService.setHeight("500");
+
+    $scope.tricks = [];
+
+
+    $scope.video = YouTubeService.getVideo();
+
+    $scope.loadVideo = function (vid) {
+        YouTubeService.loadVideo(vid);
+        TrickService.loadTricks(vid);
+    };
+
+    $scope.setTrick = function (trick) {
+        $scope.tags = trick.tags;
+    };
+
+    $scope.isActive = function (trick) {
+        return TrickService.isIn(trick, $scope.video.position) ? "active" : "";
+    };
+
+    $scope.$on("YTS_change_position", function () {
+        $scope.$apply();
+    });
+    $scope.$on("TRS_loaded_tricks", function () {
+        $scope.tricks = TrickService.getTricks();
+        if (!$scope.$$phase) {
+            $scope.$apply();
+        }
+    });
 });

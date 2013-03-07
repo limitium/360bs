@@ -12,6 +12,9 @@ Bs\VideoBundle\Entity\Trick:
         end:
             type: integer
             nullable: false
+        created_at:
+            type: datetime
+            nullable: false
     uniqueConstraints:
         uniq_start:
             columns:

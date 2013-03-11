@@ -153,4 +153,32 @@ class Trick
     {
         return $this->Tags;
     }
+    /**
+     * @var \DateTime
+     */
+    private $created_at;
+
+
+    /**
+     * Set created_at
+     *
+     * @param \DateTime $createdAt
+     * @return Trick
+     */
+    public function setCreatedAt($createdAt)
+    {
+        $this->created_at = $createdAt;
+    
+        return $this;
+    }
+
+    /**
+     * Get created_at
+     *
+     * @return \DateTime 
+     */
+    public function getCreatedAt()
+    {
+        return $this->created_at;
+    }
 }

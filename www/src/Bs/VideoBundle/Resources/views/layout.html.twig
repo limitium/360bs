@@ -10,6 +10,7 @@
     </script>
 {% endblock %}
 {% block body %}
+    {% set route = app.request.attributes.get('_route') %}
     <header class="container">
         <div class="row">
 
@@ -19,12 +20,13 @@
             <h1 class="span5 brand">Stop fail</h1>
 
             <div class="pull-right">
-                <a href="{{ path('video_new') }}" class="btn btn-danger btn-large"><strong><i
-                                class="icon-upload icon-white"></i> I'll show</strong></a>
+                {% if route != 'video_new' %}
+                    <a href="{{ path('video_new') }}" class="btn btn-danger btn-large"><strong><i
+                                    class="icon-upload icon-white"></i> I'll show</strong></a>
+                {% endif %}
             </div>
         </div>
     </header>
-
     <div class="container">
         <div class="row">
             <div class="span12">
@@ -39,12 +41,12 @@
 
                             <div class="nav-collapse">
                                 <ul class="nav">
-                                    <li class="active">
+                                    <li {% if route == 'video' %}class="active"{% endif %}>
                                         <a href="{{ path('video') }}">
                                             <i class="icon-film"></i> Cinema
                                         </a>
                                     </li>
-                                    <li>
+                                    <li  {% if route == 'term' %}class="active"{% endif %}>
                                         <a href="{{ path('term') }}">
                                             <i class="icon-book"></i> Library
                                         </a>

@@ -15,6 +15,12 @@ Bs\VideoBundle\Entity\Video:
         duration:
             type: decimal
             nullable: false
+        created_at:
+            type: datetime
+            nullable: false
+        views:
+            type: integer
+            nullable: false
     oneToMany:
         Tricks:
             targetEntity: Bs\VideoBundle\Entity\Trick

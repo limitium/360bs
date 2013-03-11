@@ -157,4 +157,60 @@ class Video
     public function __toString(){
         return $this->getName();
     }
+    /**
+     * @var \DateTime
+     */
+    private $created_at;
+
+    /**
+     * @var integer
+     */
+    private $views;
+
+
+    /**
+     * Set created_at
+     *
+     * @param \DateTime $createdAt
+     * @return Video
+     */
+    public function setCreatedAt($createdAt)
+    {
+        $this->created_at = $createdAt;
+    
+        return $this;
+    }
+
+    /**
+     * Get created_at
+     *
+     * @return \DateTime 
+     */
+    public function getCreatedAt()
+    {
+        return $this->created_at;
+    }
+
+    /**
+     * Set views
+     *
+     * @param integer $views
+     * @return Video
+     */
+    public function setViews($views)
+    {
+        $this->views = $views;
+    
+        return $this;
+    }
+
+    /**
+     * Get views
+     *
+     * @return integer 
+     */
+    public function getViews()
+    {
+        return $this->views;
+    }
 }

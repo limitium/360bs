@@ -1,6 +1,15 @@
 {% extends '::base.html.twig' %}
+{% block javascripts %}
+    {{ parent() }}
+    <script>
+        bs.constant("URLS", {
+            "terms": "{{ path('video_tags')}}",
+            "trick_new": "{{ path('trick_create',{ 'vid': '{vid}' })}}",
+            "tricks_load": "{{ path('tricks_load',{ 'vid': '{vid}' })}}"
+        });
+    </script>
+{% endblock %}
 {% block body %}
-
     <header class="container">
         <div class="row">
 
@@ -70,6 +79,4 @@
             </div>
         </div>
     </footer>
-
-
 {% endblock %}

@@ -97,10 +97,18 @@ bs.filter("tagName", function (TagService) {
         return TagService.getName(input);
     }
 });
-
-bs.factory("TagService", function ($http) {
+bs.service("UrlService", function (URLS) {
+    this.url = function (urlName, params) {
+        var url = URLS[urlName];
+        angular.forEach(params, function (value, key) {
+            url = url.replace("%7B" + key + "%7D", value);
+        });
+        return url;
+    };
+});
+bs.factory("TagService", function ($http, UrlService) {
     var tags = {};
-    $http.get('tags').success(function (responseTags) {
+    $http.get(UrlService.url("terms")).success(function (responseTags) {
         tags = responseTags;
     });
     var selected = [];
@@ -232,13 +240,13 @@ bs.factory("YouTubeService", function ($window, $timeout, $rootScope) {
     return  service;
 });
 
-bs.factory("TrickService", function ($http, $rootScope) {
+bs.factory("TrickService", function ($http, $rootScope, UrlService) {
     var tricks = [];
     var service = {
         loadTricks: function (vid) {
             $http({
                 method: "GET",
-                url: "tricks/" + vid
+                url: UrlService.url("tricks_load", {vid: vid})
             }).success(function (responseTags) {
                     tricks = responseTags;
                     $rootScope.$broadcast("TRS_loaded_tricks");
@@ -261,7 +269,7 @@ bs.controller("TagController", function ($scope, TagService) {
     };
 });
 
-bs.controller("UploadController", function ($scope, $http, $timeout, $window, YouTubeService, TagService, TrickService) {
+bs.controller("UploadController", function ($scope, $http, $timeout, $window, YouTubeService, TagService, TrickService, UrlService) {
     YouTubeService.setHeight("300");
 
     $scope.videoUrl = "";
@@ -317,7 +325,7 @@ bs.controller("UploadController", function ($scope, $http, $timeout, $window, Yo
         $scope.trick.adding = true;
         $http({
             method: "POST",
-            url: "trick/" + $scope.video.id,
+            url: UrlService.url("trick_new", {vid: $scope.video.id}),
             headers: {'Content-Type': 'application/x-www-form-urlencoded'},
             data: $.param({
                 "bs_videobundle_tricktype[Video][vid]": $scope.video.id,
@@ -391,13 +399,13 @@ bs.controller("PlaybackController", function ($scope, YouTubeService, TrickServi
     YouTubeService.setHeight("500");
 
     $scope.tricks = [];
+    $scope.videos = [];
 
 
     $scope.video = YouTubeService.getVideo();
 
     $scope.loadVideo = function (vid) {
         YouTubeService.loadVideo(vid);
-        TrickService.loadTricks(vid);
     };
 
     $scope.setTrick = function (trick) {

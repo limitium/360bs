@@ -18,7 +18,7 @@
                     </div>
                 </div>
                 <div class="span3">
-                    {% include 'BsVideoBundle:Video:_tricks_list.html.twig' %}
+                    {% include 'BsVideoBundle:Trick:_tricks_list.html.twig' %}
                 </div>
             </div>
             {#{% include 'BsVideoBundle:Video:_tags.html.twig' %}#}
@@ -29,7 +29,6 @@
                 <div class="span2">
                     <ul class="nav nav-tabs nav-stacked">
                         <li class="active"><a href="#"><i class="icon-picture"></i> Newest</a></li>
-                        <li><a href="#"><i class="icon-signal"></i> Top riders</a></li>
                         <li><a href="#"><i class="icon-ok"></i> Popular</a></li>
                         <li><a href="#"><i class="icon-bookmark"></i> Most Viewed</a></li>
                         <li><a href="#"><i class="icon-th-list"></i> Categories</a></li>
@@ -38,8 +37,13 @@
                 </div>
                 <div class="span10">
                     <div class="row">
+                        <div ng-hide="videos.length" class="span10">
+                            <div class="progress progress-danger progress-striped active">
+                                <div class="bar" style="width: 100%;"></div>
+                            </div>
+                        </div>
                         <div class="span2 galery" ng-repeat="video in videos">
-                            <div ng-click="loadVideo('video.vid')">
+                            <div ng-click="loadVideo(video.vid)">
                                 <div class="video">
                                     <img ng-src="http://img.youtube.com/vi/{{ '{{video.vid}}' }}/hqdefault.jpg"/>
                                 </div>
@@ -58,7 +62,7 @@
                                                 class="icon-facetime-video"></i></li>
                                     <li rel="tooltip" title="Duration">{{ '{{ video.duration }}' }} <i
                                                 class="icon-time"></i></li>
-                                    <li rel="tooltip" title="Views">20 <i class="icon-eye-open"></i></li>
+                                    <li rel="tooltip" title="Views">{{ '{{ video.views }}' }} <i class="icon-eye-open"></i></li>
                                 </ul>
                             </div>
                         </div>

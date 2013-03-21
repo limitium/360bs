@@ -41,11 +41,11 @@ class Video
     {
         $this->Tricks = new \Doctrine\Common\Collections\ArrayCollection();
     }
-    
+
     /**
      * Get id
      *
-     * @return integer 
+     * @return integer
      */
     public function getId()
     {
@@ -61,14 +61,14 @@ class Video
     public function setVid($vid)
     {
         $this->vid = $vid;
-    
+
         return $this;
     }
 
     /**
      * Get vid
      *
-     * @return string 
+     * @return string
      */
     public function getVid()
     {
@@ -84,14 +84,14 @@ class Video
     public function setName($name)
     {
         $this->name = $name;
-    
+
         return $this;
     }
 
     /**
      * Get name
      *
-     * @return string 
+     * @return string
      */
     public function getName()
     {
@@ -107,14 +107,14 @@ class Video
     public function setDuration($duration)
     {
         $this->duration = $duration;
-    
+
         return $this;
     }
 
     /**
      * Get duration
      *
-     * @return float 
+     * @return float
      */
     public function getDuration()
     {
@@ -130,7 +130,7 @@ class Video
     public function addTrick(\Bs\VideoBundle\Entity\Trick $tricks)
     {
         $this->Tricks[] = $tricks;
-    
+
         return $this;
     }
 
@@ -147,16 +147,18 @@ class Video
     /**
      * Get Tricks
      *
-     * @return \Doctrine\Common\Collections\Collection 
+     * @return \Doctrine\Common\Collections\Collection
      */
     public function getTricks()
     {
         return $this->Tricks;
     }
 
-    public function __toString(){
+    public function __toString()
+    {
         return $this->getName();
     }
+
     /**
      * @var \DateTime
      */
@@ -177,14 +179,14 @@ class Video
     public function setCreatedAt($createdAt)
     {
         $this->created_at = $createdAt;
-    
+
         return $this;
     }
 
     /**
      * Get created_at
      *
-     * @return \DateTime 
+     * @return \DateTime
      */
     public function getCreatedAt()
     {
@@ -200,17 +202,42 @@ class Video
     public function setViews($views)
     {
         $this->views = $views;
-    
+
         return $this;
     }
 
     /**
      * Get views
      *
-     * @return integer 
+     * @return integer
      */
     public function getViews()
     {
         return $this->views;
+    }
+
+    /**
+     * @return array
+     */
+    public function getSortedTricks()
+    {
+        $tricks = $this->getTricks();
+        $tricksData = array();
+        foreach ($tricks as $trick) {
+            $tags = array();
+            foreach ($trick->getTags() as $tag) {
+                $tags[] = $tag->getId();
+            }
+            $tricksData[] = array(
+                "start" => $trick->getStart(),
+                "end" => $trick->getEnd(),
+                "tags" => $tags
+            );
+        }
+        usort($tricksData, function ($a, $b) {
+            return $a['start'] - $b['start'];
+        });
+
+        return $tricksData;
     }
 }

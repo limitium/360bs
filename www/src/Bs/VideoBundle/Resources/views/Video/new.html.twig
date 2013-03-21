@@ -27,7 +27,7 @@
                             <input required="required" autofocus="autofocus"
                                    class="input-xlarge"
                                    id="yt-url"
-                                   type="text"
+                                   type="url"
                                    placeholder="Youtube video url"
                                    ng-model="videoUrl">
                             <button class="btn" type="submit">Go!</button>
@@ -90,11 +90,11 @@
                 </div>
             </div>
             <div class="span3">
-                {% include 'BsVideoBundle:Video:_tricks_list.html.twig' %}
+                {% include 'BsVideoBundle:Trick:_tricks_list.html.twig' %}
             </div>
         </div>
         <div ng-cloak ng-show="video.title && video.player">
-            {% include 'BsVideoBundle:Video:_tags.html.twig' %}
+            {% include 'BsVideoBundle:Term:_tags.html.twig' %}
         </div>
     </div>
 {% endblock %}

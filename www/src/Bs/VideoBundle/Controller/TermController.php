@@ -1,19 +1,14 @@
 <?php
 
 namespace Bs\VideoBundle\Controller;
-
-use Bs\VideoBundle\Entity\Trick;
-use Bs\VideoBundle\Form\TrickType;
-use Symfony\Component\HttpFoundation\Request;
-use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
-use Bs\VideoBundle\Entity\Video;
-use Bs\VideoBundle\Form\VideoType;
+use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Symfony\Component\HttpFoundation\Request;
 
 /**
- * Video controller.
+ * Term controller.
  *
  * @Route("/term")
  */
@@ -57,4 +52,23 @@ class TermController extends Controller
     }
 
 
+    /**
+     * Lists all Video tags
+     *
+     * @Route("/tags", name="video_tags")
+     * @Template()
+     */
+    public function tagsAction()
+    {
+        $em = $this->getDoctrine()->getManager();
+
+        $tagsHash = array();
+        foreach ($em->getRepository('BsVideoBundle:Tag')->findAll() as $tag) {
+            $tagsHash[$tag->getId()] = $tag->getName();
+        }
+
+        return array(
+            'tags' => $tagsHash,
+        );
+    }
 }

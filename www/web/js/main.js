@@ -101,7 +101,7 @@ bs.service("UrlService", function (URLS) {
     this.url = function (urlName, params) {
         var url = URLS[urlName];
         angular.forEach(params, function (value, key) {
-            url = url.replace("%7B" + key + "%7D", value);
+            url = url.replace(":" + key, value);
         });
         return url;
     };
@@ -395,7 +395,7 @@ bs.controller("UploadController", function ($scope, $http, $timeout, $window, Yo
     });
 });
 
-bs.controller("PlaybackController", function ($scope, YouTubeService, TrickService) {
+bs.controller("PlaybackController", function ($scope, $http,YouTubeService, TrickService,UrlService) {
     YouTubeService.setHeight("500");
 
     $scope.tricks = [];
@@ -416,6 +416,16 @@ bs.controller("PlaybackController", function ($scope, YouTubeService, TrickServi
     $scope.isActive = function (trick) {
         return TrickService.isIn(trick, $scope.video.position) ? "active" : "";
     };
+    $scope.loadVideos = function () {
+        $http({
+            method: "GET",
+            url: UrlService.url("videos_load")
+        }).success(function (videos) {
+                $scope.videos = videos;
+            }).error(function () {
+                alert("Error");
+            });
+    };
 
     $scope.$on("YTS_change_position", function () {
         $scope.$apply();
@@ -426,4 +436,6 @@ bs.controller("PlaybackController", function ($scope, YouTubeService, TrickServi
             $scope.$apply();
         }
     });
+
+    $scope.loadVideos();
 });

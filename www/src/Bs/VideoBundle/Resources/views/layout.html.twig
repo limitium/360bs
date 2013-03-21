@@ -4,8 +4,9 @@
     <script>
         bs.constant("URLS", {
             "terms": "{{ path('video_tags')}}",
-            "trick_new": "{{ path('trick_create',{ 'vid': '{vid}' })}}",
-            "tricks_load": "{{ path('tricks_load',{ 'vid': '{vid}' })}}"
+            "trick_new": "{{ path('trick_create',{ 'vid': ':vid' })}}",
+            "tricks_load": "{{ path('tricks_load',{ 'vid': ':vid' })}}",
+            "videos_load": "{{ path('video_load')}}"
         });
     </script>
 {% endblock %}
@@ -44,6 +45,11 @@
                                     <li {% if route == 'video' %}class="active"{% endif %}>
                                         <a href="{{ path('video') }}">
                                             <i class="icon-film"></i> Cinema
+                                        </a>
+                                    </li>
+                                    <li  {% if route == 'top' %}class="active"{% endif %}>
+                                        <a href="#">
+                                            <i class="icon-signal"></i> Top riders
                                         </a>
                                     </li>
                                     <li  {% if route == 'term' %}class="active"{% endif %}>

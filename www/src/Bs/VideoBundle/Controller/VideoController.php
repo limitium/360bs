@@ -2,15 +2,15 @@
 
 namespace Bs\VideoBundle\Controller;
 
-use Bs\VideoBundle\Entity\Trick;
-use Bs\VideoBundle\Form\TrickType;
-use Symfony\Component\HttpFoundation\Request;
-use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
+use Bs\VideoBundle\Entity\Trick;
 use Bs\VideoBundle\Entity\Video;
+use Bs\VideoBundle\Form\TrickType;
 use Bs\VideoBundle\Form\VideoType;
+use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Symfony\Component\HttpFoundation\Request;
 
 /**
  * Video controller.
@@ -19,6 +19,31 @@ use Bs\VideoBundle\Form\VideoType;
  */
 class VideoController extends Controller
 {
+    /**
+     * Lists all Video entities.
+     *
+     * @Route("/load", name="video_load")
+     * @Template()
+     */
+    public function loadAction()
+    {
+        $videos = array();
+
+        $em = $this->getDoctrine()->getManager();
+        foreach ($em->getRepository('BsVideoBundle:Video')->findAll() as $video) {
+            $videos[] = array(
+                "vid" => $video->getVid(),
+                "name" => $video->getName(),
+                "duration" => $video->getDuration(),
+                "tricks" => $video->getSortedTricks()
+            );
+        }
+
+        return array(
+            'videos' => $videos,
+        );
+    }
+
     /**
      * Lists all Video entities.
      *
@@ -32,103 +57,11 @@ class VideoController extends Controller
 
         return array(
             'taggroups' => $em->getRepository('BsVideoBundle:TagGroup')->findAll(),
-            'videos' => $em->getRepository('BsVideoBundle:Video')->findAll(),
         );
     }
 
-    /**
-     * Lists all Video tags
-     *
-     * @Route("/tags", name="video_tags")
-     * @Template()
-     */
-    public function tagsAction()
-    {
-        $em = $this->getDoctrine()->getManager();
 
-        $tagsHash = array();
-        foreach ($em->getRepository('BsVideoBundle:Tag')->findAll() as $tag) {
-            $tagsHash[$tag->getId()] = $tag->getName();
-        }
 
-        return array(
-            'tags' => $tagsHash,
-        );
-    }
-
-    /**
-     * @Route("/tricks/{vid}", name="tricks_load")
-     * @Method("GET")
-     * @Template("BsVideoBundle:Video:tricks.html.twig")
-     */
-    public function loadtricksAction(Request $request, $vid)
-    {
-        $em = $this->getDoctrine()->getManager();
-        $video = $em->getRepository('BsVideoBundle:Video')->findOneBy(array("vid" => $vid));
-        return array(
-            "tricks" => $this->getTricks($video)
-        );
-    }
-
-    /**
-     * @param $video
-     * @internal param $vid
-     * @internal param $em
-     * @return array
-     */
-    private function getTricks($video)
-    {
-        $tricks = array();
-        if ($video) {
-            $tricks = $video->getTricks();
-        }
-        $tricksData = array();
-        foreach ($tricks as $trick) {
-            $tags = array();
-            foreach ($trick->getTags() as $tag) {
-                $tags[] = $tag->getId();
-            }
-            $tricksData[] = array(
-                "start" => $trick->getStart(),
-                "end" => $trick->getEnd(),
-                "tags" => $tags
-            );
-        }
-        usort($tricksData, function ($a, $b) {
-            return $a['start'] - $b['start'];
-        });
-
-        return $tricksData;
-    }
-
-    /**
-     * @Route("/trick/{vid}", name="trick_create")
-     * @Method("POST")
-     * @Template("BsVideoBundle:Video:tricks.html.twig")
-     */
-    public function createtrickAction(Request $request, $vid)
-    {
-        $em = $this->getDoctrine()->getManager();
-        $trick = new Trick();
-        $form = $this->createForm(new TrickType(), $trick);
-        $form->bind($request);
-        $video = null;
-        if ($form->isValid()) {
-            $video = $em->getRepository('BsVideoBundle:Video')->findOneBy(array("vid" => $vid));
-            if (!$video) {
-                $video = $trick->getVideo();
-                $video->addTrick($trick);
-                $em->persist($video);
-            } else {
-                $trick->setVideo($video);
-            }
-            $em->persist($trick);
-            $em->flush();
-        }
-        return array(
-            "tricks" => $this->getTricks($video)
-        );
-    }
 
     /**
      * Finds and displays a Video entity.

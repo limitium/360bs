@@ -46,7 +46,7 @@
                             </div>
                         </div>
                         <div class="span2 galery" ng-repeat="video in videos">
-                            <div ng-click="loadVideo(video.vid)">
+                            <div ng-click="loadVideo($index)">
                                 <div class="video">
                                     <img ng-src="http://img.youtube.com/vi/{{ '{{video.vid}}' }}/hqdefault.jpg"/>
                                 </div>

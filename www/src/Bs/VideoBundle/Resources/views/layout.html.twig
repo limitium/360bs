@@ -46,8 +46,8 @@
                             <div class="nav-collapse">
                                 <ul class="nav">
                                     <li {% if route == 'video' %}class="active"{% endif %}>
-                                        <a href="{{ path('video') }}">
-                                            <i class="icon-film"></i> Cinema
+                                        <a href="{{ path('video',{"filter":"newest"}) }}">
+                                            <i class="icon-film"></i> Videos
                                         </a>
                                     </li>
                                     <li  {% if route == 'top' %}class="active"{% endif %}>

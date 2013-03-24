@@ -19,8 +19,6 @@ use Symfony\Component\HttpFoundation\Request;
  */
 class VideoController extends Controller
 {
-
-
         /**
         * Lists all Video entities.
         *

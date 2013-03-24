@@ -412,12 +412,13 @@ bs.controller("PlaybackController", function ($scope, $http, YouTubeService, Tri
 
     $scope.video = YouTubeService.getVideo();
 
-    $scope.loadVideo = function (vid) {
-        YouTubeService.loadVideo(vid);
+    $scope.loadVideo = function (index) {
+        var video = $scope.videos[index];
+        YouTubeService.loadVideo(video.vid);
+        $scope.tricks = video.tricks;
     };
 
     $scope.setTrick = function (trick) {
-        $scope.tags = trick.tags;
         YouTubeService.playVideo(trick.start);
     };
 
@@ -428,7 +429,7 @@ bs.controller("PlaybackController", function ($scope, $http, YouTubeService, Tri
         return $scope.filter == filter ? "active" : "";
     };
 
-     function loadVideos (filter) {
+    function loadVideos(filter) {
         $http({
             method: "GET",
             url: UrlService.url("video_load", {filter: filter})
@@ -452,9 +453,7 @@ bs.controller("PlaybackController", function ($scope, $http, YouTubeService, Tri
         $scope.videos.length = 0;
     });
     $rootScope.$on("$routeChangeSuccess", function () {
-        $scope.filter = $routeParams.filter;
         loadVideos($routeParams.filter);
+        $scope.filter = $routeParams.filter;
     });
-
-    $location.path(UrlService.url("video_filter", {filter: "newset"}));
 });

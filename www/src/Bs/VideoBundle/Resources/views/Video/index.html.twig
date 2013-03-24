@@ -28,11 +28,14 @@
 
                 <div class="span2">
                     <ul class="nav nav-tabs nav-stacked">
-                        <li class="active"><a href="#"><i class="icon-picture"></i> Newest</a></li>
-                        <li><a href="#"><i class="icon-ok"></i> Popular</a></li>
-                        <li><a href="#"><i class="icon-bookmark"></i> Most Viewed</a></li>
-                        <li><a href="#"><i class="icon-th-list"></i> Categories</a></li>
-                        <li><a href="#"><i class="icon-heart"></i> Recomended</a></li>
+                        <li ng-class="isFilter('newest')"><a href="{{ path('video',{"filter":"newest"})}}"><i class="icon-picture"></i> Newest</a></li>
+                        <li ng-class="isFilter('popular')"><a href="{{ path('video',{"filter":"popular"})}}"><i class="icon-ok"></i> Popular</a></li>
+                        <li ng-class="isFilter('most_viewed')"><a href="{{ path('video',{"filter":"most_viewed"})}}"><i class="icon-bookmark"></i> Most Viewed</a>
+                        </li>
+                        <li ng-class="isFilter('category')"><a href="{{ path('video',{"filter":"category"})}}"><i class="icon-th-list"></i> Categories</a>
+                        </li>
+                        <li ng-class="isFilter('recomended')"><a href="{{ path('video',{"filter":"recomended"})}}"><i class="icon-heart"></i> Recomended</a>
+                        </li>
                     </ul>
                 </div>
                 <div class="span10">
@@ -62,7 +65,8 @@
                                                 class="icon-facetime-video"></i></li>
                                     <li rel="tooltip" title="Duration">{{ '{{ video.duration }}' }} <i
                                                 class="icon-time"></i></li>
-                                    <li rel="tooltip" title="Views">{{ '{{ video.views }}' }} <i class="icon-eye-open"></i></li>
+                                    <li rel="tooltip" title="Views">{{ '{{ video.views }}' }} <i
+                                                class="icon-eye-open"></i></li>
                                 </ul>
                             </div>
                         </div>

@@ -19,38 +19,40 @@ use Symfony\Component\HttpFoundation\Request;
  */
 class VideoController extends Controller
 {
+
+
+        /**
+        * Lists all Video entities.
+        *
+        * @Route("/load/{filter}/{page}", name="video_load",defaults={"page"=0})
+        * @Template()
+        */
+       public function loadAction()
+       {
+           $videos = array();
+
+           $em = $this->getDoctrine()->getManager();
+           foreach ($em->getRepository('BsVideoBundle:Video')->findAll() as $video) {
+               $videos[] = array(
+                   "vid" => $video->getVid(),
+                   "name" => $video->getName(),
+                   "duration" => $video->getDuration(),
+                   "tricks" => $video->getSortedTricks()
+               );
+           }
+
+           return array(
+               'videos' => $videos,
+           );
+       }
+
     /**
      * Lists all Video entities.
      *
-     * @Route("/load", name="video_load")
+     * @Route("/{filter}/{page}", name="video",defaults={"filter" = "newset","page"=0})
      * @Template()
      */
-    public function loadAction()
-    {
-        $videos = array();
-
-        $em = $this->getDoctrine()->getManager();
-        foreach ($em->getRepository('BsVideoBundle:Video')->findAll() as $video) {
-            $videos[] = array(
-                "vid" => $video->getVid(),
-                "name" => $video->getName(),
-                "duration" => $video->getDuration(),
-                "tricks" => $video->getSortedTricks()
-            );
-        }
-
-        return array(
-            'videos' => $videos,
-        );
-    }
-
-    /**
-     * Lists all Video entities.
-     *
-     * @Route("/", name="video")
-     * @Template()
-     */
-    public function indexAction()
+    public function indexAction($filter,$page)
     {
         $em = $this->getDoctrine()->getManager();
 
@@ -59,6 +61,8 @@ class VideoController extends Controller
             'taggroups' => $em->getRepository('BsVideoBundle:TagGroup')->findAll(),
         );
     }
+
+
 
 
 

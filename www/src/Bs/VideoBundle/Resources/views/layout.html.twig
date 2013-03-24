@@ -6,7 +6,10 @@
             "terms": "{{ path('video_tags')}}",
             "trick_new": "{{ path('trick_create',{ 'vid': ':vid' })}}",
             "tricks_load": "{{ path('tricks_load',{ 'vid': ':vid' })}}",
-            "videos_load": "{{ path('video_load')}}"
+            "video_load": "{{ path('video_load',{'filter':':filter'})}}",
+            "video_load_page": "{{ path('video_load',{'filter':':filter','page':':page'})}}",
+            "video_filter": "{{ path('video',{'filter':':filter'})}}",
+            "video_filter_page": "{{ path('video',{'filter':':filter','page':':page'})}}"
         });
     </script>
 {% endblock %}
@@ -73,8 +76,9 @@
         </div>
     </div>
 
+    <div  ng-app="bs">
     {% block content %}{% endblock %}
-
+    </div>
     <footer class="container">
         <hr class="alt"/>
         <div class="row">

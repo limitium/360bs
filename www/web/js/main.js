@@ -1,5 +1,13 @@
 var bs = angular.module('bs', []);
 
+bs.config(function ($routeProvider, $locationProvider, URLS) {
+    $routeProvider
+        .when(URLS.video_filter, {
+        });
+
+    $locationProvider.html5Mode(true);
+});
+
 bs.directive("rel", function () {
     return {
         restrict: "A",
@@ -395,12 +403,12 @@ bs.controller("UploadController", function ($scope, $http, $timeout, $window, Yo
     });
 });
 
-bs.controller("PlaybackController", function ($scope, $http,YouTubeService, TrickService,UrlService) {
+bs.controller("PlaybackController", function ($scope, $http, YouTubeService, TrickService, UrlService, $route, $routeParams, $rootScope, $location) {
     YouTubeService.setHeight("500");
 
     $scope.tricks = [];
     $scope.videos = [];
-
+    $scope.filter = "";
 
     $scope.video = YouTubeService.getVideo();
 
@@ -416,16 +424,20 @@ bs.controller("PlaybackController", function ($scope, $http,YouTubeService, Tric
     $scope.isActive = function (trick) {
         return TrickService.isIn(trick, $scope.video.position) ? "active" : "";
     };
-    $scope.loadVideos = function () {
+    $scope.isFilter = function (filter) {
+        return $scope.filter == filter ? "active" : "";
+    };
+
+     function loadVideos (filter) {
         $http({
             method: "GET",
-            url: UrlService.url("videos_load")
+            url: UrlService.url("video_load", {filter: filter})
         }).success(function (videos) {
                 $scope.videos = videos;
             }).error(function () {
                 alert("Error");
             });
-    };
+    }
 
     $scope.$on("YTS_change_position", function () {
         $scope.$apply();
@@ -436,6 +448,13 @@ bs.controller("PlaybackController", function ($scope, $http,YouTubeService, Tric
             $scope.$apply();
         }
     });
+    $rootScope.$on("$routeChangeStart", function () {
+        $scope.videos.length = 0;
+    });
+    $rootScope.$on("$routeChangeSuccess", function () {
+        $scope.filter = $routeParams.filter;
+        loadVideos($routeParams.filter);
+    });
 
-    $scope.loadVideos();
+    $location.path(UrlService.url("video_filter", {filter: "newset"}));
 });

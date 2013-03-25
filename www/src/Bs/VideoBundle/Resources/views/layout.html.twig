@@ -14,23 +14,7 @@
     </script>
 {% endblock %}
 {% block body %}
-    {% set route = app.request.attributes.get('_route') %}
-    <header class="container">
-        <div class="row">
 
-            <div class="span1">
-                <img src="{{ asset('img/logo2.png') }}"/>
-            </div>
-            <h1 class="span5 brand">Stop fail</h1>
-
-            <div class="pull-right">
-                {% if route != 'video_new' %}
-                    <a href="{{ path('video_new') }}" class="btn btn-danger btn-large"><strong><i
-                                    class="icon-upload icon-white"></i> I'll show</strong></a>
-                {% endif %}
-            </div>
-        </div>
-    </header>
     <div class="container">
         <div class="row">
             <div class="span12">
@@ -63,7 +47,7 @@
                                 </ul>
                                 <ul class="nav pull-right ">
                                     <li class="divider-vertical"></li>
-                                    <li rel="tooltip" title="Registration / Login"><a href="signin.html"><i
+                                    <li rel="tooltip" title="Registration / Login"><a href="{{path('fos_user_security_login')}}"><i
                                                     class="icon-check"></i> I'm with you</a></li>
                                     <li class="divider-vertical"></li>
                                 </ul>
@@ -79,16 +63,5 @@
     <div  ng-app="bs">
     {% block content %}{% endblock %}
     </div>
-    <footer class="container">
-        <hr class="alt"/>
-        <div class="row">
-            <div class="span6">&copy; 2013 Stop fall. All right reserved.</div>
-            <div class="span6">
-                <ul>
-                    <li><a href="#">Terms Of Service</a></li>
-                    <li><a href="#">Privacy</a></li>
-                </ul>
-            </div>
-        </div>
-    </footer>
+
 {% endblock %}

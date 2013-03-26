@@ -26,3 +26,11 @@ Bs\VideoBundle\Entity\Video:
             targetEntity: Bs\VideoBundle\Entity\Trick
             mappedBy: Video
             orphanRemoval: true
+    manyToOne:
+        Uploader:
+            targetEntity: Bs\VideoBundle\Entity\User
+            inversedBy: Videos
+            joinColumns:
+                user_id:
+                    referencedColumnName: id
+                    nullable: false

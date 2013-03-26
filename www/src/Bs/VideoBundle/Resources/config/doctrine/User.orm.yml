@@ -6,3 +6,13 @@ Bs\VideoBundle\Entity\User:
             type: integer
             generator:
                 strategy: AUTO
+    oneToMany:
+        Videos:
+            targetEntity: Bs\VideoBundle\Entity\Video
+            mappedBy: Uploader
+        TricksUploaded:
+            targetEntity: Bs\VideoBundle\Entity\Trick
+            mappedBy: Uploader
+        TricksMade:
+            targetEntity: Bs\VideoBundle\Entity\Trick
+            mappedBy: Rider

@@ -240,4 +240,32 @@ class Video
 
         return $tricksData;
     }
+    /**
+     * @var \Bs\VideoBundle\Entity\User
+     */
+    private $Uploader;
+
+
+    /**
+     * Set Uploader
+     *
+     * @param \Bs\VideoBundle\Entity\User $uploader
+     * @return Video
+     */
+    public function setUploader(\Bs\VideoBundle\Entity\User $uploader)
+    {
+        $this->Uploader = $uploader;
+    
+        return $this;
+    }
+
+    /**
+     * Get Uploader
+     *
+     * @return \Bs\VideoBundle\Entity\User 
+     */
+    public function getUploader()
+    {
+        return $this->Uploader;
+    }
 }

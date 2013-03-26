@@ -181,4 +181,60 @@ class Trick
     {
         return $this->created_at;
     }
+    /**
+     * @var \Bs\VideoBundle\Entity\User
+     */
+    private $Uploader;
+
+    /**
+     * @var \Bs\VideoBundle\Entity\User
+     */
+    private $Rider;
+
+
+    /**
+     * Set Uploader
+     *
+     * @param \Bs\VideoBundle\Entity\User $uploader
+     * @return Trick
+     */
+    public function setUploader(\Bs\VideoBundle\Entity\User $uploader)
+    {
+        $this->Uploader = $uploader;
+    
+        return $this;
+    }
+
+    /**
+     * Get Uploader
+     *
+     * @return \Bs\VideoBundle\Entity\User 
+     */
+    public function getUploader()
+    {
+        return $this->Uploader;
+    }
+
+    /**
+     * Set Rider
+     *
+     * @param \Bs\VideoBundle\Entity\User $rider
+     * @return Trick
+     */
+    public function setRider(\Bs\VideoBundle\Entity\User $rider)
+    {
+        $this->Rider = $rider;
+    
+        return $this;
+    }
+
+    /**
+     * Get Rider
+     *
+     * @return \Bs\VideoBundle\Entity\User 
+     */
+    public function getRider()
+    {
+        return $this->Rider;
+    }
 }

@@ -31,6 +31,20 @@ Bs\VideoBundle\Entity\Trick:
                     nullable: false
                     onDelete: CASCADE
                     onUpdate: CASCADE
+        Uploader:
+            targetEntity: Bs\VideoBundle\Entity\User
+            inversedBy: TricksUploaded
+            joinColumns:
+                uploader_id:
+                    referencedColumnName: id
+                    nullable: false
+        Rider:
+            targetEntity: Bs\VideoBundle\Entity\User
+            inversedBy: TricksMade
+            joinColumns:
+                rider_id:
+                    referencedColumnName: id
+                    nullable: false
     manyToMany:
         Tags:
             targetEntity: Tag

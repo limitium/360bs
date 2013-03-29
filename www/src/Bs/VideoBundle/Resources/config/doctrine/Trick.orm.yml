@@ -44,7 +44,6 @@ Bs\VideoBundle\Entity\Trick:
             joinColumns:
                 rider_id:
                     referencedColumnName: id
-                    nullable: false
     manyToMany:
         Tags:
             targetEntity: Tag

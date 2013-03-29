@@ -31,7 +31,7 @@
       <column name="video_id" required="true" type="integer"/>
       <column name="created_at" required="true" type="datetime"/>
       <column name="uploader_id" required="true" type="integer"/>
-      <column name="rider_id" required="true" type="integer"/>
+      <column name="rider_id" type="integer"/>
       <index name="uniq_start" unique="true">
         <index-column name="start"/>
         <index-column name="video_id"/>

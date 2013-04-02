@@ -105,6 +105,16 @@ bs.filter("tagName", function (TagService) {
         return TagService.getName(input);
     }
 });
+bs.filter("duration", function () {
+    return function (seconds) {
+        var h, m, s;
+        h = seconds / 3600 | 0;
+        seconds = seconds % 3600;
+        m = seconds / 60 | 0;
+        s = seconds % 60;
+        return (h ? h + ":" : "") + (m ? m + ":" : "") + s;
+    }
+});
 bs.service("UrlService", function (URLS) {
     this.url = function (urlName, params) {
         var url = URLS[urlName];

@@ -17,6 +17,7 @@ framework:
     trust_proxy_headers: false # Deprecated in 2.0; will be removed in 2.3 (used trusted_proxies instead)
     trusted_proxies: ~
     session:         ~
+    translator: { fallback: en }
 
 # Twig Configuration
 twig:
@@ -69,3 +70,7 @@ fos_user:
     db_driver: orm # other valid values are 'mongodb', 'couchdb' and 'propel'
     firewall_name: main
     user_class: Bs\VideoBundle\Entity\User
+    registration:
+            form:
+                type: bs_user_registration
+                validation_groups: [Rega]

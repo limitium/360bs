@@ -5,28 +5,31 @@
 	<div class="form-content clearfix">
 		<form action="{{ path("fos_user_security_check") }}" method="post">
 		    <input type="hidden" name="_csrf_token" value="{{ csrf_token }}" />
-			<h1><i class="iconbig-note-write"></i> Sign In</h1>
+			<h1>Login</h1>
 			<div class="login-fields">
 				{% if error %}
-                    <div class="alert-danger">{{ error|trans({}, 'FOSUserBundle') }}</div>
+                    <div class="alert alert-danger">{{ error|trans({}, 'FOSUserBundle') }}</div>
                 {% endif %}
 				<div class="field">
 					<label for="username">{{ 'security.login.username'|trans({}, 'FOSUserBundle') }}</label>
-					<input class="login username-field" placeholder="Username" type="text" id="username" name="_username" value="{{ last_username }}" required="required" />
+					<input class="login username-field" placeholder="Username or Email" type="text" id="username" name="_username" value="{{ last_username }}" required="required" />
 				</div>
 				<div class="field">
 					<label for="password">{{ 'security.login.password'|trans({}, 'FOSUserBundle') }}</label>
 					<input type="password" required="" class="login password-field" placeholder="Password" value="" name="password" id="password">
 				</div>
-				<div class="field">
-				<input type="checkbox" id="remember_me" name="_remember_me" value="on" />
-                    <label for="remember_me">{{ 'security.login.remember_me'|trans({}, 'FOSUserBundle') }}</label>
-				</div>
 			</div>
-			<div class="login-actions">
-				<input type="submit" class="btn-signin btn btn-primary" value="{{ 'security.login.submit'|trans({}, 'FOSUserBundle') }}" name="submit">
+            <div class="login-actions">
+				<span class="login-checkbox">
+                    <input type="checkbox"  class="field login-checkbox" id="remember_me" name="_remember_me" value="on" />
+					<label for="remember_me" class="choice">{{ 'security.login.remember_me'|trans({}, 'FOSUserBundle') }}</label>
+				</span>
+                <input type="submit" class="btn-signin btn btn-danger" value="{{ 'security.login.submit'|trans({}, 'FOSUserBundle') }}" name="submit">
                 <a class="btn-signin btn" href="#">Cancel</a>
-			</div>
+            </div>
+            <p>
+                <a href="{{ path('fos_user_registration_register') }}">or register</a>
+            </p>
 		</form>
 	   </div>
     </div>

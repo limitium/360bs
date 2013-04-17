@@ -4,7 +4,7 @@ jms_security_extra:
 
 security:
     encoders:
-        Symfony\Component\Security\Core\User\User: plaintext
+        Bs\VideoBundle\Entity\User: plaintext
 
     role_hierarchy:
         ROLE_ADMIN:       ROLE_USER

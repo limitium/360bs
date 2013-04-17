@@ -8,13 +8,12 @@
     <parameters>
         <parameter key="bs_user.example.class">Bs\UserBundle\Example</parameter>
     </parameters>
-
+-->
     <services>
-        <service id="bs_user.example" class="%bs_user.example.class%">
-            <argument type="service" id="service_id" />
-            <argument>plain_value</argument>
-            <argument>%parameter_name%</argument>
+        <service id="bs_user.registration.form.type" class="Bs\UserBundle\Form\RegistrationFormType">
+            <tag name="form.type" alias="bs_user_registration" />
+            <argument>%fos_user.model.user.class%</argument>
         </service>
     </services>
-    -->
+
 </container>

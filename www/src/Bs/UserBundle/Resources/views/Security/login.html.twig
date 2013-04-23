@@ -12,7 +12,7 @@
                 {% endif %}
 				<div class="field">
 					<label for="username">{{ 'security.login.username'|trans({}, 'FOSUserBundle') }}</label>
-					<input class="login username-field" placeholder="Username or Email" type="text" id="username" name="_username" value="{{ last_username }}" required="required" />
+					<input class="login username-field" placeholder="Username or Email" type="text" id="username" name="email" value="{{ last_username }}" required="required" />
 				</div>
 				<div class="field">
 					<label for="password">{{ 'security.login.password'|trans({}, 'FOSUserBundle') }}</label>

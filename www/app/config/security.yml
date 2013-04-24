@@ -31,15 +31,18 @@ security:
                 password_parameter: password
 
 
-#                remember_me:    true
-#            remember_me:
+                remember_me:    true
+            remember_me:
+                key:      %secret%
+                path:     /
+                domain:   ~
+                always_remember_me: true
+                user_provider: fos_userbundle
 #                token_provider: name
-#                key: someS3cretKey
 #                name: NameOfTheCookie
-#                lifetime: 360000 # in seconds
-#                httponly: true
-#                always_remember_me: true
-#                remember_me_parameter: _remember_me
+                lifetime: 360000 # in seconds
+                httponly: true
+                remember_me_parameter: _remember_me
 
             logout:       true
             anonymous:    true

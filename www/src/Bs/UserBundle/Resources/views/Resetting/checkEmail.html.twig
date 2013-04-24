@@ -1,0 +1,16 @@
+{% extends "FOSUserBundle::layout.html.twig" %}
+
+{% block fos_user_content %}
+    <div class="account-container">
+        <div class="form-content clearfix">
+            <p>{{ 'resetting.check_email'|trans({'%email%': email}, 'FOSUserBundle') }}</p>
+
+            <p>
+                {% set mailParts = email|split("@") %}
+                {% if mailParts|length == 2 %}
+                    Check email at <a href="http://{{ mailParts[1] }}">{{ mailParts[1] }}</a>
+                {% endif %}
+            </p>
+        </div>
+    </div>
+{% endblock %}

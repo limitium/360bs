@@ -1,0 +1,25 @@
+<div class="account-container">
+    <div class="form-content clearfix">
+        <form action="{{ path('fos_user_resetting_send_email') }}" method="POST" class="fos_user_resetting_request">
+            <h1>Reset password</h1>
+
+            <div class="login-fields">
+                {% if invalid_username is defined %}
+                    <div class="alert alert-danger">{{ 'resetting.request.invalid_username'|trans({'%username%': invalid_username}, 'FOSUserBundle') }}</div>
+                {% endif %}
+                <div class="field">
+                    <label for="username">{{ 'security.login.username'|trans({}, 'FOSUserBundle') }}</label>
+                    <input class="login username-field" placeholder="Username or Email" type="text" id="username"
+                           name="username" required="required"/>
+                </div>
+            </div>
+            <div class="login-last_usernameactions">
+                <input type="submit" class="btn-signin btn btn-danger"
+                       value="{{ 'resetting.request.submit'|trans({}, 'FOSUserBundle') }}" name="submit">
+            </div>
+            <p>
+                <a href="{{ path('fos_user_security_login') }}">login</a>
+            </p>
+        </form>
+    </div>
+</div>

@@ -75,3 +75,11 @@ fos_user:
                 type: bs_user_registration
                 validation_groups: [Rega]
                 name: ""
+    resetting:
+            email:
+                template: BsUserBundle:Resetting:email.txt.twig
+                from_email:
+                    address: mailer@stopfall.com
+                    sender_name: StopFall
+    service:
+            mailer: fos_user.mailer.twig_swift

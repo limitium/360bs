@@ -76,6 +76,8 @@ fos_user:
                 validation_groups: [Rega]
                 name: ""
     resetting:
+            form:
+                validation_groups: [Rega]
             email:
                 template: BsUserBundle:Resetting:email.txt.twig
                 from_email:

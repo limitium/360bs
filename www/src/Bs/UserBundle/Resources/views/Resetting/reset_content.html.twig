@@ -1,6 +1,30 @@
-<form action="{{ path('fos_user_resetting_reset', {'token': token}) }}" {{ form_enctype(form) }} method="POST" class="fos_user_resetting_reset">
-    {{ form_widget(form) }}
-    <div>
-        <input type="submit" value="{{ 'resetting.reset.submit'|trans({}, 'FOSUserBundle') }}" />
+<div class="account-container">
+    <div class="form-content clearfix">
+        <form action="{{ path('fos_user_resetting_reset', {'token': token}) }}" {{ form_enctype(form) }} method="POST"
+              class="fos_user_resetting_reset">
+            <div class="login-fields">
+                <div class="field control-group {% if form.new.first.vars.errors|length >0 %}error{% endif %}">
+                    {% if form.new.first.vars.errors|length >0 %}
+                        <span class="help-block">
+                            {{ form_errors(form.new.first) }}
+                        </span>
+                    {% endif %}
+                    {{ form_widget(form.new.first, { 'attr': {'class': 'password-field','placeholder':'New password'} }) }}
+                </div>
+                <div class="field control-group {% if form.new.second.vars.errors|length >0 %}error{% endif %}">
+                    {% if form.new.second.vars.errors|length >0 %}
+                        <span class="help-block">
+                            {{ form_errors(form.new.second) }}
+                        </span>
+                    {% endif %}
+                    {{ form_widget(form.new.second, { 'attr': {'class': 'password-field','placeholder':'Confirm password'} }) }}
+                </div>
+                {{ form_rest(form) }}
+            </div>
+            <div class="login-actions">
+                <input type="submit" class="btn-signin btn btn-danger"
+                       value="{{ 'resetting.reset.submit'|trans({}, 'FOSUserBundle') }}" name="submit">
+            </div>
+        </form>
     </div>
-</form>
+</div>

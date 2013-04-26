@@ -13,6 +13,7 @@
     </table>
     <table name="Video" visPositionX="35" visPositionY="31" visSizeX="0" visSizeX2="102" visSizeY="0" visSizeY2="73">
       <column auto-increment="true" name="id" primary="true" required="true" type="integer"/>
+      <column name="service" required="true" type="string"/>
       <column name="vid" required="true" type="string"/>
       <column name="name" required="true" type="string"/>
       <column name="duration" required="true" type="decimal"/>

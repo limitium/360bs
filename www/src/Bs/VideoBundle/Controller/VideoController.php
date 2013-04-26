@@ -19,30 +19,50 @@ use Symfony\Component\HttpFoundation\Request;
  */
 class VideoController extends Controller
 {
-        /**
-        * Lists all Video entities.
-        *
-        * @Route("/load/{filter}/{page}", name="video_load",defaults={"page"=0})
-        * @Template()
-        */
-       public function loadAction()
-       {
-           $videos = array();
+    /**
+     * Displays a form to create a new Video entity.
+     *
+     * @Route("/new", name="video_new")
+     * @Template()
+     */
+    public function newAction()
+    {
+        $video = new Video();
+        $trick = new Trick();
+        $trick->setVideo($video);
+        $form = $this->createForm(new TrickType(), $trick);
+        $em = $this->getDoctrine()->getManager();
+        return array(
+            'entity' => $trick,
+            'form' => $form->createView(),
+            'taggroups' => $em->getRepository('BsVideoBundle:TagGroup')->findAll(),
+        );
+    }
 
-           $em = $this->getDoctrine()->getManager();
-           foreach ($em->getRepository('BsVideoBundle:Video')->findAll() as $video) {
-               $videos[] = array(
-                   "vid" => $video->getVid(),
-                   "name" => $video->getName(),
-                   "duration" => $video->getDuration(),
-                   "tricks" => $video->getSortedTricks()
-               );
-           }
+    /**
+     * Lists all Video entities.
+     *
+     * @Route("/load/{filter}/{page}", name="video_load",defaults={"page"=0})
+     * @Template()
+     */
+    public function loadAction()
+    {
+        $videos = array();
 
-           return array(
-               'videos' => $videos,
-           );
-       }
+        $em = $this->getDoctrine()->getManager();
+        foreach ($em->getRepository('BsVideoBundle:Video')->findAll() as $video) {
+            $videos[] = array(
+                "vid" => $video->getVid(),
+                "name" => $video->getName(),
+                "duration" => $video->getDuration(),
+                "tricks" => $video->getSortedTricks()
+            );
+        }
+
+        return array(
+            'videos' => $videos,
+        );
+    }
 
     /**
      * Lists all Video entities.
@@ -50,7 +70,7 @@ class VideoController extends Controller
      * @Route("/{filter}/{page}", name="video",defaults={"filter" = "newset","page"=0})
      * @Template()
      */
-    public function indexAction($filter,$page)
+    public function indexAction($filter, $page)
     {
         $em = $this->getDoctrine()->getManager();
 
@@ -59,10 +79,6 @@ class VideoController extends Controller
             'taggroups' => $em->getRepository('BsVideoBundle:TagGroup')->findAll(),
         );
     }
-
-
-
-
 
 
     /**
@@ -89,25 +105,6 @@ class VideoController extends Controller
         );
     }
 
-    /**
-     * Displays a form to create a new Video entity.
-     *
-     * @Route("/new", name="video_new")
-     * @Template()
-     */
-    public function newAction()
-    {
-        $video = new Video();
-        $trick = new Trick();
-        $trick->setVideo($video);
-        $form = $this->createForm(new TrickType(), $trick);
-        $em = $this->getDoctrine()->getManager();
-        return array(
-            'entity' => $trick,
-            'form' => $form->createView(),
-            'taggroups' => $em->getRepository('BsVideoBundle:TagGroup')->findAll(),
-        );
-    }
 
     /**
      * Creates a new Video entity.

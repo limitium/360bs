@@ -115,6 +115,7 @@ bs.filter("duration", function () {
         return (h ? h + ":" : "") + (m ? m + ":" : "") + s;
     }
 });
+
 bs.service("UrlService", function (URLS) {
     this.url = function (urlName, params) {
         var url = URLS[urlName];
@@ -124,6 +125,7 @@ bs.service("UrlService", function (URLS) {
         return url;
     };
 });
+
 bs.factory("TagService", function ($http, UrlService) {
     var tags = {};
     $http.get(UrlService.url("terms")).success(function (responseTags) {
@@ -153,53 +155,40 @@ bs.factory("TagService", function ($http, UrlService) {
         }
     }
 });
-
 bs.factory("YouTubeService", function ($window, $timeout, $rootScope) {
-    var video = {
-            id: "",
-            player: null,
-            position: 0,
-            status: "",
-            duration: 0,
-            title: "",
-            uploader: "",
-            uploaded: "",
-            views: "",
-            playback: false
-        },
-        settings = {
-            height: 100
-        };
+    var player;
+    var settings;
 
     $window.onYouTubePlayerReady = function () {
-        var player = document.getElementById("player-swf");
-        video.player = player;
+        player = document.getElementById("player-swf");
 
-        $rootScope.$broadcast("YTS_loaded_player");
+        $rootScope.$broadcast("YTS_loaded_player", player);
 
         player.addEventListener("onStateChange", "onStateChange");
 
-        function setCurrentTime() {
-            video.position = player.getCurrentTime();
-            $rootScope.$broadcast("YTS_change_position");
-            $timeout(setCurrentTime, 333);
+        function sendPosition() {
+            $rootScope.$broadcast("YTS_change_position", player.getCurrentTime());
+            $timeout(sendPosition, 333);
         }
 
-        setCurrentTime();
+        sendPosition();
 
         player.playVideo();
     };
-    $window.onStateChange = function (status) {
-        video.playback = status == 1 || status == 3;
-        $rootScope.$broadcast("YTS_change_state_player");
+    $window.onStateChange = function (state) {
+        var playback = state == 1 || state == 3;
+        $rootScope.$broadcast("YTS_change_state_player", playback);
     };
 
     var service = {
-        setHeight: function (height) {
-            settings.height = height;
+        getName: function () {
+            return "y"
         },
-        getVideo: function () {
-            return video;
+        setSettings: function (sett) {
+            settings = sett
+        },
+        getVideoUrl: function (vid) {
+            return "http://youtube.com/watch?v=" + vid;
         },
         getVideoId: function (url) {
             var regExp = /^.*(youtu.be\/|v\/|e\/|u\/\w+\/|embed\/|v=)([^#\&\?]*).*/;
@@ -209,38 +198,34 @@ bs.factory("YouTubeService", function ($window, $timeout, $rootScope) {
             }
             return false;
         },
-        loadMeta: function (vid) {
+        loadMeta: function (vid, cb) {
             $.getJSON("http://gdata.youtube.com/feeds/api/videos/" + vid + "?v=2&alt=json&prettyprint=true", function (resp) {
-                video.title = resp.entry.title.$t;
-                video.duration = resp.entry.media$group.yt$duration.seconds;
-                video.uploader = resp.entry.author[0].name.$t;
-                video.uploaded = resp.entry.published.$t;
-                video.views = resp.entry.yt$statistics.viewCount;
-                $rootScope.$broadcast("YTS_loaded_meta");
+                cb({
+                    title: resp.entry.title.$t,
+                    duration: resp.entry.media$group.yt$duration.seconds,
+                    uploader: resp.entry.author[0].name.$t,
+                    uploaded: resp.entry.published.$t,
+                    views: resp.entry.yt$statistics.viewCount
+                });
             });
         },
-        playVideo: function (start) {
+        play: function (start) {
             if (angular.isNumber(start)) {
-                video.player.seekTo(start, true);
+                player.seekTo(start, true);
             }
-            video.player.playVideo();
+            player.playVideo();
         },
-        togglePlay: function () {
-            if (video.playback) {
-                video.player.stopVideo();
-            } else {
-                video.player.playVideo();
-            }
+        stop: function () {
+            player.stopVideo();
         },
-        pauseVideo: function () {
-            video.player.pauseVideo()
+        pause: function () {
+            player.pauseVideo()
         },
         loadVideo: function (vid) {
-            video.id = vid;
-            if (!video.player) {
+            if (!player) {
                 this.loadPlayer(vid);
             } else {
-                video.player.loadVideoById(vid);
+                player.loadVideoById(vid);
             }
         },
         loadPlayer: function (vid) {
@@ -255,7 +240,82 @@ bs.factory("YouTubeService", function ($window, $timeout, $rootScope) {
             );
         }
     };
-    return  service;
+    return service;
+});
+bs.factory("PlayerService", function (YouTubeService, $timeout, $rootScope) {
+    var service = YouTubeService;
+    var video = {
+        player: null,
+        id: "",
+        position: 0,
+        duration: 0,
+        title: "",
+        uploader: "",
+        uploaded: "",
+        views: "",
+        sersvice: service.getName(),
+        playback: false
+    };
+    var settings = {
+        height: 100
+    };
+    service.setSettings(settings);
+
+    $rootScope.$on("YTS_loaded_player", function (e, player) {
+        video.player = player;
+        $rootScope.$broadcast("PS_loaded_player", player);
+    });
+    $rootScope.$on("YTS_change_position", function (e, position) {
+//        if (video.position != position) {
+            video.position = position;
+            $rootScope.$broadcast("PS_change_position", position);
+//        }
+    });
+    $rootScope.$on("YTS_change_state_player", function (e, playback) {
+        if (video.playback != playback) {
+            video.playback = playback;
+            $rootScope.$broadcast("PS_change_state_player", playback);
+        }
+    });
+
+    var api = {
+        setHeight: function (height) {
+            settings.height = height;
+        },
+        getVideo: function () {
+            return video;
+        },
+        getVideoUrl: function (vid) {
+            return service.getVideoUrl(vid);
+        },
+        getVideoId: function (url) {
+            return service.getVideoId(url);
+        },
+        loadMeta: function (vid) {
+            service.loadMeta(vid, function (resp) {
+                angular.extend(video, resp)
+                $rootScope.$broadcast("PS_loaded_meta");
+            });
+        },
+        playVideo: function (start) {
+            service.play(start)
+        },
+        togglePlay: function () {
+            if (video.playback) {
+                service.stop();
+            } else {
+                service.play();
+            }
+        },
+        pauseVideo: function () {
+            service.pause()
+        },
+        loadVideo: function (vid) {
+            video.id = vid;
+            service.loadVideo(vid);
+        }
+    };
+    return api;
 });
 
 bs.factory("TrickService", function ($http, $rootScope, UrlService) {
@@ -287,8 +347,8 @@ bs.controller("TagController", function ($scope, TagService) {
     };
 });
 
-bs.controller("UploadController", function ($scope, $http, $timeout, $window, YouTubeService, TagService, TrickService, UrlService) {
-    YouTubeService.setHeight("300");
+bs.controller("UploadController", function ($scope, $http, $timeout, $window, PlayerService, TagService, TrickService, UrlService) {
+    PlayerService.setHeight("300");
 
     $scope.videoUrl = "";
     $scope.trick = {
@@ -298,26 +358,26 @@ bs.controller("UploadController", function ($scope, $http, $timeout, $window, Yo
         adding: false
     };
     $scope.tricks = [];
-    $scope.video = YouTubeService.getVideo();
+    $scope.video = PlayerService.getVideo();
     $scope.isValidUrl = function () {
-        return !!YouTubeService.getVideoId($scope.videoUrl);
+        return !!PlayerService.getVideoId($scope.videoUrl);
     };
 
     $scope.loadVideo = function () {
-        var vid = YouTubeService.getVideoId($scope.videoUrl);
+        var vid = PlayerService.getVideoId($scope.videoUrl);
         if (vid) {
-            $scope.videoUrl = "http://youtube.com/watch?v=" + vid;
+            $scope.videoUrl = PlayerService.getVideoUrl(vid)
             $scope.trick.preview = false;
             TrickService.loadTricks(vid);
-            YouTubeService.loadMeta(vid);
-            YouTubeService.loadVideo(vid);
+            PlayerService.loadMeta(vid);
+            PlayerService.loadVideo(vid);
         }
     };
 
-    $scope.togglePlay = YouTubeService.togglePlay;
+    $scope.togglePlay = PlayerService.togglePlay;
 
     $scope.previewVideo = function () {
-        YouTubeService.playVideo($scope.trick.start);
+        PlayerService.playVideo($scope.trick.start);
         $scope.trick.preview = true;
     };
 
@@ -387,24 +447,26 @@ bs.controller("UploadController", function ($scope, $http, $timeout, $window, Yo
             $scope.trick.end = $scope.trick.start;
         }
     });
-    $scope.$on("YTS_change_position", function () {
+    $scope.$on("PS_change_position", function () {
         if ($scope.trick.preview && $scope.video.position >= $scope.trick.end) {
             $scope.trick.preview = false;
-            YouTubeService.pauseVideo();
+            PlayerService.pauseVideo();
         }
         $scope.$apply();
     });
-    $scope.$on("YTS_loaded_player", function () {
+
+    $scope.$on("PS_loaded_player", function () {
         $scope.$apply();
     });
-    $scope.$on("YTS_loaded_meta", function () {
+    $scope.$on("PS_loaded_meta", function () {
         $scope.$apply();
     });
-    $scope.$on("YTS_change_state_player", function () {
+    $scope.$on("PS_change_state_player", function () {
         if (!$scope.$$phase) {
             $scope.$apply();
         }
     });
+
     $scope.$on("TRS_loaded_tricks", function () {
         $scope.tricks = TrickService.getTricks();
         if (!$scope.$$phase) {
@@ -413,23 +475,23 @@ bs.controller("UploadController", function ($scope, $http, $timeout, $window, Yo
     });
 });
 
-bs.controller("PlaybackController", function ($scope, $http, YouTubeService, TrickService, UrlService, $route, $routeParams, $rootScope, $location) {
-    YouTubeService.setHeight("500");
+bs.controller("PlaybackController", function ($scope, $http, PlayerService, TrickService, UrlService, $route, $routeParams, $rootScope, $location) {
+    PlayerService.setHeight("500");
 
     $scope.tricks = [];
     $scope.videos = [];
     $scope.filter = "";
 
-    $scope.video = YouTubeService.getVideo();
+    $scope.video = PlayerService.getVideo();
 
     $scope.loadVideo = function (index) {
         var video = $scope.videos[index];
-        YouTubeService.loadVideo(video.vid);
+        PlayerService.loadVideo(video.vid);
         $scope.tricks = video.tricks;
     };
 
     $scope.setTrick = function (trick) {
-        YouTubeService.playVideo(trick.start);
+        PlayerService.playVideo(trick.start);
     };
 
     $scope.isActive = function (trick) {
@@ -450,7 +512,7 @@ bs.controller("PlaybackController", function ($scope, $http, YouTubeService, Tri
             });
     }
 
-    $scope.$on("YTS_change_position", function () {
+    $scope.$on("PS_change_position", function () {
         $scope.$apply();
     });
     $scope.$on("TRS_loaded_tricks", function () {

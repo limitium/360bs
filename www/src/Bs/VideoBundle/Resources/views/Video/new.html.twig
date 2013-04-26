@@ -11,9 +11,9 @@
 
 {% block javascripts %}
     {{ parent() }}
+    <script src='http://a.vimeocdn.com/js/froogaloop2.min.js'></script>
     <script src='http://ajax.googleapis.com/ajax/libs/swfobject/2.2/swfobject.js'></script>
     <script src="{{ asset('vendor/jquery/ui/js/jquery-ui-1.10.1.custom.js') }}"></script>
-    {#<script src='{{ asset('js/upload.js') }}'></script>#}
 {% endblock %}
 
 {% block content %}
@@ -91,8 +91,10 @@
                     <strong>Oh snap</strong>
                     Seems wrong youtube URL.
                 </div>
-                <div id="player-container">
-                    <div id="player"></div>
+                <div id="yt-player-container">
+                    <div id="yt-player"></div>
+                </div>
+                <div id="v-player-container">
                 </div>
             </div>
             <div class="span3">

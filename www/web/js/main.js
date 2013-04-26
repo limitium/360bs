@@ -155,6 +155,71 @@ bs.factory("TagService", function ($http, UrlService) {
         }
     }
 });
+bs.factory("VimeoService", function ($window, $timeout, $rootScope) {
+    var player;
+    var settings;
+
+    var service = {
+        getName: function () {
+            return "v"
+        },
+        setSettings: function (sett) {
+            settings = sett
+        },
+        getVideoUrl: function (vid) {
+            return "http://vimeo.com/" + vid;
+        },
+        getVideoId: function (url) {
+            var regExp = /^.*(vimeo\.com\/)((channels\/[A-z]+\/)|(groups\/[A-z]+\/videos\/))?([0-9]+)/;
+            var match = url.match(regExp);
+            if (match && angular.isDefined(match[5])) {
+                return match[5];
+            }
+            return false;
+        },
+        loadMeta: function (vid, cb) {
+            $.getJSON("http://vimeo.com/api/v2/video/" + vid + ".json", function (resp) {
+                cb({
+                    title: resp[0].title,
+                    duration: resp[0].duration,
+                    uploader: resp[0].user_name,
+                    uploaded: resp[0].upload_date,
+                    views: resp[0].stats_number_of_views
+                });
+            });
+        },
+        play: function (start) {
+        },
+        stop: function () {
+        },
+        pause: function () {
+        },
+        loadVideo: function (vid) {
+            if (!player) {
+                this.loadPlayer(vid);
+            } else {
+                player.loadVideoById(vid);
+            }
+        },
+        loadPlayer: function (vid) {
+            $("#v-player-container").html("<iframe id='v-player' src='http://player.vimeo.com/video/" + vid + "?api=1'width='100%' height='" + settings.height + "' frameborder='0' webkitAllowFullScreen mozallowfullscreen allowFullScreen></iframe>");
+            player = $f($("#v-player")[0]);
+            player.addEvent('ready', function () {
+                player.addEvent('pause', function () {
+                    console.log(arguments);
+                });
+                player.addEvent('finish', function () {
+                    console.log(arguments);
+                });
+                player.addEvent('playProgress', function () {
+                    console.log(arguments);
+                });
+            });
+
+        }
+    };
+    return service;
+});
 bs.factory("YouTubeService", function ($window, $timeout, $rootScope) {
     var player;
     var settings;
@@ -231,7 +296,7 @@ bs.factory("YouTubeService", function ($window, $timeout, $rootScope) {
         loadPlayer: function (vid) {
             swfobject.embedSWF(
                 "http://www.youtube.com/v/" + vid + "?hl=en_US&version=3&autoplay=1&autohide=1&cc_load_policy=1&iv_load_policy=3&enablejsapi=1&fs=1&modestbranding=1&rel=0&theme=light&vq=hd720&playerapiid=ytplayer&showinfo=0",
-                "player",
+                "yt-player",
                 "100%", settings.height,
                 "8",
                 null, null,
@@ -242,8 +307,8 @@ bs.factory("YouTubeService", function ($window, $timeout, $rootScope) {
     };
     return service;
 });
-bs.factory("PlayerService", function (YouTubeService, $timeout, $rootScope) {
-    var service = YouTubeService;
+bs.factory("PlayerService", function (YouTubeService, VimeoService, $timeout, $rootScope) {
+    var service;
     var video = {
         player: null,
         id: "",
@@ -253,23 +318,22 @@ bs.factory("PlayerService", function (YouTubeService, $timeout, $rootScope) {
         uploader: "",
         uploaded: "",
         views: "",
-        sersvice: service.getName(),
+        service: "",
         playback: false
     };
     var settings = {
         height: 100
     };
-    service.setSettings(settings);
+    YouTubeService.setSettings(settings);
+    VimeoService.setSettings(settings);
 
     $rootScope.$on("YTS_loaded_player", function (e, player) {
         video.player = player;
         $rootScope.$broadcast("PS_loaded_player", player);
     });
     $rootScope.$on("YTS_change_position", function (e, position) {
-//        if (video.position != position) {
-            video.position = position;
-            $rootScope.$broadcast("PS_change_position", position);
-//        }
+        video.position = position;
+        $rootScope.$broadcast("PS_change_position", position);
     });
     $rootScope.$on("YTS_change_state_player", function (e, playback) {
         if (video.playback != playback) {
@@ -279,6 +343,9 @@ bs.factory("PlayerService", function (YouTubeService, $timeout, $rootScope) {
     });
 
     var api = {
+        getService: function (url) {
+            return url.indexOf("imeo") != -1 ? VimeoService : YouTubeService;
+        },
         setHeight: function (height) {
             settings.height = height;
         },
@@ -289,7 +356,8 @@ bs.factory("PlayerService", function (YouTubeService, $timeout, $rootScope) {
             return service.getVideoUrl(vid);
         },
         getVideoId: function (url) {
-            return service.getVideoId(url);
+            service = this.getService(url);
+            return this.getService(url).getVideoId(url);
         },
         loadMeta: function (vid) {
             service.loadMeta(vid, function (resp) {
@@ -312,6 +380,7 @@ bs.factory("PlayerService", function (YouTubeService, $timeout, $rootScope) {
         },
         loadVideo: function (vid) {
             video.id = vid;
+            video.service = service.getName();
             service.loadVideo(vid);
         }
     };

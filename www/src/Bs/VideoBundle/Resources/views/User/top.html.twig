@@ -1,0 +1,24 @@
+{% extends 'BsVideoBundle::layout.html.twig' %}
+{% block javascripts %}
+    {{ parent() }}
+{% endblock %}
+{% block stylesheets %}
+    {{ parent() }}
+{% endblock %}
+{% block content %}
+    <div class="container">
+        <div class="row" ng-controller="RiderController">
+            <div class="span9">
+                <div ng-repeat="rider in riders">
+                    <div ng-class-odd="'odd'" ng-class-even="'even'">
+                        <a href="#{{ '{{ rider.id }}' }}">{{ '{{ rider.username }}' }}</a>
+
+                        <div><i class="icon icon-facetime-video"></i>:{{ '{{ rider.count_tricks_made }}' }}</div>
+                        <div><i class="icon icon-star"></i>:{{ '{{ rider.score}}' }}</div>
+                    </div>
+                </div>
+            </div>
+            <div class="span3">Filter:</div>
+        </div>
+    </div>
+{% endblock %}

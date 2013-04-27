@@ -178,44 +178,49 @@ bs.factory("VimeoService", function ($window, $timeout, $rootScope) {
             return false;
         },
         loadMeta: function (vid, cb) {
-            $.getJSON("http://vimeo.com/api/v2/video/" + vid + ".json", function (resp) {
+            $.getJSON("http://vimeo.com/api/v2/video/" + vid + ".json?callback=?", function (resp) {
                 cb({
                     title: resp[0].title,
                     duration: resp[0].duration,
                     uploader: resp[0].user_name,
                     uploaded: resp[0].upload_date,
-                    views: resp[0].stats_number_of_views
+                    views: resp[0].stats_number_of_plays
                 });
             });
         },
         play: function (start) {
+            if (angular.isNumber(start)) {
+                player.api("seekTo",start);
+            }
+            player.api("play");
         },
         stop: function () {
+            player.api("pause");
         },
         pause: function () {
+            player.api("pause");
         },
         loadVideo: function (vid) {
-            if (!player) {
-                this.loadPlayer(vid);
-            } else {
-                player.loadVideoById(vid);
-            }
+            this.loadPlayer(vid);
         },
         loadPlayer: function (vid) {
-            $("#v-player-container").html("<iframe id='v-player' src='http://player.vimeo.com/video/" + vid + "?api=1'width='100%' height='" + settings.height + "' frameborder='0' webkitAllowFullScreen mozallowfullscreen allowFullScreen></iframe>");
-            player = $f($("#v-player")[0]);
-            player.addEvent('ready', function () {
+            $("#v-player-container").html("<iframe id='v-player' src='http://player.vimeo.com/video/" + vid + "?api=1&autoplay=1&title=1&player_id=v-player'width='100%' height='" + settings.height + "' frameborder='0' webkitAllowFullScreen mozallowfullscreen allowFullScreen></iframe>");
+            $f($('#v-player')[0]).addEvent('ready', function () {
+                player = $f("v-player");
+                $rootScope.$broadcast("VS_loaded_player", player);
+                player.addEvent('play', function () {
+                    $rootScope.$broadcast("VS_change_state_player", true);
+                });
                 player.addEvent('pause', function () {
-                    console.log(arguments);
+                    $rootScope.$broadcast("VS_change_state_player", false);
                 });
                 player.addEvent('finish', function () {
-                    console.log(arguments);
+                    $rootScope.$broadcast("VS_change_state_player", false);
                 });
-                player.addEvent('playProgress', function () {
-                    console.log(arguments);
+                player.addEvent('playProgress', function (progress) {
+                    $rootScope.$broadcast("VS_change_position", progress.seconds);
                 });
             });
-
         }
     };
     return service;
@@ -227,12 +232,12 @@ bs.factory("YouTubeService", function ($window, $timeout, $rootScope) {
     $window.onYouTubePlayerReady = function () {
         player = document.getElementById("player-swf");
 
-        $rootScope.$broadcast("YTS_loaded_player", player);
+        $rootScope.$broadcast("VS_loaded_player", player);
 
         player.addEventListener("onStateChange", "onStateChange");
 
         function sendPosition() {
-            $rootScope.$broadcast("YTS_change_position", player.getCurrentTime());
+            $rootScope.$broadcast("VS_change_position", player.getCurrentTime());
             $timeout(sendPosition, 333);
         }
 
@@ -242,7 +247,7 @@ bs.factory("YouTubeService", function ($window, $timeout, $rootScope) {
     };
     $window.onStateChange = function (state) {
         var playback = state == 1 || state == 3;
-        $rootScope.$broadcast("YTS_change_state_player", playback);
+        $rootScope.$broadcast("VS_change_state_player", playback);
     };
 
     var service = {
@@ -327,15 +332,15 @@ bs.factory("PlayerService", function (YouTubeService, VimeoService, $timeout, $r
     YouTubeService.setSettings(settings);
     VimeoService.setSettings(settings);
 
-    $rootScope.$on("YTS_loaded_player", function (e, player) {
+    $rootScope.$on("VS_loaded_player", function (e, player) {
         video.player = player;
         $rootScope.$broadcast("PS_loaded_player", player);
     });
-    $rootScope.$on("YTS_change_position", function (e, position) {
+    $rootScope.$on("VS_change_position", function (e, position) {
         video.position = position;
         $rootScope.$broadcast("PS_change_position", position);
     });
-    $rootScope.$on("YTS_change_state_player", function (e, playback) {
+    $rootScope.$on("VS_change_state_player", function (e, playback) {
         if (video.playback != playback) {
             video.playback = playback;
             $rootScope.$broadcast("PS_change_state_player", playback);
@@ -597,4 +602,17 @@ bs.controller("PlaybackController", function ($scope, $http, PlayerService, Tric
         loadVideos($routeParams.filter);
         $scope.filter = $routeParams.filter;
     });
+});
+bs.controller("RiderController", function ($scope, $http, YouTubeService, TrickService, UrlService, $route, $routeParams, $rootScope, $location) {
+    $scope.riders = [];
+
+    $http({
+        method: "GET",
+        url: UrlService.url("riders_load")
+    }).success(function (riders) {
+            $scope.riders = riders;
+        }).error(function () {
+            alert("Error");
+        });
+
 });

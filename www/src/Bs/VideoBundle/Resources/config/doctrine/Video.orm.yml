@@ -6,6 +6,9 @@ Bs\VideoBundle\Entity\Video:
             type: integer
             generator:
                 strategy: AUTO
+        service:
+            type: string
+            nullable: false
         vid:
             type: string
             nullable: false

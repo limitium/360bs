@@ -190,12 +190,12 @@ bs.factory("VimeoService", function ($window, $timeout, $rootScope) {
         },
         play: function (start) {
             if (angular.isNumber(start)) {
-                player.api("seekTo",start);
+                player.api("seekTo", start);
             }
             player.api("play");
         },
         stop: function () {
-            player.api("pause");
+            player.api("unload");
         },
         pause: function () {
             player.api("pause");
@@ -348,6 +348,10 @@ bs.factory("PlayerService", function (YouTubeService, VimeoService, $timeout, $r
     });
 
     var api = {
+        selectService: function (name) {
+            service = name == VimeoService.getName() ? VimeoService : YouTubeService;
+            video.service = service.getName();
+        },
         getService: function (url) {
             return url.indexOf("imeo") != -1 ? VimeoService : YouTubeService;
         },
@@ -357,15 +361,14 @@ bs.factory("PlayerService", function (YouTubeService, VimeoService, $timeout, $r
         getVideo: function () {
             return video;
         },
-        getVideoUrl: function (vid) {
-            return service.getVideoUrl(vid);
+        getVideoUrl: function () {
+            return service.getVideoUrl(video.id);
         },
         getVideoId: function (url) {
-            service = this.getService(url);
             return this.getService(url).getVideoId(url);
         },
-        loadMeta: function (vid) {
-            service.loadMeta(vid, function (resp) {
+        loadMeta: function () {
+            service.loadMeta(video.id, function (resp) {
                 angular.extend(video, resp)
                 $rootScope.$broadcast("PS_loaded_meta");
             });
@@ -383,9 +386,11 @@ bs.factory("PlayerService", function (YouTubeService, VimeoService, $timeout, $r
         pauseVideo: function () {
             service.pause()
         },
+        stopVideo: function () {
+            service && service.stop()
+        },
         loadVideo: function (vid) {
             video.id = vid;
-            video.service = service.getName();
             service.loadVideo(vid);
         }
     };
@@ -395,10 +400,10 @@ bs.factory("PlayerService", function (YouTubeService, VimeoService, $timeout, $r
 bs.factory("TrickService", function ($http, $rootScope, UrlService) {
     var tricks = [];
     var service = {
-        loadTricks: function (vid) {
+        loadTricks: function (serviceName, vid) {
             $http({
                 method: "GET",
-                url: UrlService.url("tricks_load", {vid: vid})
+                url: UrlService.url("tricks_load", {vid: vid, service: serviceName})
             }).success(function (responseTags) {
                     tricks = responseTags;
                     $rootScope.$broadcast("TRS_loaded_tricks");
@@ -440,11 +445,16 @@ bs.controller("UploadController", function ($scope, $http, $timeout, $window, Pl
     $scope.loadVideo = function () {
         var vid = PlayerService.getVideoId($scope.videoUrl);
         if (vid) {
-            $scope.videoUrl = PlayerService.getVideoUrl(vid)
-            $scope.trick.preview = false;
-            TrickService.loadTricks(vid);
-            PlayerService.loadMeta(vid);
+            PlayerService.stopVideo();
+            var serviceName = PlayerService.getService($scope.videoUrl).getName();
+
+            PlayerService.selectService(serviceName);
             PlayerService.loadVideo(vid);
+            PlayerService.loadMeta();
+
+            TrickService.loadTricks(serviceName, vid);
+            $scope.videoUrl = PlayerService.getVideoUrl()
+            $scope.trick.preview = false;
         }
     };
 
@@ -477,9 +487,10 @@ bs.controller("UploadController", function ($scope, $http, $timeout, $window, Pl
         $scope.trick.adding = true;
         $http({
             method: "POST",
-            url: UrlService.url("trick_new", {vid: $scope.video.id}),
+            url: UrlService.url("trick_new"),
             headers: {'Content-Type': 'application/x-www-form-urlencoded'},
             data: $.param({
+                "bs_videobundle_tricktype[Video][service]": $scope.video.service,
                 "bs_videobundle_tricktype[Video][vid]": $scope.video.id,
                 "bs_videobundle_tricktype[Video][name]": $scope.video.title,
                 "bs_videobundle_tricktype[Video][duration]": $scope.video.duration,
@@ -526,26 +537,22 @@ bs.controller("UploadController", function ($scope, $http, $timeout, $window, Pl
             $scope.trick.preview = false;
             PlayerService.pauseVideo();
         }
-        $scope.$apply();
+        !$scope.$$phase && $scope.$apply();
     });
 
     $scope.$on("PS_loaded_player", function () {
-        $scope.$apply();
+        !$scope.$$phase && $scope.$apply();
     });
     $scope.$on("PS_loaded_meta", function () {
-        $scope.$apply();
+        !$scope.$$phase && $scope.$apply();
     });
     $scope.$on("PS_change_state_player", function () {
-        if (!$scope.$$phase) {
-            $scope.$apply();
-        }
+        !$scope.$$phase && $scope.$apply();
     });
 
     $scope.$on("TRS_loaded_tricks", function () {
         $scope.tricks = TrickService.getTricks();
-        if (!$scope.$$phase) {
-            $scope.$apply();
-        }
+        !$scope.$$phase && $scope.$apply();
     });
 });
 

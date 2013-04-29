@@ -12,6 +12,7 @@ class VideoType extends AbstractType
     {
         $builder
             ->add('vid')
+            ->add('service')
             ->add('name')
             ->add('duration')
         ;

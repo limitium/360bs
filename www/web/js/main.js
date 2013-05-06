@@ -183,7 +183,7 @@ bs.factory("VimeoService", function ($window, $timeout, $rootScope) {
                     title: resp[0].title,
                     duration: resp[0].duration,
                     uploader: resp[0].user_name,
-                    uploaded: resp[0].upload_date,
+                    uploaded: resp[0].upload_date.substr(0, 10).split("-").reverse().join("."),
                     views: resp[0].stats_number_of_plays
                 });
             });
@@ -228,6 +228,7 @@ bs.factory("VimeoService", function ($window, $timeout, $rootScope) {
 bs.factory("YouTubeService", function ($window, $timeout, $rootScope) {
     var player;
     var settings;
+    var playback = false;
 
     $window.onYouTubePlayerReady = function () {
         player = document.getElementById("player-swf");
@@ -237,7 +238,7 @@ bs.factory("YouTubeService", function ($window, $timeout, $rootScope) {
         player.addEventListener("onStateChange", "onStateChange");
 
         function sendPosition() {
-            $rootScope.$broadcast("VS_change_position", player.getCurrentTime());
+            playback && $rootScope.$broadcast("VS_change_position", player.getCurrentTime());
             $timeout(sendPosition, 333);
         }
 
@@ -246,7 +247,7 @@ bs.factory("YouTubeService", function ($window, $timeout, $rootScope) {
         player.playVideo();
     };
     $window.onStateChange = function (state) {
-        var playback = state == 1 || state == 3;
+        playback = state == 1 || state == 3;
         $rootScope.$broadcast("VS_change_state_player", playback);
     };
 
@@ -414,6 +415,21 @@ bs.factory("TrickService", function ($http, $rootScope, UrlService) {
         },
         isIn: function (trick, time) {
             return trick.start <= time && time < trick.end;
+        },
+        isIntersect: function (trickToCheck) {
+            for (var i = 0; i < tricks.length; i++) {
+                var trick = tricks[i];
+                if (trick.start <= trickToCheck.start && trickToCheck.start < trick.end) {
+                    return true;
+                }
+                if (trick.start < trickToCheck.end && trickToCheck.end <= trick.end) {
+                    return true;
+                }
+                if (trickToCheck.start <= trick.start && trick.end <= trickToCheck.end) {
+                    return true;
+                }
+            }
+            return false;
         }
     };
     return service;
@@ -482,6 +498,10 @@ bs.controller("UploadController", function ($scope, $http, $timeout, $window, Pl
     $scope.addVideo = function () {
         if (!TagService.getSelected().length) {
             alert("Empty tricks");
+            return;
+        }
+        if (TrickService.isIntersect($scope.trick)) {
+            alert("Tricks are interseced");
             return;
         }
         $scope.trick.adding = true;

@@ -98,7 +98,7 @@
                 </div>
             </div>
             <div class="span3">
-                {% include 'BsVideoBundle:Trick:_tricks_list.html.twig' %}
+                {% include 'BsVideoBundle:Trick:_tricks_list.html.twig' with {'endTrick':true} %}
             </div>
         </div>
         <div ng-cloak ng-show="video.title && video.player">

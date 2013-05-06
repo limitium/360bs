@@ -37,7 +37,7 @@ class VideoController extends Controller
             'form' => $form->createView(),
             'taggroups' => $em->getRepository('BsVideoBundle:TagGroup')->findAll(),
         );
-    }
+}
 
     /**
      * Lists all Video entities.
@@ -50,10 +50,17 @@ class VideoController extends Controller
         $videos = array();
 
         $em = $this->getDoctrine()->getManager();
+
         foreach ($em->getRepository('BsVideoBundle:Video')->findAll() as $video) {
+            /**
+             * @var \Bs\VideoBundle\Entity\Video
+             */
+            $video;
             $videos[] = array(
                 "vid" => $video->getVid(),
                 "name" => $video->getName(),
+                "service" => $video->getService(),
+                "views" => $video->getViews(),
                 "duration" => $video->getDuration(),
                 "tricks" => $video->getSortedTricks()
             );

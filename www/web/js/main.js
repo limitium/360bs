@@ -350,6 +350,7 @@ bs.factory("PlayerService", function (YouTubeService, VimeoService, $timeout, $r
 
     var api = {
         selectService: function (name) {
+            service && service.stop();
             service = name == VimeoService.getName() ? VimeoService : YouTubeService;
             video.service = service.getName();
         },
@@ -461,9 +462,7 @@ bs.controller("UploadController", function ($scope, $http, $timeout, $window, Pl
     $scope.loadVideo = function () {
         var vid = PlayerService.getVideoId($scope.videoUrl);
         if (vid) {
-            PlayerService.stopVideo();
             var serviceName = PlayerService.getService($scope.videoUrl).getName();
-
             PlayerService.selectService(serviceName);
             PlayerService.loadVideo(vid);
             PlayerService.loadMeta();
@@ -534,7 +533,7 @@ bs.controller("UploadController", function ($scope, $http, $timeout, $window, Pl
 
     $scope.$watch("video.duration", function () {
         $scope.trick.start = 0;
-        $scope.trick.end = $scope.video.duration;
+        $scope.trick.end = 5;
     });
     $scope.$watch("trick.start", function () {
         if ($scope.trick.start < 0) {
@@ -587,6 +586,7 @@ bs.controller("PlaybackController", function ($scope, $http, PlayerService, Tric
 
     $scope.loadVideo = function (index) {
         var video = $scope.videos[index];
+        PlayerService.selectService(video.service);
         PlayerService.loadVideo(video.vid);
         $scope.tricks = video.tricks;
     };
@@ -614,13 +614,11 @@ bs.controller("PlaybackController", function ($scope, $http, PlayerService, Tric
     }
 
     $scope.$on("PS_change_position", function () {
-        $scope.$apply();
+        !$scope.$$phase && $scope.$apply();
     });
     $scope.$on("TRS_loaded_tricks", function () {
         $scope.tricks = TrickService.getTricks();
-        if (!$scope.$$phase) {
-            $scope.$apply();
-        }
+        !$scope.$$phase && $scope.$apply();
     });
     $rootScope.$on("$routeChangeStart", function () {
         $scope.videos.length = 0;

@@ -1,6 +1,7 @@
 {% extends 'BsVideoBundle::layout.html.twig' %}
 {% block javascripts %}
     {{ parent() }}
+    <script src='http://a.vimeocdn.com/js/froogaloop2.min.js'></script>
     <script src='http://ajax.googleapis.com/ajax/libs/swfobject/2.2/swfobject.js'></script>
 {% endblock %}
 {% block stylesheets %}
@@ -13,8 +14,10 @@
         <div class="container">
             <div class="row">
                 <div class="span9">
-                    <div id="yt-player-container">
+                    <div id="yt-player-container" ng-show="video.service=='y'">
                         <div id="yt-player"></div>
+                    </div>
+                    <div id="v-player-container" ng-show="video.service=='v'">
                     </div>
                 </div>
                 <div class="span3">

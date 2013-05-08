@@ -24,6 +24,9 @@ Bs\VideoBundle\Entity\Video:
         views:
             type: integer
             nullable: false
+        thumbnail:
+            type: string
+            nullable: false
     oneToMany:
         Tricks:
             targetEntity: Bs\VideoBundle\Entity\Trick

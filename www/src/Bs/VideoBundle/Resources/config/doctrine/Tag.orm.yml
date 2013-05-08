@@ -9,6 +9,9 @@ Bs\VideoBundle\Entity\Tag:
         name:
             type: string
             nullable: false
+        weight:
+            type: integer
+            nullable: true
     manyToOne:
         Group:
             targetEntity: Bs\VideoBundle\Entity\TagGroup

@@ -3,7 +3,11 @@
     <ul class="unstyled">
         <li ng-repeat="trick in tricks">
             <div ng-class="isActive(trick)" ng-click="setTrick(trick)" ng-class-odd="'odd'" ng-class-even="'even'">
+                {% if endTrick is defined %}
+                <span class="time">{{ '{{ trick.start }}' }}-{{ '{{ trick.end }}' }}:</span>
+                {% else %}
                 <span class="time">{{ '{{ trick.start|duration }}' }}:</span>
+                {% endif %}
                 <span class="tag" ng-repeat="tag in trick.tags">{{ '{{ tag | tagName}}' }}</span>
             </div>
         </li>

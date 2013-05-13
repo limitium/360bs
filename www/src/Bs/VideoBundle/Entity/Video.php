@@ -296,4 +296,32 @@ class Video
     {
         return $this->service;
     }
+    /**
+     * @var string
+     */
+    private $thumbnail;
+
+
+    /**
+     * Set thumbnail
+     *
+     * @param string $thumbnail
+     * @return Video
+     */
+    public function setThumbnail($thumbnail)
+    {
+        $this->thumbnail = $thumbnail;
+    
+        return $this;
+    }
+
+    /**
+     * Get thumbnail
+     *
+     * @return string 
+     */
+    public function getThumbnail()
+    {
+        return $this->thumbnail;
+    }
 }

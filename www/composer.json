@@ -23,7 +23,10 @@
 
         "limitium/ormd-fixer":"dev-master",
         "stof/doctrine-extensions-bundle":"dev-master",
-        "friendsofsymfony/user-bundle": "*"
+        "friendsofsymfony/user-bundle": "*",
+    
+        "knplabs/knp-paginator-bundle": "dev-master"
+    
 
     },
     "scripts":{

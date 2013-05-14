@@ -3,6 +3,7 @@
     {{ parent() }}
     <script src='http://a.vimeocdn.com/js/froogaloop2.min.js'></script>
     <script src='http://ajax.googleapis.com/ajax/libs/swfobject/2.2/swfobject.js'></script>
+    <script src="{{ asset('vendor/angular-ui/ui-bootstrap-custom-tpls-0.4.0-SNAPSHOT.min.js') }}"></script>
 {% endblock %}
 {% block stylesheets %}
     {{ parent() }}
@@ -31,13 +32,20 @@
 
                 <div class="span2">
                     <ul class="nav nav-tabs nav-stacked">
-                        <li ng-class="isFilter('newest')"><a href="{{ path('video',{"filter":"newest"})}}"><i class="icon-picture"></i> Newest</a></li>
-                        <li ng-class="isFilter('popular')"><a href="{{ path('video',{"filter":"popular"})}}"><i class="icon-ok"></i> Popular</a></li>
-                        <li ng-class="isFilter('most_viewed')"><a href="{{ path('video',{"filter":"most_viewed"})}}"><i class="icon-bookmark"></i> Most Viewed</a>
+                        <li ng-class="isFilter('newest')">
+                            <a href="{{ path('video',{"filter":"newest"}) }}"><i class="icon-picture"></i> Newest</a>
                         </li>
-                        <li ng-class="isFilter('category')"><a href="{{ path('video',{"filter":"category"})}}"><i class="icon-th-list"></i> Categories</a>
+                        <li ng-class="isFilter('popular')">
+                            <a href="{{ path('video',{"filter":"popular"}) }}"><i class="icon-ok"></i> Popular</a></li>
+                        <li ng-class="isFilter('most_viewed')">
+                            <a href="{{ path('video',{"filter":"most_viewed"}) }}"><i class="icon-bookmark"></i> Most
+                                Viewed</a>
                         </li>
-                        <li ng-class="isFilter('recomended')"><a href="{{ path('video',{"filter":"recomended"})}}"><i class="icon-heart"></i> Recomended</a>
+                        <li ng-class="isFilter('category')">
+                            <a href="{{ path('video',{"filter":"category"}) }}"><i class="icon-th-list"></i> Categories</a>
+                        </li>
+                        <li ng-class="isFilter('recomended')">
+                            <a href="{{ path('video',{"filter":"recomended"}) }}"><i class="icon-heart"></i> Recomended</a>
                         </li>
                     </ul>
                 </div>
@@ -72,6 +80,9 @@
                                                 class="icon-eye-open"></i></li>
                                 </ul>
                             </div>
+                        </div>
+                        <div class="span10" ng-show="videos.length && noOfPages > 1">
+                            <pagination boundary-links="true" num-pages="noOfPages" current-page="currentPage" max-size="maxSize"></pagination>
                         </div>
                     </div>
                 </div>

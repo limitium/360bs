@@ -37,15 +37,15 @@ class VideoController extends Controller
             'form' => $form->createView(),
             'taggroups' => $em->getRepository('BsVideoBundle:TagGroup')->findAll(),
         );
-}
+    }
 
     /**
      * Lists all Video entities.
      *
-     * @Route("/load/{filter}/{page}", name="video_load",defaults={"page"=0})
+     * @Route("/load/{filter}/{page}", name="video_load",defaults={"page"=1})
      * @Template()
      */
-    public function loadAction()
+    public function loadAction($filter, $page)
     {
         $videos = array();
 
@@ -67,7 +67,12 @@ class VideoController extends Controller
         }
 
         return array(
-            'videos' => $videos,
+            'data' => array(
+                'currentPage' => $page,
+                'maxSize' => 8,
+                'noOfPages' => 11,
+                'videos' => $videos,
+            )
         );
     }
 

@@ -1,4 +1,4 @@
-var bs = angular.module('bs', []);
+var bs = angular.module('bs', ['ui.bootstrap']);
 
 bs.config(function ($routeProvider, $locationProvider, URLS) {
     $routeProvider
@@ -582,6 +582,10 @@ bs.controller("PlaybackController", function ($scope, $http, PlayerService, Tric
     $scope.videos = [];
     $scope.filter = "";
 
+    $scope.noOfPages = 0;
+    $scope.currentPage =0;
+    $scope.maxSize = 0;
+
     $scope.video = PlayerService.getVideo();
 
     $scope.loadVideo = function (index) {
@@ -606,8 +610,8 @@ bs.controller("PlaybackController", function ($scope, $http, PlayerService, Tric
         $http({
             method: "GET",
             url: UrlService.url("video_load", {filter: filter})
-        }).success(function (videos) {
-                $scope.videos = videos;
+        }).success(function (data) {
+                angular.extend($scope, data)
             }).error(function () {
                 alert("Error");
             });

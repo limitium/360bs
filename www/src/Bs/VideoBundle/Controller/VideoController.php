@@ -42,7 +42,7 @@ class VideoController extends Controller
     /**
      * Lists all Video entities.
      *
-     * @Route("/load/{filter}/{page}", name="video_load",defaults={"page"=1})
+     * @Route("/load/{filter}/{page}", name="video_load",defaults={"page"="1"})
      * @Template()
      */
     public function loadAction($filter, $page)
@@ -68,7 +68,6 @@ class VideoController extends Controller
 
         return array(
             'data' => array(
-                'currentPage' => $page,
                 'maxSize' => 8,
                 'noOfPages' => 11,
                 'videos' => $videos,
@@ -79,7 +78,7 @@ class VideoController extends Controller
     /**
      * Lists all Video entities.
      *
-     * @Route("/{filter}/{page}", name="video",defaults={"filter" = "newset","page"=0})
+     * @Route("/{filter}/{page}", name="video",defaults={"filter" = "newset","page"=1})
      * @Template()
      */
     public function indexAction($filter, $page)

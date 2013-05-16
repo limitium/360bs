@@ -3,6 +3,8 @@ var bs = angular.module('bs', ['ui.bootstrap']);
 bs.config(function ($routeProvider, $locationProvider, URLS) {
     $routeProvider
         .when(URLS.video_filter, {
+        })
+        .when(URLS.video_filter_page, {
         });
 
     $locationProvider.html5Mode(true);
@@ -581,9 +583,10 @@ bs.controller("PlaybackController", function ($scope, $http, PlayerService, Tric
     $scope.tricks = [];
     $scope.videos = [];
     $scope.filter = "";
+    $scope.page = 0;
 
     $scope.noOfPages = 0;
-    $scope.currentPage =0;
+    $scope.currentPage = 0;
     $scope.maxSize = 0;
 
     $scope.video = PlayerService.getVideo();
@@ -606,10 +609,11 @@ bs.controller("PlaybackController", function ($scope, $http, PlayerService, Tric
         return $scope.filter == filter ? "active" : "";
     };
 
-    function loadVideos(filter) {
+    function loadVideos(filter, page) {
+        $scope.videos.length = 0;
         $http({
             method: "GET",
-            url: UrlService.url("video_load", {filter: filter})
+            url: UrlService.url("video_load_page", {filter: filter, page: page})
         }).success(function (data) {
                 angular.extend($scope, data)
             }).error(function () {
@@ -624,14 +628,22 @@ bs.controller("PlaybackController", function ($scope, $http, PlayerService, Tric
         $scope.tricks = TrickService.getTricks();
         !$scope.$$phase && $scope.$apply();
     });
-    $rootScope.$on("$routeChangeStart", function () {
-        $scope.videos.length = 0;
-    });
+
     $rootScope.$on("$routeChangeSuccess", function () {
-        loadVideos($routeParams.filter);
         $scope.filter = $routeParams.filter;
+        $scope.page = parseInt($routeParams.page) || 1;
+        if ($scope.currentPage != $scope.page) {
+            $scope.currentPage = $scope.page;
+        }
+        loadVideos($scope.filter, $scope.page);
     });
-});
+
+    $scope.$watch("currentPage", function () {
+        if ($scope.filter && $scope.currentPage != $scope.page) {
+            $location.path(UrlService.url("video_filter_page", {filter: $scope.filter, page: $scope.currentPage}));
+        }
+    });
+})
 bs.controller("RiderController", function ($scope, $http, YouTubeService, TrickService, UrlService, $route, $routeParams, $rootScope, $location) {
     $scope.riders = [];
 

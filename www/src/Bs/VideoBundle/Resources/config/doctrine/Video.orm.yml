@@ -1,5 +1,6 @@
 Bs\VideoBundle\Entity\Video:
     type: entity
+    repositoryClass: Bs\VideoBundle\Entity\VideoRepository
     fields:
         id:
             id: true

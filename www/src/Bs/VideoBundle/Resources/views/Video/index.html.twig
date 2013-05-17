@@ -35,17 +35,18 @@
                         <li ng-class="isFilter('newest')">
                             <a href="{{ path('video',{"filter":"newest"}) }}"><i class="icon-picture"></i> Newest</a>
                         </li>
-                        <li ng-class="isFilter('popular')">
-                            <a href="{{ path('video',{"filter":"popular"}) }}"><i class="icon-ok"></i> Popular</a></li>
+                        <li ng-class="isFilter('category')">
+                            <a href="{{ path('video',{"filter":"category"}) }}"><i class="icon-th-list"></i> Categories</a>
+                        </li>
                         <li ng-class="isFilter('most_viewed')">
                             <a href="{{ path('video',{"filter":"most_viewed"}) }}"><i class="icon-bookmark"></i> Most
                                 Viewed</a>
                         </li>
-                        <li ng-class="isFilter('category')">
-                            <a href="{{ path('video',{"filter":"category"}) }}"><i class="icon-th-list"></i> Categories</a>
+                        <li ng-class="isFilter('duration')">
+                            <a href="{{ path('video',{"filter":"duration"}) }}"><i class="icon-time"></i> Duration</a>
                         </li>
-                        <li ng-class="isFilter('recomended')">
-                            <a href="{{ path('video',{"filter":"recomended"}) }}"><i class="icon-heart"></i> Recomended</a>
+                        <li ng-class="isFilter('tricks')">
+                            <a href="{{ path('video',{"filter":"tricks"}) }}"><i class="icon-facetime-video"></i> Tricks count</a>
                         </li>
                     </ul>
                 </div>

@@ -10,7 +10,7 @@
 <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
-    <title>{% block title %}Stop fail!{% endblock %}</title>
+    <title>{% block title %}Stop fail{% endblock %}</title>
     <meta name="description" content="">
     <meta name="viewport" content="width=device-width">
     <link rel="icon" type="image/x-icon" href="{{ asset('favicon.ico') }}"/>
@@ -30,10 +30,7 @@
       <header class="container">
           <div class="row">
 
-              <div class="span1">
-                  <a href="{{ path('_welcome')}}"><img src="{{ asset('img/logo2.png') }}"/></a>
-              </div>
-              <a href="{{ path('_welcome')}}"><h1 class="span5 brand">Stop fail</h1></a>
+              <a href="{{ path('_welcome')}}"><h1 class="span6 brand">Stop fail</h1></a>
 
               <div class="pull-right">
                   {% if route != 'video_new' and route != 'fos_user_security_login' %}

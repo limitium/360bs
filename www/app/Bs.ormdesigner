@@ -12,7 +12,7 @@
       <column name="tag_group_id" required="true" type="integer"/>
       <column name="weight" type="integer"/>
     </table>
-    <table name="Video" visPositionX="41" visPositionY="16" visSizeX="0" visSizeX2="117" visSizeY="0" visSizeY2="143">
+    <table name="Video" visPositionX="41" visPositionY="18" visSizeX="0" visSizeX2="117" visSizeY="0" visSizeY2="143">
       <column auto-increment="true" name="id" primary="true" required="true" type="integer"/>
       <column name="service" required="true" type="string"/>
       <column name="vid" required="true" type="string"/>
@@ -22,6 +22,9 @@
       <column name="views" required="true" type="integer"/>
       <column name="user_id" required="true" type="integer"/>
       <column name="thumbnail" required="true" type="string"/>
+      <orm-properties>
+        <attribute name="repository-class">Bs\VideoBundle\Entity\VideoRepository</attribute>
+      </orm-properties>
     </table>
     <table name="TagGroup" visPositionX="420" visPositionY="351" visSizeX="0" visSizeX2="83" visSizeY="0" visSizeY2="45">
       <column auto-increment="true" name="id" primary="true" required="true" type="integer"/>

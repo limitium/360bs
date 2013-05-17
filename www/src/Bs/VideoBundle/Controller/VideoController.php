@@ -47,16 +47,19 @@ class VideoController extends Controller
      */
     public function loadAction($filter, $page)
     {
-        $videos = array();
+        $videosPerPage = $this->container->getParameter("paginator_videos");
+        $videosData = array();
 
         $em = $this->getDoctrine()->getManager();
 
-        foreach ($em->getRepository('BsVideoBundle:Video')->findAll() as $video) {
+        $repository = $em->getRepository('BsVideoBundle:Video');
+        $videos = $repository->findVideos(--$page  * $videosPerPage, $videosPerPage);
+        foreach ($videos as $video) {
             /**
              * @var \Bs\VideoBundle\Entity\Video
              */
             $video;
-            $videos[] = array(
+            $videosData[] = array(
                 "vid" => $video->getVid(),
                 "name" => $video->getName(),
                 "service" => $video->getService(),
@@ -68,9 +71,9 @@ class VideoController extends Controller
 
         return array(
             'data' => array(
-                'maxSize' => 8,
-                'noOfPages' => 11,
-                'videos' => $videos,
+                'maxSize' => $this->container->getParameter("paginator_size"),
+                'noOfPages' => (int)($repository->countVideos() / $videosPerPage),
+                'videos' => $videosData,
             )
         );
     }

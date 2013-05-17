@@ -48,12 +48,12 @@ class VideoController extends Controller
     public function loadAction($filter, $page)
     {
         $videosPerPage = $this->container->getParameter("paginator_videos");
-        $videosData = array();
 
-        $em = $this->getDoctrine()->getManager();
+        $repository = $this->getDoctrine()->getManager()->getRepository('BsVideoBundle:Video');
 
-        $repository = $em->getRepository('BsVideoBundle:Video');
         $videos = $repository->findVideos(--$page  * $videosPerPage, $videosPerPage);
+
+        $videosData = array();
         foreach ($videos as $video) {
             /**
              * @var \Bs\VideoBundle\Entity\Video

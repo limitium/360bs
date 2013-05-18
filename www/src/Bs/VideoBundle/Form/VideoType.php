@@ -15,6 +15,7 @@ class VideoType extends AbstractType
             ->add('service')
             ->add('name')
             ->add('duration')
+            ->add('thumbnail')
         ;
     }
 

@@ -51,7 +51,7 @@ class VideoController extends Controller
 
         $repository = $this->getDoctrine()->getManager()->getRepository('BsVideoBundle:Video');
 
-        $videos = $repository->findVideos(--$page  * $videosPerPage, $videosPerPage);
+        $videos = $repository->findVideos($filter, --$page * $videosPerPage, $videosPerPage);
 
         $videosData = array();
         foreach ($videos as $video) {
@@ -65,6 +65,8 @@ class VideoController extends Controller
                 "service" => $video->getService(),
                 "views" => $video->getViews(),
                 "duration" => $video->getDuration(),
+                "thumbnail" => $video->getThumbnail(),
+                "created_at" => $video->getCreatedAt()->getTimestamp()*1000,
                 "tricks" => $video->getSortedTricks()
             );
         }

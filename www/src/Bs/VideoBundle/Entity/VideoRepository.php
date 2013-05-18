@@ -15,17 +15,23 @@ class VideoRepository extends EntityRepository
             ->getSingleScalarResult();
     }
 
-    public function findVideos($offset, $limit)
+    public function findVideos($filter, $offset, $limit)
     {
         $order = array(
-            "newset" => "created_at",
-            "most_viewed" => "views",
-            "duration" => "duration",
+            "newest" => "v.created_at",
+            "category" => "category",
+            "most_viewed" => "v.views",
+            "duration" => "v.duration",
             "tricks" => "duration",
         );
+
+        if (!isset($order[$filter])) {
+            return array();
+        }
         return $this->makeQuery()
             ->setMaxResults($limit)
             ->setFirstResult($offset)
+            ->orderBy($order[$filter], "ASC")
             ->getQuery()
             ->getResult();
     }
@@ -39,7 +45,7 @@ class VideoRepository extends EntityRepository
             ->createQueryBuilder()
             ->select("v")
             ->from("BsVideoBundle:Video", "v")
-            ->leftJoin("v.Tricks", "t")
-            ->orderBy("v.created_at", "ASC");
+            ->leftJoin("v.Tricks", "t");
+
     }
 }

@@ -186,6 +186,7 @@ bs.factory("VimeoService", function ($window, $timeout, $rootScope) {
                     duration: resp[0].duration,
                     uploader: resp[0].user_name,
                     uploaded: resp[0].upload_date.substr(0, 10).split("-").reverse().join("."),
+                    thumbnail: resp[0].thumbnail_medium,
                     views: resp[0].stats_number_of_plays
                 });
             });
@@ -278,6 +279,7 @@ bs.factory("YouTubeService", function ($window, $timeout, $rootScope) {
                     duration: resp.entry.media$group.yt$duration.seconds,
                     uploader: resp.entry.author[0].name.$t,
                     uploaded: resp.entry.published.$t,
+                    thumbnail: resp.entry.media$group.media$thumbnail[1].url,
                     views: resp.entry.yt$statistics.viewCount
                 });
             });
@@ -327,6 +329,7 @@ bs.factory("PlayerService", function (YouTubeService, VimeoService, $timeout, $r
         uploaded: "",
         views: "",
         service: "",
+        thumbnail: "",
         playback: false
     };
     var settings = {
@@ -515,6 +518,7 @@ bs.controller("UploadController", function ($scope, $http, $timeout, $window, Pl
                 "bs_videobundle_tricktype[Video][vid]": $scope.video.id,
                 "bs_videobundle_tricktype[Video][name]": $scope.video.title,
                 "bs_videobundle_tricktype[Video][duration]": $scope.video.duration,
+                "bs_videobundle_tricktype[Video][thumbnail]": $scope.video.thumbnail,
                 "bs_videobundle_tricktype[start]": $scope.trick.start,
                 "bs_videobundle_tricktype[end]": $scope.trick.end,
                 "bs_videobundle_tricktype[Tags][]": TagService.getSelected()

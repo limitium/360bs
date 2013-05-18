@@ -3,7 +3,6 @@
     {{ parent() }}
     <script src='http://a.vimeocdn.com/js/froogaloop2.min.js'></script>
     <script src='http://ajax.googleapis.com/ajax/libs/swfobject/2.2/swfobject.js'></script>
-    <script src="{{ asset('vendor/angular-ui/ui-bootstrap-custom-tpls-0.4.0-SNAPSHOT.min.js') }}"></script>
 {% endblock %}
 {% block stylesheets %}
     {{ parent() }}
@@ -46,7 +45,8 @@
                             <a href="{{ path('video',{"filter":"duration"}) }}"><i class="icon-time"></i> Duration</a>
                         </li>
                         <li ng-class="isFilter('tricks')">
-                            <a href="{{ path('video',{"filter":"tricks"}) }}"><i class="icon-facetime-video"></i> Tricks count</a>
+                            <a href="{{ path('video',{"filter":"tricks"}) }}"><i class="icon-facetime-video"></i> Tricks
+                                count</a>
                         </li>
                     </ul>
                 </div>
@@ -60,7 +60,7 @@
                         <div class="span2 galery" ng-repeat="video in videos">
                             <div ng-click="loadVideo($index)">
                                 <div class="video">
-                                    <img ng-src="http://img.youtube.com/vi/{{ '{{video.vid}}' }}/hqdefault.jpg"/>
+                                    <img ng-src="{{ '{{video.thumbnail}}' }}"/>
                                 </div>
                                 <div class="title">
                                     <a class="group" rel="group1" href="#">{{ '{{video.name}}' }}</a>
@@ -70,7 +70,9 @@
                                 <ul class="pull-left">
                                     <li rel="tooltip" title="Comments"><i class="icon-comment"></i> -</li>
                                     <li rel="tooltip" title="Uploader"><i class="icon-user"></i> limi</li>
-                                    <li rel="tooltip" title="Uploaded"><i class="icon-upload"></i> 1 day ago</li>
+                                    <li rel="tooltip" title="Uploaded"><i
+                                                class="icon-upload"></i> {{ '{{ video.created_at |date:"d.M.yyyy" }}' }}
+                                    </li>
                                 </ul>
                                 <ul class="pull-right">
                                     <li rel="tooltip" title="Tricks count">{{ '{{ video.tricks.length }}' }} <i
@@ -83,7 +85,8 @@
                             </div>
                         </div>
                         <div class="span10" ng-show="videos.length && noOfPages > 1">
-                            <pagination boundary-links="true" num-pages="noOfPages" current-page="currentPage" max-size="maxSize"></pagination>
+                            <pagination boundary-links="true" num-pages="noOfPages" current-page="currentPage"
+                                        max-size="maxSize"></pagination>
                         </div>
                     </div>
                 </div>

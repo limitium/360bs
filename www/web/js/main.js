@@ -600,6 +600,12 @@ bs.controller("PlaybackController", function ($scope, $http, PlayerService, Tric
         PlayerService.selectService(video.service);
         PlayerService.loadVideo(video.vid);
         $scope.tricks = video.tricks;
+        $http({
+            method: "POST",
+            url: UrlService.url("video_view", {vid: video.vid, service: video.service})
+        }).success(function () {
+            }).error(function () {
+            });
     };
 
     $scope.setTrick = function (trick) {
@@ -621,7 +627,7 @@ bs.controller("PlaybackController", function ($scope, $http, PlayerService, Tric
         }).success(function (data) {
                 angular.extend($scope, data)
             }).error(function () {
-                alert("Error");
+//                alert("Error");
             });
     }
 

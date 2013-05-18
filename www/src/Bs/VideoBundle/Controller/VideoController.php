@@ -11,6 +11,7 @@ use Bs\VideoBundle\Form\TrickType;
 use Bs\VideoBundle\Form\VideoType;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
 
 /**
  * Video controller.
@@ -66,7 +67,7 @@ class VideoController extends Controller
                 "views" => $video->getViews(),
                 "duration" => $video->getDuration(),
                 "thumbnail" => $video->getThumbnail(),
-                "created_at" => $video->getCreatedAt()->getTimestamp()*1000,
+                "created_at" => $video->getCreatedAt()->getTimestamp() * 1000,
                 "tricks" => $video->getSortedTricks()
             );
         }
@@ -96,6 +97,19 @@ class VideoController extends Controller
         );
     }
 
+
+    /**
+     * @Route("/view/{service}/{vid}", name="video_view")
+     * @Method("POST")
+     */
+    public function viewAction($service, $vid)
+    {
+        $em = $this->getDoctrine()->getManager();
+        $video = $em->getRepository('BsVideoBundle:Video')->findOneBy(array("service" => $service, "vid" => $vid));
+        $video->setViews($video->getViews() + 1);
+        $em->flush();
+        return new Response();
+    }
 
     /**
      * Finds and displays a Video entity.

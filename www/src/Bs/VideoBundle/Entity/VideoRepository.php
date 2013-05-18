@@ -31,7 +31,7 @@ class VideoRepository extends EntityRepository
         return $this->makeQuery()
             ->setMaxResults($limit)
             ->setFirstResult($offset)
-            ->orderBy($order[$filter], "ASC")
+            ->orderBy($order[$filter], "DESC")
             ->getQuery()
             ->getResult();
     }

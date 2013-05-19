@@ -43,7 +43,7 @@ class VideoController extends Controller
     /**
      * Lists all Video entities.
      *
-     * @Route("/load/{filter}/{page}", name="video_load",defaults={"page"="1"})
+     * @Route("/load/{filter}/{page}", name="video_load",defaults={"page"="1"},requirements={"page"=":page|\d+","filter"=":filter|newest|category|most_viewed|duration|tricks"})
      * @Template()
      */
     public function loadAction($filter, $page)
@@ -61,6 +61,7 @@ class VideoController extends Controller
              */
             $video;
             $videosData[] = array(
+                "id" => $video->getId(),
                 "vid" => $video->getVid(),
                 "name" => $video->getName(),
                 "service" => $video->getService(),
@@ -84,7 +85,7 @@ class VideoController extends Controller
     /**
      * Lists all Video entities.
      *
-     * @Route("/{filter}/{page}", name="video",defaults={"filter" = "newset","page"=1})
+     * @Route("/{filter}/{page}", name="video",defaults={"filter" = "newset","page"=1},requirements={"page"=":page|\d+","filter"=":filter|newest|category|most_viewed|duration|tricks"})
      * @Template()
      */
     public function indexAction($filter, $page)
@@ -99,13 +100,13 @@ class VideoController extends Controller
 
 
     /**
-     * @Route("/view/{service}/{vid}", name="video_view")
+     * @Route("/view/{id}", name="video_view")
      * @Method("POST")
      */
-    public function viewAction($service, $vid)
+    public function viewAction($id)
     {
         $em = $this->getDoctrine()->getManager();
-        $video = $em->getRepository('BsVideoBundle:Video')->findOneBy(array("service" => $service, "vid" => $vid));
+        $video = $em->getRepository('BsVideoBundle:Video')->find($id);
         $video->setViews($video->getViews() + 1);
         $em->flush();
         return new Response();

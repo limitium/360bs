@@ -602,7 +602,7 @@ bs.controller("PlaybackController", function ($scope, $http, PlayerService, Tric
         $scope.tricks = video.tricks;
         $http({
             method: "POST",
-            url: UrlService.url("video_view", {vid: video.vid, service: video.service})
+            url: UrlService.url("video_view", {id: video.id})
         }).success(function () {
             }).error(function () {
             });

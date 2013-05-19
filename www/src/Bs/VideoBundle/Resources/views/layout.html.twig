@@ -11,7 +11,7 @@
             "video_load_page": "{{ path('video_load',{'filter':':filter','page':':page'})}}",
             "video_filter": "{{ path('video',{'filter':':filter'})}}",
             "video_filter_page": "{{ path('video',{'filter':':filter','page':':page'})}}",
-            "video_view": "{{ path('video_view',{ 'vid': ':vid','service': ':service' })}}"
+            "video_view": "{{ path('video_view',{ 'id': ':id'})}}"
         });
     </script>
     <script src="{{ asset('vendor/angular-ui/ui-bootstrap-custom-tpls-0.4.0-SNAPSHOT.min.js') }}"></script>

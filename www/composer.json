@@ -23,8 +23,8 @@
 
         "limitium/ormd-fixer":"dev-master",
         "stof/doctrine-extensions-bundle":"dev-master",
-        "friendsofsymfony/user-bundle": "*"
-
+        "friendsofsymfony/user-bundle": "*",
+        "friendsofsymfony/comment-bundle":"*"
 
     },
     "scripts":{

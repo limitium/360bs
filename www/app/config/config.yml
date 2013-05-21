@@ -85,3 +85,13 @@ fos_user:
                     sender_name: StopFall
     service:
             mailer: fos_user.mailer.twig_swift
+
+fos_comment:
+    db_driver: orm
+    class:
+        model:
+            comment: Bs\VideoBundle\Entity\Comment
+            thread: Bs\VideoBundle\Entity\Thread
+
+assetic:
+    bundles: [ "FOSCommentBundle","BsVideoBundle" ]

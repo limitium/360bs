@@ -1,37 +1,34 @@
-<h1>Video</h1>
+{% extends 'BsVideoBundle::layout.html.twig' %}
+{% block javascripts %}
+    {{ parent() }}
+    <script src='http://a.vimeocdn.com/js/froogaloop2.min.js'></script>
+    <script src='http://ajax.googleapis.com/ajax/libs/swfobject/2.2/swfobject.js'></script>
+{% endblock %}
+{% block stylesheets %}
+    {{ parent() }}
+    <link href="{{ asset('css/videos.css') }}" rel="stylesheet"/>
+    {% stylesheets '@FOSCommentBundle/Resources/assets/css/comments.css' %}
+    <link rel="stylesheet" href="{{ asset_url }}" type="text/css" />
+    {% endstylesheets %}
+{% endblock %}
+{% block content %}
+    <div ng-controller="PlaybackController">
+        <div class="container">
+            <div class="row">
+                <div class="span9">
+                    <div id="yt-player-container" ng-show="video.service=='y'">
+                        <div id="yt-player"></div>
+                    </div>
+                    <div id="v-player-container" ng-show="video.service=='v'">
+                    </div>
+                </div>
+                <div class="span3">
+                    {% include 'BsVideoBundle:Trick:_tricks_list.html.twig' %}
+                </div>
+            </div>
+            {#{% include 'BsVideoBundle:Video:_tags.html.twig' %}#}
+        </div>
 
-<table class="record_properties">
-    <tbody>
-        <tr>
-            <th>Id</th>
-            <td>{{ entity.id }}</td>
-        </tr>
-        <tr>
-            <th>Vid</th>
-            <td>{{ entity.vid }}</td>
-        </tr>
-        <tr>
-            <th>Name</th>
-            <td>{{ entity.name }}</td>
-        </tr>
-    </tbody>
-</table>
-
-<ul class="record_actions">
-    <li>
-        <a href="{{ path('video') }}">
-            Back to the list
-        </a>
-    </li>
-    <li>
-        <a href="{{ path('video_edit', { 'id': entity.id }) }}">
-            Edit
-        </a>
-    </li>
-    <li>
-        <form action="{{ path('video_delete', { 'id': entity.id }) }}" method="post">
-            {{ form_widget(delete_form) }}
-            <button type="submit">Delete</button>
-        </form>
-    </li>
-</ul>
+        {% include 'FOSCommentBundle:Thread:async.html.twig' with {'id': 'foo'} %}
+    </div>
+{% endblock %}

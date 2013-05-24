@@ -5,16 +5,57 @@ use Doctrine\ORM\Mapping as ORM;
 use FOS\CommentBundle\Entity\Thread as BaseThread;
 
 /**
- * @ORM\Entity
- * @ORM\ChangeTrackingPolicy("DEFERRED_EXPLICIT")
  */
 class Thread extends BaseThread
 {
     /**
      * @var string $id
      *
-     * @ORM\Id
-     * @ORM\Column(type="string")
      */
     protected $id;
+    /**
+     * @var \Doctrine\Common\Collections\Collection
+     */
+    private $comments;
+
+    /**
+     * Constructor
+     */
+    public function __construct()
+    {
+        $this->comments = new \Doctrine\Common\Collections\ArrayCollection();
+    }
+
+    /**
+     * Add comments
+     *
+     * @param \Bs\VideoBundle\Entity\Comment $comments
+     * @return Thread
+     */
+    public function addComment(\Bs\VideoBundle\Entity\Comment $comments)
+    {
+        $this->comments[] = $comments;
+    
+        return $this;
+    }
+
+    /**
+     * Remove comments
+     *
+     * @param \Bs\VideoBundle\Entity\Comment $comments
+     */
+    public function removeComment(\Bs\VideoBundle\Entity\Comment $comments)
+    {
+        $this->comments->removeElement($comments);
+    }
+
+    /**
+     * Get comments
+     *
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function getComments()
+    {
+        return $this->comments;
+    }
 }

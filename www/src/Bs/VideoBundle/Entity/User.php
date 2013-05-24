@@ -139,4 +139,48 @@ class User extends BaseUser
     {
         return $this->TricksMade;
     }
+    /**
+     * @var \Doctrine\Common\Collections\Collection
+     */
+    private $Comments;
+
+
+    /**
+     * Add Comments
+     *
+     * @param \Bs\VideoBundle\Entity\Comment $comments
+     * @return User
+     */
+    public function addComment(\Bs\VideoBundle\Entity\Comment $comments)
+    {
+        $this->Comments[] = $comments;
+    
+        return $this;
+    }
+
+    /**
+     * Remove Comments
+     *
+     * @param \Bs\VideoBundle\Entity\Comment $comments
+     */
+    public function removeComment(\Bs\VideoBundle\Entity\Comment $comments)
+    {
+        $this->Comments->removeElement($comments);
+    }
+
+    /**
+     * Get Comments
+     *
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function getComments()
+    {
+        return $this->Comments;
+    }
+    /**
+     * @var \Doctrine\Common\Collections\Collection
+     */
+    private $comments;
+
+
 }

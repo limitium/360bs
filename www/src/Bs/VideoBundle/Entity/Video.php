@@ -324,4 +324,60 @@ class Video
     {
         return $this->thumbnail;
     }
+    /**
+     * @var integer
+     */
+    private $num_comments;
+
+    /**
+     * @var integer
+     */
+    private $num_tricks;
+
+
+    /**
+     * Set num_comments
+     *
+     * @param integer $numComments
+     * @return Video
+     */
+    public function setNumComments($numComments)
+    {
+        $this->num_comments = $numComments;
+    
+        return $this;
+    }
+
+    /**
+     * Get num_comments
+     *
+     * @return integer 
+     */
+    public function getNumComments()
+    {
+        return $this->num_comments;
+    }
+
+    /**
+     * Set num_tricks
+     *
+     * @param integer $numTricks
+     * @return Video
+     */
+    public function setNumTricks($numTricks)
+    {
+        $this->num_tricks = $numTricks;
+    
+        return $this;
+    }
+
+    /**
+     * Get num_tricks
+     *
+     * @return integer 
+     */
+    public function getNumTricks()
+    {
+        return $this->num_tricks;
+    }
 }

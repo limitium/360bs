@@ -1,0 +1,25 @@
+.depth_0,
+.depth_1,
+.depth_2,
+.depth_3,
+.depth_4,
+.depth_5,
+.depth_6,
+.depth_7,
+.depth_8 {
+    margin-left: 40px;
+}
+.comment_reply{
+    height: 24px;
+}
+.comment_content:hover {
+    background-color: #e8e8e8;
+}
+
+.comment_content .comment_reply_show_form {
+    display: none;
+}
+
+.comment_content:hover .comment_reply_show_form {
+    display: block;
+}

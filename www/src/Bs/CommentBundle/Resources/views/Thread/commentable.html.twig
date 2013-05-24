@@ -1,0 +1,33 @@
+{#
+
+ This file is part of the FOSCommentBundle package.
+
+ (c) FriendsOfSymfony <http://friendsofsymfony.github.com/>
+
+ This source file is subject to the MIT license that is bundled
+ with this source code in the file LICENSE.
+
+#}
+
+<div class="comment_commentable_form_holder">
+    <form class="comment_commentable_form" action="{{ url('comment_patch_thread_commentable', {'id': id}) }}" data-fos-comment-thread-id="{{ id }}" method="POST">
+
+        {% block comment_form_fields %}
+            {{ form_errors(form) }}
+
+            {{ form_errors(form.isCommentable) }}
+            {{ form_widget(form.isCommentable) }}
+
+            {{ form_rest(form) }}
+        {% endblock %}
+
+        <input type="hidden" name="_method" value="patch" />
+
+        <div class="comment_submit">
+            {% block comment_form_submit %}
+                <input type="submit" value="{{ (isCommentable ? 'comment_thread_open' : 'comment_thread_close') | trans({}, 'FOSCommentBundle') }}" />
+            {% endblock %}
+        </div>
+
+    </form>
+</div>

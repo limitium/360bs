@@ -1,0 +1,95 @@
+{#
+
+ This file is part of the FOSCommentBundle package.
+
+ (c) FriendsOfSymfony <http://friendsofsymfony.github.com/>
+
+ This source file is subject to the MIT license that is bundled
+ with this source code in the file LICENSE.
+
+#}
+
+{% block comment_comment %}
+    <div id="comment_{{ comment.id }}" {% if parentId is defined %}data-parent="{{ parentId }}"{% endif %}>
+        <div id="comment_body_{{ comment.id }}" class="comment_body">
+            <div class="comment_content">
+                {% block comment_comment_body %}
+                    {% if comment is fos_comment_in_state(constant('FOS\\CommentBundle\\Model\\CommentInterface::STATE_DELETED')) %}
+                        {% trans from 'FOSCommentBundle' %}fos_comment_comment_deleted{% endtrans %}
+                    {% else %}
+                        {% if comment is fos_comment_raw %}
+                            {{ comment.rawBody | raw }}
+                        {% else %}
+                            {{ comment.body | nl2br }}
+                        {% endif %}
+                    {% endif %}
+                {% endblock comment_comment_body %}
+
+                <div class="comment_metas">
+                    {% block comment_comment_metas %}
+                        {% block comment_comment_metas_authorline %}
+                            <i class="icon-user"></i>
+                            <span class="comment_authorname">
+                    {% if comment is fos_comment_in_state(constant('FOS\\CommentBundle\\Model\\CommentInterface::STATE_DELETED')) %}
+                        {% trans from 'FOSCommentBundle' %}fos_comment_comment_deleted{% endtrans %}
+                    {% else %}
+                        {{ comment.authorName }}
+                    {% endif %}
+                </span>, <i class="icon-time"></i>{{ comment.createdAt|date("d.m.Y H:i") }}
+                        {% endblock comment_comment_metas_authorline %}
+
+                        {% block comment_comment_metas_edit %}
+                            {% if fos_comment_can_edit_comment(comment) %}
+                                <button data-container="#comment_body_{{ comment.id }}" data-url="{{ url("comment_edit_thread_comment", {"id": comment.thread.id, "commentId": comment.id}) }}" class="comment_edit_show_form">{% trans from 'FOSCommentBundle' %}
+                                    fos_comment_comment_edit{% endtrans %}</button>
+                            {% endif %}
+                        {% endblock comment_comment_metas_edit %}
+
+                        {% block comment_comment_metas_delete %}
+                            {% if fos_comment_can_delete_comment(comment) %}
+                                {% if comment is fos_comment_in_state(constant('FOS\\CommentBundle\\Model\\CommentInterface::STATE_DELETED')) %}
+                                    {# undelete #}
+                                    <button data-url="{{ url("comment_remove_thread_comment", {"id": comment.thread.id, "commentId": comment.id, "value": constant('FOS\\CommentBundle\\Model\\CommentInterface::STATE_VISIBLE') }) }}" class="comment_remove">{% trans from 'FOSCommentBundle' %}
+                                        fos_comment_comment_undelete{% endtrans %}</button>
+                                {% else %}
+                                    {# delete #}
+                                    <button data-url="{{ url("comment_remove_thread_comment", {"id": comment.thread.id, "commentId": comment.id, "value":  constant('FOS\\CommentBundle\\Model\\CommentInterface::STATE_DELETED')}) }}" class="comment_remove">{% trans from 'FOSCommentBundle' %}
+                                        fos_comment_comment_delete{% endtrans %}</button>
+                                {% endif %}
+                            {% endif %}
+                        {% endblock comment_comment_metas_delete %}
+
+                        {% block comment_comment_metas_voting %}
+                            {% if fos_comment_can_vote(comment) %}
+                                <div class="comment_voting">
+                                    <button data-url="{{ url("comment_new_thread_comment_votes", {"id": comment.thread.id, "commentId": comment.id, "value": 1}) }}" class="comment_vote">{% trans from 'FOSCommentBundle' %}
+                                        fos_comment_comment_show_voteup{% endtrans %}</button>
+                                    <button data-url="{{ url("comment_new_thread_comment_votes", {"id": comment.thread.id, "commentId": comment.id, "value": -1}) }}" class="comment_vote">{% trans from 'FOSCommentBundle' %}
+                                        fos_comment_comment_show_votedown{% endtrans %}</button>
+                                    <div class="comment_score" id="comment_score_{{ comment.id }}">{% include "FOSCommentBundle:Thread:comment_votes.html.twig" with { 'commentScore': comment.score } %}</div>
+                                </div>
+                            {% endif %}
+                        {% endblock comment_comment_metas_voting %}
+                    {% endblock comment_comment_metas %}
+                </div>
+
+                {% if fos_comment_can_comment(comment) %}
+                    <div class="comment_reply">
+                        {% block comment_comment_reply %}
+                            <button data-url="{{ url('fos_comment_new_thread_comments', {"id": comment.thread.id}) }}" data-name="{{ comment.authorName }}" data-parent-id="{{ comment.id }}" class="btn btn-mini btn-danger comment_reply_show_form">{% trans from 'FOSCommentBundle' %}
+                                fos_comment_comment_show_reply{% endtrans %}</button>
+                        {% endblock comment_comment_reply %}
+                    </div>
+                {% endif %}
+            </div>
+
+
+            <div class="comment_replies depth_{{ depth }}">
+                {% if children is defined %}
+                    {% include "FOSCommentBundle:Thread:comments.html.twig" with { "comments": children, "depth": depth + 1, "parentId": comment.id, "view": view } %}
+                {% endif %}
+            </div>
+
+        </div>
+    </div>
+{% endblock comment_comment %}

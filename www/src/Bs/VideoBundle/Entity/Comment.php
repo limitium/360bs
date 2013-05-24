@@ -7,29 +7,20 @@ use FOS\CommentBundle\Model\SignedCommentInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
 
 /**
- * @ORM\Entity
- * @ORM\ChangeTrackingPolicy("DEFERRED_EXPLICIT")
  */
 class Comment extends BaseComment implements SignedCommentInterface
 {
-    /**
-     * @ORM\Id
-     * @ORM\Column(type="integer")
-     * @ORM\GeneratedValue(strategy="AUTO")
-     */
     protected $id;
 
     /**
      * Thread of this comment
      *
      * @var Thread
-     * @ORM\ManyToOne(targetEntity="Bs\VideoBundle\Entity\Thread")
      */
     protected $thread;
     /**
      * Author of the comment
      *
-     * @ORM\ManyToOne(targetEntity="Bs\VideoBundle\Entity\User")
      * @var User
      */
     protected $author;
@@ -53,5 +44,3 @@ class Comment extends BaseComment implements SignedCommentInterface
         return $this->getAuthor()->getUsername();
     }
 }
-
-

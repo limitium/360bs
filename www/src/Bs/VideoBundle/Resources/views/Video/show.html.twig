@@ -6,14 +6,11 @@
 {% endblock %}
 {% block stylesheets %}
     {{ parent() }}
-    <link href="{{ asset('css/videos.css') }}" rel="stylesheet"/>
-    {% stylesheets '@FOSCommentBundle/Resources/assets/css/comments.css' %}
-    <link rel="stylesheet" href="{{ asset_url }}" type="text/css" />
-    {% endstylesheets %}
+    <link href="{{ asset('css/comments.css') }}" rel="stylesheet"/>
 {% endblock %}
 {% block content %}
-    <div ng-controller="PlaybackController">
-        <div class="container">
+    <div>
+        <div class="container videos">
             <div class="row">
                 <div class="span9">
                     <div id="yt-player-container" ng-show="video.service=='y'">
@@ -26,9 +23,12 @@
                     {% include 'BsVideoBundle:Trick:_tricks_list.html.twig' %}
                 </div>
             </div>
-            {#{% include 'BsVideoBundle:Video:_tags.html.twig' %}#}
+            <div class="row">
+                <div class="offset1 span10">
+                    {% include 'FOSCommentBundle:Thread:async.html.twig' with {'id': 'foo'} %}
+                </div>
+            </div>
         </div>
 
-        {% include 'FOSCommentBundle:Thread:async.html.twig' with {'id': 'foo'} %}
     </div>
 {% endblock %}

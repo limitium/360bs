@@ -5,7 +5,7 @@
     <module-position name="VideoBundle" visPositionX="-15" visPositionY="-155"/>
   </project>
 
-  <module import-format="Doctrine2Yml" import-path="..\src\Bs\VideoBundle\Resources\config\doctrine\" name="VideoBundle" visBkColor="16317694" visSizeX="0" visSizeX2="523" visSizeY="6" visSizeY2="441">
+  <module import-format="Doctrine2Yml" import-path="..\src\Bs\VideoBundle\Resources\config\doctrine\" name="VideoBundle" visBkColor="16317694" visSizeX="0" visSizeX2="550" visSizeY="6" visSizeY2="441">
     <table name="Tag" visPositionX="222" visPositionY="347" visSizeX="0" visSizeX2="118" visSizeY="0" visSizeY2="59">
       <column auto-increment="true" name="id" primary="true" required="true" type="integer"/>
       <column name="name" required="true" type="string"/>
@@ -22,6 +22,8 @@
       <column name="views" required="true" type="integer"/>
       <column name="user_id" required="true" type="integer"/>
       <column name="thumbnail" required="true" type="string"/>
+      <column default="0" name="num_comments" required="true" type="integer"/>
+      <column default="0" name="num_tricks" required="true" type="integer"/>
       <orm-properties>
         <attribute name="repository-class">Bs\VideoBundle\Entity\VideoRepository</attribute>
       </orm-properties>
@@ -31,7 +33,7 @@
       <column name="name" required="true" type="string"/>
       <column name="weight" type="integer"/>
     </table>
-    <table name="Trick" visPositionX="36" visPositionY="186" visSizeX="0" visSizeX2="100" visSizeY="0" visSizeY2="73">
+    <table name="Trick" visPositionX="40" visPositionY="206" visSizeX="0" visSizeX2="117" visSizeY="0" visSizeY2="115">
       <column auto-increment="true" name="id" primary="true" required="true" type="integer"/>
       <column name="start" required="true" type="integer"/>
       <column name="end" required="true" type="integer"/>
@@ -55,6 +57,14 @@
     <table name="User" visPositionX="259" visPositionY="226" visSizeX="0" visSizeX2="72" visSizeY="0" visSizeY2="31">
       <column auto-increment="true" name="id" primary="true" required="true" type="integer"/>
     </table>
+    <table name="Thread" visPositionX="437" visPositionY="141" visSizeX="0" visSizeX2="67" visSizeY="0" visSizeY2="31">
+      <column name="id" primary="true" required="true" type="string"/>
+    </table>
+    <table name="Comment" visPositionX="420" visPositionY="258" visSizeX="0" visSizeX2="98" visSizeY="0" visSizeY2="59">
+      <column auto-increment="true" name="id" primary="true" required="true" type="integer"/>
+      <column name="user_id" required="true" type="integer"/>
+      <column name="thread_id" required="true" type="string"/>
+    </table>
     <foreign-key caption="tag group" from="Tag" inverse-alias="Group" name="FK_tag_tag_group_id" owning-alias="Tags" to="TagGroup">
       <foreign-key-column from="tag_group_id" to="id"/>
       <orm-properties>
@@ -71,7 +81,7 @@
     <foreign-key caption="User Video" from="Video" inverse-alias="Uploader" name="FK_Video_User_id" owning-alias="Videos" to="User">
       <foreign-key-column from="user_id" to="id"/>
     </foreign-key>
-    <foreign-key caption="Video Trick" from="Trick" inverse-alias="Video" name="FK_Trick_Video_id" owning-alias="Tricks" to="Video">
+    <foreign-key caption="Video Trick" from="Trick" inverse-alias="Video" name="FK_Trick_Video_id" owning-alias="Tricks" to="Video" visCaption1X="0" visCaption1Y="0" visCenterX="0" visCenterY="9">
       <foreign-key-column from="video_id" to="id"/>
       <orm-properties>
         <attribute name="on-delete">CASCADE</attribute>
@@ -115,6 +125,12 @@
           <attribute name="orphan-removal">true</attribute>
         </attribute>
       </orm-properties>
+    </foreign-key>
+    <foreign-key caption="User Comment" from="Comment" inverse-alias="author" name="FK_Comment_User_id" owning-alias="comments" to="User" visCaption1X="2" visCaption1Y="0" visCenterX="0" visCenterY="0">
+      <foreign-key-column from="user_id" to="id"/>
+    </foreign-key>
+    <foreign-key caption="Thread Comment" from="Comment" inverse-alias="thread" name="FK_Comment_Thread_id" owning-alias="comments" to="Thread" visCaption1X="0" visCaption1Y="-1" visCenterX="0" visCenterY="0">
+      <foreign-key-column from="thread_id" to="id"/>
     </foreign-key>
     <many-to-many-relation mn-table="TrickTag">
       <many-to-many-foreign-key foreign-key="FK_TrickTag_Trick_id" relation-alias="Tricks"/>

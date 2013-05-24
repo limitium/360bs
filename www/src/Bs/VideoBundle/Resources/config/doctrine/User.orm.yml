@@ -16,3 +16,6 @@ Bs\VideoBundle\Entity\User:
         TricksMade:
             targetEntity: Bs\VideoBundle\Entity\Trick
             mappedBy: Rider
+        comments:
+            targetEntity: Bs\VideoBundle\Entity\Comment
+            mappedBy: author

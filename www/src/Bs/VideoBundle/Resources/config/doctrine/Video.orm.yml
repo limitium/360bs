@@ -28,6 +28,12 @@ Bs\VideoBundle\Entity\Video:
         thumbnail:
             type: string
             nullable: false
+        num_comments:
+            type: integer
+            nullable: false
+        num_tricks:
+            type: integer
+            nullable: false
     oneToMany:
         Tricks:
             targetEntity: Bs\VideoBundle\Entity\Trick

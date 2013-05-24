@@ -1,0 +1,23 @@
+Bs\VideoBundle\Entity\Comment:
+    type: entity
+    fields:
+        id:
+            id: true
+            type: integer
+            generator:
+                strategy: AUTO
+    manyToOne:
+        author:
+            targetEntity: Bs\VideoBundle\Entity\User
+            inversedBy: comments
+            joinColumns:
+                user_id:
+                    referencedColumnName: id
+                    nullable: false
+        thread:
+            targetEntity: Bs\VideoBundle\Entity\Thread
+            inversedBy: comments
+            joinColumns:
+                thread_id:
+                    referencedColumnName: id
+                    nullable: false

@@ -1,0 +1,10 @@
+Bs\VideoBundle\Entity\Thread:
+    type: entity
+    fields:
+        id:
+            id: true
+            type: string
+    oneToMany:
+        comments:
+            targetEntity: Bs\VideoBundle\Entity\Comment
+            mappedBy: thread

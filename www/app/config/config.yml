@@ -88,6 +88,7 @@ fos_user:
 
 fos_comment:
     db_driver: orm
+    sorter: date_desc
     class:
         model:
             comment: Bs\VideoBundle\Entity\Comment

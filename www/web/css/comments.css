@@ -10,7 +10,10 @@
     margin-left: 40px;
 }
 .comment_reply{
-    height: 24px;
+    height: 22px;
+}
+.comment_content {
+    padding: 5px;
 }
 .comment_content:hover {
     background-color: #e8e8e8;
@@ -22,4 +25,7 @@
 
 .comment_content:hover .comment_reply_show_form {
     display: block;
+}
+#fos_comment_comment_body{
+    width: 100%;
 }

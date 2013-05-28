@@ -88,11 +88,13 @@ fos_user:
 
 fos_comment:
     db_driver: orm
-    sorter: date_desc
     class:
         model:
             comment: Bs\VideoBundle\Entity\Comment
             thread: Bs\VideoBundle\Entity\Thread
+    service:
+        sorting:
+            default: date_asc
 
 assetic:
     bundles: [ "FOSCommentBundle","BsVideoBundle" ]

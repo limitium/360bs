@@ -12,6 +12,12 @@
 .comment_reply{
     height: 22px;
 }
+.comment_reply.comment_replying{
+    height: auto;
+}
+.comment_content:hover .comment_reply.comment_replying .comment_reply_show_form{
+    display: none;
+}
 .comment_content {
     padding: 5px;
 }
@@ -27,5 +33,5 @@
     display: block;
 }
 #fos_comment_comment_body{
-    width: 100%;
+    width: 98%;
 }

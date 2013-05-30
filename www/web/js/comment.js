@@ -119,7 +119,8 @@ console.log(123);
                 'form.comment_comment_new_form',
                 function (e) {
                     console.log('form.comment_comment_new_form');
-                    var that = $(this);
+                    var that = $(this),btn = $(".comment_submit .btn", that);
+
                     var serializedData = FOS_COMMENT.serializeObject(this);
 
                     e.preventDefault();
@@ -131,12 +132,12 @@ console.log(123);
                         return;
                     }
 
+                    btn.attr("disabled",1);
                     FOS_COMMENT.post(
                         this.action,
                         serializedData,
                         // success
                         function (data, statusCode) {
-                            console.log(arguments);
                             FOS_COMMENT.appendComment(data, that);
                             that.trigger('comment_new_comment', data);
                         },
@@ -148,7 +149,7 @@ console.log(123);
                         },
                         // complete
                         function (data, statusCode) {
-                            console.log(arguments);
+                            btn.removeAttr("disabled");
                             that.trigger('comment_submitted_form', statusCode);
                         }
                     );
@@ -156,21 +157,24 @@ console.log(123);
             );
 
             FOS_COMMENT.thread_container.on('click',
-                '.comment_comment_reply_show_form',
+                '.comment_reply_show_form',
                 function (e) {
-                    console.log('.comment_comment_reply_show_form');
+                    console.log('.comment_reply_show_form');
+                    $(".comment_form_holder",$(".comment_reply.comment_replying").removeClass("comment_replying")).remove();
                     var form_data = $(this).data();
                     var that = $(this);
 
-                    if (that.closest('.comment_comment_reply').hasClass('comment_replying')) {
+                    if (that.closest('.comment_reply').hasClass('comment_replying')) {
                         return that;
                     }
 
+                    that.attr("disabled",1);
                     FOS_COMMENT.get(
                         form_data.url,
                         {parentId: form_data.parentId},
                         function (data) {
-                            that.closest('.comment_comment_reply').addClass('comment_replying');
+                            that.removeAttr("disabled");
+                            that.closest('.comment_reply').addClass('comment_replying');
                             that.after(data);
                             that.trigger('comment_show_form', data);
                         }
@@ -181,7 +185,7 @@ console.log(123);
             FOS_COMMENT.thread_container.on('click',
                 '.comment_comment_reply_cancel',
                 function (e) {
-                    var form_holder = $(this).closest('.comment_comment_form_holder');
+                    var form_holder = $(this).closest('.comment_form_holder');
 
                     var event = $.Event('comment_cancel_form');
                     form_holder.trigger(event);
@@ -190,7 +194,7 @@ console.log(123);
                         return;
                     }
 
-                    form_holder.closest('.comment_comment_reply').removeClass('comment_replying');
+                    form_holder.closest('.comment_reply').removeClass('comment_replying');
                     form_holder.remove();
                 }
             );

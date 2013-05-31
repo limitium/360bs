@@ -97,7 +97,6 @@
             event.params = {
                 permalink: encodeURIComponent(permalink || window.location.href)
             };
-console.log(123);
             FOS_COMMENT.thread_container.trigger(event);
             FOS_COMMENT.get(
                 FOS_COMMENT.base_url + '/' + encodeURIComponent(event.identifier) + '/comments',
@@ -116,7 +115,7 @@ console.log(123);
          */
         initializeListeners: function () {
             FOS_COMMENT.thread_container.on('submit',
-                'form.comment_comment_new_form',
+                'form.comment_new_form',
                 function (e) {
                     console.log('form.comment_comment_new_form');
                     var that = $(this),btn = $(".comment_submit .btn", that);
@@ -159,7 +158,6 @@ console.log(123);
             FOS_COMMENT.thread_container.on('click',
                 '.comment_reply_show_form',
                 function (e) {
-                    console.log('.comment_reply_show_form');
                     $(".comment_form_holder",$(".comment_reply.comment_replying").removeClass("comment_replying")).remove();
                     var form_data = $(this).data();
                     var that = $(this);
@@ -167,18 +165,18 @@ console.log(123);
                     if (that.closest('.comment_reply').hasClass('comment_replying')) {
                         return that;
                     }
-
                     that.attr("disabled",1);
-                    FOS_COMMENT.get(
-                        form_data.url,
-                        {parentId: form_data.parentId},
-                        function (data) {
+                    var data = $("#comment_reply_form_template").html().replace(/_parent_id_/g,form_data.parentId).replace(/_parent_author_/g,form_data.name);
+//                    FOS_COMMENT.get(
+//                        form_data.url,
+//                        {parentId: form_data.parentId},
+//                        function (data) {
                             that.removeAttr("disabled");
                             that.closest('.comment_reply').addClass('comment_replying');
                             that.after(data);
                             that.trigger('comment_show_form', data);
-                        }
-                    );
+//                        }
+//                    );
                 }
             );
 
@@ -354,13 +352,13 @@ console.log(123);
             var form_data = form.data();
 
             if ('' != form_data.parent) {
-                var form_parent = form.closest('.comment_comment_form_holder');
+                var form_parent = form.closest('.comment_form_holder');
 
                 // reply button holder
-                var reply_button_holder = form.closest('.comment_comment_reply');
+                var reply_button_holder = form.closest('.comment_reply');
 
-                var comment_element = form.closest('.comment_comment_show')
-                    .children('.comment_comment_replies');
+                var comment_element = form.closest('.comment_body')
+                    .children('.comment_replies');
 
                 reply_button_holder.removeClass('comment_replying');
 
@@ -370,8 +368,10 @@ console.log(123);
                 // Remove the form
                 form_parent.remove();
             } else {
+                console.log(form);
                 // Insert the comment
-                FOS_COMMENT.thread_container.children(".comment_thread_container").append(commentHtml);
+                form.closest(".comment_form_holder").before(commentHtml);
+//                FOS_COMMENT.thread_container.children(".comment_thread_container").append(commentHtml);
                 form.trigger('comment_add_comment', commentHtml);
 
                 // "reset" the form

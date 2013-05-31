@@ -35,3 +35,6 @@
 #fos_comment_comment_body{
     width: 98%;
 }
+#comment_reply_form_template{
+    display: none;
+}

@@ -1,11 +1,4 @@
 <?php
-/**
- * Created by JetBrains PhpStorm.
- * User: limi
- * Date: 17.04.13
- * Time: 21:26
- * To change this template use File | Settings | File Templates.
- */
 
 namespace Bs\UserBundle\Controller;
 

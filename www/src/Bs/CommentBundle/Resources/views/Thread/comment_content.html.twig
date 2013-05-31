@@ -35,7 +35,7 @@
                     {% else %}
                         {{ comment.authorName }}
                     {% endif %}
-                </span>, <i class="icon-time"></i>{{ comment.createdAt|date("d.m.Y H:i") }}
+                </span>, <i class="icon-time"></i> {{ comment.createdAt|date("d.m.Y H:i") }}
                         {% endblock comment_comment_metas_authorline %}
 
                         {% block comment_comment_metas_edit %}
